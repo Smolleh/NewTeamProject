@@ -13,7 +13,7 @@ class Artefact(models.Model):
     info = models.CharField(db_column='Info', blank=True, null=True)  
     artefactdate = models.DateField(db_column='ArtefactDate', blank=True, null=True)  
     artefactobjectpath = models.TextField(db_column='ArtefactObjectPath', blank=True, null=True)  
-    exhibitid = models.ForeignKey(Exhibit, models.CASCADE, db_column='ExhibitIßd')  
+    exhibitid = models.ForeignKey(Exhibit, models.CASCADE, db_column='ExhibitId')  
 
 
 """
