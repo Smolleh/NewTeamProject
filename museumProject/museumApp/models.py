@@ -1,19 +1,19 @@
 from django.db import models
 
 class Exhibit(models.Model):
-    exhibitid = models.AutoField(db_column='ExhibitId', primary_key=True)  
-    title = models.TextField(db_column='Title', blank=True, null=True) 
-    domain = models.TextField(db_column='Domain', blank=True, null=True)  
-    backgrounddeploymentcontext = models.TextField(db_column='BackgroundDeploymentContext', blank=True, null=True) 
-    intededuse = models.TextField(db_column='IntededUse', blank=True, null=True) 
-    viewnumber = models.IntegerField(db_column='ViewNumber', blank=True, null=True)  
+    exhibitId = models.AutoField(db_column='exhibitId', primary_key=True)  
+    title = models.TextField(db_column='title', blank=True, null=True) 
+    domain = models.TextField(db_column='domain', blank=True, null=True)  
+    backgroundDeploymentContext = models.TextField(db_column='backgroundDeploymentContext', blank=True, null=True) 
+    intededUse = models.TextField(db_column='intededUse', blank=True, null=True) 
+    viewNumber = models.IntegerField(db_column='viewNumber', blank=True, null=True)  
 
 class Artefact(models.Model):
-    artefactid = models.AutoField(db_column='ArtefactId', primary_key=True)  
-    info = models.CharField(db_column='Info', blank=True, null=True)  
-    artefactdate = models.DateField(db_column='ArtefactDate', blank=True, null=True)  
-    artefactobjectpath = models.TextField(db_column='ArtefactObjectPath', blank=True, null=True)  
-    exhibitid = models.ForeignKey(Exhibit, models.CASCADE, db_column='ExhibitId')  
+    artefactId = models.AutoField(db_column='artefactId', primary_key=True)  
+    info = models.CharField(db_column='info', blank=True, null=True)  
+    artefactDate = models.DateField(db_column='artefactDate', blank=True, null=True)  
+    artefactObjectPath = models.TextField(db_column='artefactObjectPath', blank=True, null=True)  
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId')  
 
 
 """

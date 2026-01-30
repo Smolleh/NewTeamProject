@@ -18,7 +18,7 @@ class ArtefactsView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         exhibit_id = self.kwargs["exhibit_id"]
-        return Artefact.objects.filter(exhibitid=exhibit_id)
+        return Artefact.objects.filter(exhibitId=exhibit_id)
     
 class SingleArtefactView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Artefact.objects.all()

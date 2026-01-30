@@ -6,10 +6,10 @@ class ExhibitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exhibit
-        fields = ['exhibitid', 'title', 'domain', 'backgrounddeploymentcontext', 'intededuse', 'viewnumber','first_artefact']
+        fields = ['exhibitId', 'title', 'domain', 'backgroundDeploymentContext', 'intededUse', 'viewNumber','first_artefact']
 
     def get_first_artefact(self, obj):
-        artefact = (Artefact.objects.filter(exhibitid=obj.exhibitid).order_by('artefactid').first()
+        artefact = (Artefact.objects.filter(exhibitId=obj.exhibitId).order_by('artefactId').first()
         )
         if artefact is None:
             return None
@@ -21,4 +21,4 @@ class ExhibitSerializer(serializers.ModelSerializer):
 class ArtefactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artefact
-        fields = ['artefactid','info', 'artefactdate', 'artefactobjectpath', 'exhibitid']
+        fields = ['artefactId','info', 'artefactDate', 'artefactObjectPath', 'exhibitId']
