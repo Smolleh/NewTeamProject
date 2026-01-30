@@ -1,12 +1,19 @@
 from django.db import models
 
 class Exhibit(models.Model):
-    exhibitid = models.AutoField(db_column='ExhibitId', primary_key=True, blank=True)  
+    exhibitid = models.AutoField(db_column='ExhibitId', primary_key=True)  
     title = models.TextField(db_column='Title', blank=True, null=True) 
     domain = models.TextField(db_column='Domain', blank=True, null=True)  
     backgrounddeploymentcontext = models.TextField(db_column='BackgroundDeploymentContext', blank=True, null=True) 
     intededuse = models.TextField(db_column='IntededUse', blank=True, null=True) 
     viewnumber = models.IntegerField(db_column='ViewNumber', blank=True, null=True)  
+
+class Artefact(models.Model):
+    artefactid = models.AutoField(db_column='ArtefactId', primary_key=True)  
+    info = models.CharField(db_column='Info', blank=True, null=True)  
+    artefactdate = models.DateField(db_column='ArtefactDate', blank=True, null=True)  
+    artefactobjectpath = models.TextField(db_column='ArtefactObjectPath', blank=True, null=True)  
+    exhibitid = models.ForeignKey(Exhibit, models.CASCADE, db_column='ExhibitIßd')  
 
 
 """
@@ -22,15 +29,7 @@ class AiSystemDescription(models.Model):
         db_table = 'AI_system_description'
 
 
-class Artefacts(models.Model):
-    artefactid = models.AutoField(db_column='ArtefactId', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    info = models.CharField(db_column='Info', blank=True, null=True)  # Field name made lowercase.
-    artefactdate = models.DateField(db_column='ArtefactDate', blank=True, null=True)  # Field name made lowercase.
-    artefactobjectpath = models.TextField(db_column='ArtefactObjectPath', blank=True, null=True)  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = 'artefacts'
 
 
 class AttemptedQuizzes(models.Model):
@@ -176,14 +175,7 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class Evidence(models.Model):
-    pk = models.CompositePrimaryKey('ArtefactId', 'ExhibitId')
-    artefactid = models.ForeignKey(Artefacts, models.DO_NOTHING, db_column='ArtefactId', blank=True, null=True)  # Field name made lowercase.
-    exhibitid = models.ForeignKey('Exhibit', models.DO_NOTHING, db_column='ExhibitId', blank=True, null=True)  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = 'evidence'
 
 
 
