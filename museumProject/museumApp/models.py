@@ -1,5 +1,5 @@
 from django.db import models
-
+##cammelcase exhibitId eg not ExhibitID or exhibitid 
 class Exhibit(models.Model):
     exhibitId = models.AutoField(db_column='exhibitId', primary_key=True)  
     title = models.TextField(db_column='title', blank=True, null=True) 
@@ -8,6 +8,18 @@ class Exhibit(models.Model):
     intededUse = models.TextField(db_column='intededUse', blank=True, null=True) 
     viewNumber = models.IntegerField(db_column='viewNumber', blank=True, null=True)  
 
+class Quizzes(models.Model):
+    quizId = models.AutoField(db_column='quizId', primary_key=True, blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=True)   
+    quizzDetails = models.TextField(db_column='quizzDetails', blank=True, null=True)   
+    completionRate = models.IntegerField(db_column='completionRate', blank=True, null=True)   
+    attemptRate = models.IntegerField(db_column='attemptRate', blank=True, null=True)   
+    totalQuestionPoints = models.IntegerField(db_column='totalQuestionPoints', blank=True, null=True)   
+
+    class Meta:
+        managed = False
+        db_table = 'quizzes'
+
 class Artefact(models.Model):
     artefactId = models.AutoField(db_column='artefactId', primary_key=True)  
     info = models.CharField(db_column='info', blank=True, null=True)  
@@ -15,14 +27,24 @@ class Artefact(models.Model):
     artefactObjectPath = models.TextField(db_column='artefactObjectPath', blank=True, null=True)  
     exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId')  
 
+class Users(models.Model):
+    userId = models.AutoField(db_column='userId', primary_key=True, blank=True, null=False)   
+    userLevel = models.IntegerField(db_column='userLevel')   
+    fName = models.CharField(db_column='fName', blank=True, null=True)   
+    lName = models.CharField(db_column='lName', blank=True, null=True)  
+    password = models.CharField(db_column='password', blank=True, null=True)  
+    totalQuizzPoints = models.IntegerField(db_column='totalQuizzPoints', blank=True, null=True) 
 
-"""
+    class Meta:
+        managed = False
+        db_table = 'users'
+
 class AiSystemDescription(models.Model):
-    systemdescriptionid = models.AutoField(db_column='SystemDescriptionId', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    exhibitid = models.ForeignKey('Exhibit', models.DO_NOTHING, db_column='ExhibitId', blank=True, null=True)  # Field name made lowercase.
-    systemdescription = models.TextField(db_column='SystemDescription', blank=True, null=True)  # Field name made lowercase.
-    systempurpose = models.TextField(db_column='SystemPurpose', blank=True, null=True)  # Field name made lowercase.
-    systemoutputs = models.TextField(db_column='SystemOutputs', blank=True, null=True)  # Field name made lowercase.
+    systemDescriptionId = models.AutoField(db_column='systemDescriptionId', primary_key=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=True)   
+    systemDescription = models.TextField(db_column='systemDescription', blank=True, null=True)   
+    systemPurpose = models.TextField(db_column='systemPurpose', blank=True, null=True)   
+    systemOutputs = models.TextField(db_column='systemOutputs', blank=True, null=True)   
 
     class Meta:
         managed = False
@@ -33,17 +55,19 @@ class AiSystemDescription(models.Model):
 
 
 class AttemptedQuizzes(models.Model):
-    pk = models.CompositePrimaryKey('UserId', 'QuizId')
-    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='UserId', blank=True, null=True)  # Field name made lowercase.
-    quizid = models.ForeignKey('Quizzes', models.DO_NOTHING, db_column='QuizId', blank=True, null=True)  # Field name made lowercase.
-    pointsgained = models.IntegerField(db_column='PointsGained', blank=True, null=True)  # Field name made lowercase.
-    attemptdate = models.DateField(db_column='AttemptDate', blank=True, null=True)  # Field name made lowercase.
+    pk = models.CompositePrimaryKey('userId', 'quizId')
+    userId = models.ForeignKey(Users, models.CASCADE, db_column='userId', blank=True, null=False)   
+    quizId = models.ForeignKey(Quizzes, models.CASCADE, db_column='quizId', blank=True, null=False)   
+    pointsGained = models.IntegerField(db_column='pointsGained', blank=True, null=True)   
+    attemptDate = models.DateField(db_column='attemptDate', blank=True, null=True)   
 
     class Meta:
         managed = False
         db_table = 'attempted_quizzes'
 
 
+
+"""
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -109,22 +133,26 @@ class AuthUserUserPermissions(models.Model):
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
 
+"""
 
 class BookMarks(models.Model):
-    userid = models.OneToOneField('Users', models.DO_NOTHING, db_column='UserId', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    exhibitid = models.ForeignKey('Exhibit', models.DO_NOTHING, db_column='ExhibitId', blank=True, null=True)  # Field name made lowercase.
+    pk = models.CompositePrimaryKey('userId', 'exhibitId')
+    userId = models.ForeignKey(Users, models.CASCADE, db_column='userId', blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=False)   
 
     class Meta:
         managed = False
         db_table = 'book_marks'
 
 
+
+"""
 class ContributingFactors(models.Model):
-    contributingfactorid = models.AutoField(db_column='ContributingFactorId', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    exhibitid = models.ForeignKey('Exhibit', models.DO_NOTHING, db_column='ExhibitId', blank=True, null=True)  # Field name made lowercase.
-    dataissues = models.TextField(db_column='DataIssues', blank=True, null=True)  # Field name made lowercase.
-    designchoices = models.TextField(db_column='DesignChoices', blank=True, null=True)  # Field name made lowercase.
-    organisationalorgovernanceissues = models.TextField(db_column='OrganisationalOrGovernanceIssues', blank=True, null=True)  # Field name made lowercase.
+    contributingfactorid = models.AutoField(db_column='ContributingFactorId', primary_key=True, blank=True, null=True)   
+    exhibitid = models.ForeignKey('Exhibit', models.DO_NOTHING, db_column='ExhibitId', blank=True, null=True)   
+    dataissues = models.TextField(db_column='DataIssues', blank=True, null=True)   
+    designchoices = models.TextField(db_column='DesignChoices', blank=True, null=True)   
+    organisationalorgovernanceissues = models.TextField(db_column='OrganisationalOrGovernanceIssues', blank=True, null=True)   
 
     class Meta:
         managed = False
@@ -180,13 +208,13 @@ class DjangoSession(models.Model):
 
 
 
-
+"""
 class FailureDescription(models.Model):
-    failuredescriptionid = models.AutoField(db_column='FailureDescriptionId', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    exhibitid = models.ForeignKey(Exhibit, models.DO_NOTHING, db_column='ExhibitId', blank=True, null=True)  # Field name made lowercase.
-    whatwentwrong = models.TextField(db_column='WhatWentWrong', blank=True, null=True)  # Field name made lowercase.
-    howitwasdetected = models.TextField(db_column='HowItWasDetected', blank=True, null=True)  # Field name made lowercase.
-    whatwasaffected = models.TextField(db_column='WhatWasAffected', blank=True, null=True)  # Field name made lowercase.
+    failureDescriptioniId = models.AutoField(db_column='failureDescriptionId', primary_key=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=True)   
+    whatWentWrong = models.TextField(db_column='whatWentWrong', blank=True, null=True)   
+    howItWasDetected = models.TextField(db_column='howItWasDetected', blank=True, null=True)   
+    whatWasAffected = models.TextField(db_column='whatWasAffected', blank=True, null=True)   
 
     class Meta:
         managed = False
@@ -194,53 +222,33 @@ class FailureDescription(models.Model):
 
 
 class LessonsLearned(models.Model):
-    lessonslearnedid = models.AutoField(db_column='LessonsLearnedId', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    exhibitid = models.ForeignKey(Exhibit, models.DO_NOTHING, db_column='ExhibitId', blank=True, null=True)  # Field name made lowercase.
-    practicalrecommendations = models.TextField(db_column='PracticalRecommendations', blank=True, null=True)  # Field name made lowercase.
-    futurewarnings = models.TextField(db_column='FutureWarnings', blank=True, null=True)  # Field name made lowercase.
+    lessonslearnedId = models.AutoField(db_column='lessonsLearnedId', primary_key=True, blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=True)   
+    practicalRecommendations = models.TextField(db_column='practicalRecommendations', blank=True, null=True)   
+    futureWarnings = models.TextField(db_column='futureWarnings', blank=True, null=True)   
 
     class Meta:
         managed = False
         db_table = 'lessons_learned'
 
 
+
+
+
+
+
 class QuizzQuestions(models.Model):
-    questionid = models.AutoField(db_column='QuestionId', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    quizid = models.ForeignKey('Quizzes', models.DO_NOTHING, db_column='QuizId', blank=True, null=True)  # Field name made lowercase.
-    question = models.TextField(db_column='Question', blank=True, null=True)  # Field name made lowercase.
-    questionanswer = models.TextField(db_column='QuestionAnswer', blank=True, null=True)  # Field name made lowercase.
-    completionrate = models.IntegerField(db_column='CompletionRate', blank=True, null=True)  # Field name made lowercase.
-    attemptrate = models.IntegerField(db_column='AttemptRate', blank=True, null=True)  # Field name made lowercase.
-    points = models.IntegerField(db_column='Points', blank=True, null=True)  # Field name made lowercase.
+    questionId = models.AutoField(db_column='questionId', primary_key=True, blank=True, null=False)   
+    quizId = models.ForeignKey(Quizzes, models.CASCADE, db_column='quizId', blank=True, null=True)   
+    question = models.TextField(db_column='question', blank=True, null=True)   
+    questionAnswer = models.TextField(db_column='questionAnswer', blank=True, null=True)   
+    completionRate = models.IntegerField(db_column='completionRate', blank=True, null=True)   
+    attemptRate = models.IntegerField(db_column='attemptRate', blank=True, null=True)   
+    points = models.IntegerField(db_column='points', blank=True, null=True)   
 
     class Meta:
         managed = False
         db_table = 'quizz_questions'
+        
 
 
-class Quizzes(models.Model):
-    quizid = models.AutoField(db_column='QuizId', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    exhibitid = models.ForeignKey(Exhibit, models.DO_NOTHING, db_column='ExhibitId', blank=True, null=True)  # Field name made lowercase.
-    quizzdetails = models.TextField(db_column='QuizzDetails', blank=True, null=True)  # Field name made lowercase.
-    completionrate = models.IntegerField(db_column='CompletionRate', blank=True, null=True)  # Field name made lowercase.
-    attemptrate = models.IntegerField(db_column='AttemptRate', blank=True, null=True)  # Field name made lowercase.
-    totalquestionpoints = models.IntegerField(db_column='TotalQuestionPoints', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'quizzes'
-
-
-class Users(models.Model):
-    userid = models.AutoField(db_column='UserId', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    user_level = models.IntegerField(db_column='User_Level')  # Field name made lowercase.
-    fname = models.CharField(db_column='FName', blank=True, null=True)  # Field name made lowercase.
-    lname = models.CharField(db_column='LName', blank=True, null=True)  # Field name made lowercase.
-    password = models.CharField(db_column='Password', blank=True, null=True)  # Field name made lowercase.
-    totalquizzpoints = models.IntegerField(db_column='TotalQuizzPoints', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'users'
-
-"""
