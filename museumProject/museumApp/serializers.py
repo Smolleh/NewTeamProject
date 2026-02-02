@@ -22,3 +22,21 @@ class ArtefactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artefact
         fields = ['artefactId','info', 'artefactDate', 'artefactObjectPath', 'exhibitId']
+        
+class FailureDescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FailureDescription
+        fields = ['failureDescriptionId', 'exhibitId', 'whatWentWrong', 'whatWasAffected'] 
+
+
+
+
+class LessonsLearnedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LessonsLearned
+        fields = ['lessonsLearnedId', 'exhibitId', 'practicalRecommendations', 'futureWarnings']
+    
+class AiSystemDescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AiSystemDescription
+        fields = ['systemDescriptionId', 'exhibitId', 'systemDescription', 'systemPurpose','systemOutputs',]

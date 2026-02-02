@@ -146,19 +146,18 @@ class BookMarks(models.Model):
 
 
 
-"""
 class ContributingFactors(models.Model):
-    contributingfactorid = models.AutoField(db_column='ContributingFactorId', primary_key=True, blank=True, null=True)   
-    exhibitid = models.ForeignKey('Exhibit', models.DO_NOTHING, db_column='ExhibitId', blank=True, null=True)   
-    dataissues = models.TextField(db_column='DataIssues', blank=True, null=True)   
-    designchoices = models.TextField(db_column='DesignChoices', blank=True, null=True)   
-    organisationalorgovernanceissues = models.TextField(db_column='OrganisationalOrGovernanceIssues', blank=True, null=True)   
+    contributingFactorId = models.AutoField(db_column='contributingFactorId', primary_key=True, blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE , db_column='exhibitId', blank=True, null=True)   
+    dataIssues = models.TextField(db_column='dataIssues', blank=True, null=True)   
+    designChoices = models.TextField(db_column='designChoices', blank=True, null=True)   
+    organisationalOrGovernanceIssues = models.TextField(db_column='organisationalOrGovernanceIssues', blank=True, null=True)   
 
     class Meta:
         managed = False
         db_table = 'contributing_factors'
 
-
+"""
 class DjangoAdminLog(models.Model):
     object_id = models.TextField(blank=True, null=True)
     object_repr = models.CharField(max_length=200)
@@ -240,8 +239,12 @@ class LessonsLearned(models.Model):
 class QuizzQuestions(models.Model):
     questionId = models.AutoField(db_column='questionId', primary_key=True, blank=True, null=False)   
     quizId = models.ForeignKey(Quizzes, models.CASCADE, db_column='quizId', blank=True, null=True)   
-    question = models.TextField(db_column='question', blank=True, null=True)   
-    questionAnswer = models.TextField(db_column='questionAnswer', blank=True, null=True)   
+    question = models.TextField(db_column='question')
+    option1 =  models.TextField(db_column='option1')  
+    option2 = models.TextField(db_column='option2')
+    option3 = models.TextField(db_column='option3')
+    option4 = models.TextField(db_column='option4')
+    questionAnswer = models.IntegerField(db_column='questionAnswer')   
     completionRate = models.IntegerField(db_column='completionRate', blank=True, null=True)   
     attemptRate = models.IntegerField(db_column='attemptRate', blank=True, null=True)   
     points = models.IntegerField(db_column='points', blank=True, null=True)   
