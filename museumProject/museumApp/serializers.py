@@ -7,7 +7,7 @@ from .models import *
 class ArtefactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artefact
-        fields = ['artefactId','info', 'artefactDate', 'artefactObjectPath', 'exhibitId']
+        fields = ['info', 'artefactDate', 'artefactObjectPath']
         
 class FailureDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,7 +24,7 @@ class AiSystemDescriptionSerializer(serializers.ModelSerializer):
 class LessonsLearnedSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonsLearned
-        fields = [ 'exhibitId', 'practicalRecommendations', 'futureWarnings']
+        fields = ['practicalRecommendations', 'futureWarnings']
 
         
 

@@ -4,7 +4,14 @@ from rest_framework.views import APIView
 from .models import *
 from .serializers import *
 
+class UserExhibitsView(generics.ListAPIView):
+    queryset = Exhibit.objects.all()
+    serializer_class = ExhibitSerializer
 
+class UserSingleExhibitView(generics.RetrieveAPIView):
+    queryset = Exhibit.objects.all()
+    serializer_class = ExhibitSerializer
+    
 class AdminExhibitsView(generics.ListCreateAPIView):
     queryset = Exhibit.objects.all()
     serializer_class = ExhibitSerializer

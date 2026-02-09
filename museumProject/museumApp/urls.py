@@ -5,9 +5,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
      #path('', views.home, name='home'),
-     path('exhibits/', views.AdminExhibitsView.as_view(), name='exhibits'), 
-     path('exhibits/<int:pk>', views.AdminEditExhibitView.as_view(), name='single_exhibit'),
-     path('artefact/<int:pk>', views.AdminEditArtefactView.as_view()),
+     path('exhibits/', views.UserExhibitsView.as_view()),
+     path('exhibits/<int:pk>', views.UserSingleExhibitView.as_view()),
+     path('exhibits/viewCreate', views.AdminExhibitsView.as_view()), 
+     path('exhibits/<int:pk>/edit', views.AdminEditExhibitView.as_view()),
      path("exhibits/<int:exhibitId>/artefacts/new", views.AdminCreateArtefactView.as_view()),
      path('exhibits/<int:exhibitId>/artefacts/edit/<int:pk>', views.AdminEditArtefactView.as_view()),
      path("exhibits/<int:exhibitId>/aiSystemDescription/new", views.AdminCreateSystemDescView.as_view()),
