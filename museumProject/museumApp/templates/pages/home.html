@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Museum Project</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body> 
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'exhibits' %}">Exhibits</a></li>
+
+        </ul>
+    </nav>
+
+    
+    <h1>AI Museum of Failures and Quiz</h1>
+    <p> 
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, ipsa incidunt. Libero molestiae officia quam consequuntur ea eveniet maxime ipsa harum animi officiis, veniam quibusdam sunt omnis vel minima est.
+    </p>
+    <div>
+        <a href="{% url 'home' %}">Click here to learn more about AI failures</a>
+    </div>

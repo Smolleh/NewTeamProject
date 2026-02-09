@@ -47,7 +47,7 @@ class AiSystemDescription(models.Model):
     systemOutputs = models.TextField(db_column='systemOutputs', blank=True, null=True)   
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'AI_system_description'
 
 
@@ -154,7 +154,7 @@ class ContributingFactors(models.Model):
     organisationalOrGovernanceIssues = models.TextField(db_column='organisationalOrGovernanceIssues', blank=True, null=True)   
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'contributing_factors'
 
 """
@@ -216,7 +216,7 @@ class FailureDescription(models.Model):
     whatWasAffected = models.TextField(db_column='whatWasAffected', blank=True, null=True)   
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'failure_description'
 
 
@@ -227,7 +227,7 @@ class LessonsLearned(models.Model):
     futureWarnings = models.TextField(db_column='futureWarnings', blank=True, null=True)   
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'lessons_learned'
 
 
