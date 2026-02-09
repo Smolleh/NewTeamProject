@@ -1,21 +1,7 @@
 from rest_framework import serializers
 from .models import *
 
-class ExhibitSerializer(serializers.ModelSerializer):
-    first_artefact = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Exhibit
-        fields = ['exhibitId', 'title', 'domain', 'backgroundDeploymentContext', 'intededUse', 'viewNumber','first_artefact']
-
-    def get_first_artefact(self, obj):
-        artefact = (Artefact.objects.filter(exhibitId=obj.exhibitId).order_by('artefactId').first()
-        )
-        if artefact is None:
-            return None
-        
-        else:
-            return ArtefactSerializer(artefact).data
 
     
 class ArtefactSerializer(serializers.ModelSerializer):
@@ -26,8 +12,12 @@ class ArtefactSerializer(serializers.ModelSerializer):
 class FailureDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FailureDescription
-        fields = ['failureDescriptionId', 'exhibitId', 'whatWentWrong', 'whatWasAffected'] 
+        fields = ['whatWentWrong', 'howItWasDetected, ''whatWasAffected']
 
+class AiSystemDescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AiSystemDescription
+        fields = ['systemDescription', 'systemPurpose', 'systemOutputs']
 
 
 
@@ -35,8 +25,48 @@ class LessonsLearnedSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonsLearned
         fields = ['lessonsLearnedId', 'exhibitId', 'practicalRecommendations', 'futureWarnings']
-    
-class AiSystemDescriptionSerializer(serializers.ModelSerializer):
+
+        
+
+class ContributingFactorsSerilaizer(serializers.ModelSerializer):
     class Meta:
-        model = AiSystemDescription
-        fields = ['systemDescriptionId', 'exhibitId', 'systemDescription', 'systemPurpose','systemOutputs',]
+        model = ContributingFactors
+        fields = ['contributingFactorId', 'exhibitId', 'dataIssues', 'designChoices', 'organisationalOrGovernanceIssues']
+
+class ExhibitSerializer(serializers.ModelSerializer):
+    artefacts = serializers.SerializerMethodField()
+    lessons_learned = serializers.SerializerMethodField()
+    contributing_factors = serializers.SerializerMethodField()
+    failure_description = FailureDescriptionSerializer(read_only=True)
+    ai_system_description = AiSystemDescriptionSerializer(read_only=True)
+
+    class Meta:
+        model = Exhibit
+        fields = [
+            'exhibitId',
+            'title',
+            'domain',
+            'backgroundDeploymentContext',
+            'intededUse',
+            'viewNumber',
+            'artefacts',
+            'lessons_learned',
+            'contributing_factors',
+            'failure_description',
+            'ai_system_description',
+        ]
+
+    def get_artefacts(self, obj):
+        return ArtefactSerializer(
+            obj.artefact_set.all(), many=True
+        ).data
+
+    def get_lessons_learned(self, obj):
+        return LessonsLearnedSerializer(
+            obj.lessonslearned_set.all(), many=True
+        ).data
+
+    def get_contributing_factors(self, obj):
+        return ContributingFactorsSerilaizer(
+            obj.contributingfactors_set.all(), many=True
+        ).data

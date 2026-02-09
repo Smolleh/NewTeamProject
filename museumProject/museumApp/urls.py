@@ -4,11 +4,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-     path('', views.home, name='home'),
-     path('exhibits/', views.ExhibitsView, name='exhibits'), 
-     path('exhibits/<int:exhibit_id>', views.SingleExhibitView, name='single_exhibit'),
-     #path('artefacts/<int:exhibit_id>', views.ArtefactsView),
-     #path('artefact/<int:pk>', views.SingleArtefactView),
+     #path('', views.home, name='home'),
+     path('exhibits/', views.ExhibitsView.as_view(), name='exhibits'), 
+     path('exhibits/<int:pk>', views.SingleExhibitView.as_view(), name='single_exhibit'),
+     path('artefacts/<int:pk>', views.ArtefactsView.as_view()),
+     path('artefact/<int:pk>', views.SingleArtefactView.as_view()),
      #path('login/', views.login_view, name='login'),
 ]
 
