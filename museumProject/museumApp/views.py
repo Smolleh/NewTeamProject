@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import generics
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from .forms import createUserForm
+from django.contrib.auth import login, logout, authenticate
 
 
 class ExhibitsView(generics.ListCreateAPIView):
@@ -23,6 +26,36 @@ class ArtefactsView(generics.ListCreateAPIView):
 class SingleArtefactView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Artefact.objects.all()
     serializer_class = ArtefactSerializer
+
+def registerPage(request):
+    form = createUserForm()
+
+    if request.method == 'POST':
+        form = createUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+
+    context = {'form': form}
+    return render(request, 'pages/register.html', context)
+
+def loginPage(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user()) 
+            return redirect('exhibits')
+    else:
+        form = AuthenticationForm()
+    
+    return render(request, 'pages/login.html', {'form': form})
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+    #logout button to be added to html in order for this to work, and url path to be added to urls.py, otherwise pointless.
+
+    
     
 
 

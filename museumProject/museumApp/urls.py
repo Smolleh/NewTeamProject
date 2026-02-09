@@ -9,7 +9,8 @@ urlpatterns = [
      path('exhibits/<int:pk>', views.SingleExhibitView.as_view(), name='single_exhibit'),
      path('artefacts/<int:pk>', views.ArtefactsView.as_view()),
      path('artefact/<int:pk>', views.SingleArtefactView.as_view()),
-     #path('login/', views.login_view, name='login'),
+     path('register/', views.registerPage, name='register'),
+     path('login/', views.loginPage, name='login'),
 ]
 
 

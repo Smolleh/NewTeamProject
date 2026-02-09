@@ -1,0 +1,9 @@
+<H3>Register Page</H3>
+
+<form method = "POST" action = "">
+    {% csrf_token %}
+
+    {{form.as_p}}
+
+    <input type = "submit" value = "Sign Up">
+</form>
