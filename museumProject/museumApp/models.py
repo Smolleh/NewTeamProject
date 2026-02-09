@@ -24,7 +24,7 @@ class Artefact(models.Model):
     artefactId = models.AutoField(db_column='artefactId', primary_key=True)  
     info = models.CharField(db_column='info', blank=True, null=True)  
     artefactDate = models.DateField(db_column='artefactDate', blank=True, null=True)  
-    artefactObjectPath = models.TextField(db_column='artefactObjectPath', blank=True, null=True)  
+    artefactObjectPath = models.ImageField(db_column='artefactObjectPath',  null=True,upload_to='museumProject/museumApp/ArtefactImages/')  
     exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId')  
 
 class Users(models.Model):
