@@ -169,6 +169,7 @@ h1 {
 .exhibit-grid p{ 
     text-decoration: none;
     font-size: 30px;
+    font-style: italic;
 }
 
 
@@ -191,8 +192,39 @@ h2 {
     font-size: 20px;
     color: #2f5aa8;
     margin-bottom: 20px;
+    text-align: left;
 }
 
+
+.single-exhibit p { 
+    font-size: 16px;
+    color: #251605;
+    text-align: left;
+
+}
+
+h3 { 
+    font-size: 16px;
+    color: #2f5aa8;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.single-exhibit h1 { 
+    font-size: 16px;
+    font-style: bold;
+    color: #251605;
+    text-align: left;
+
+}
+
+.single-exhibit { 
+    font-size: 16px;
+    color: #251605;
+    text-align: left;
+    margin-bottom: 20px;
+
+}
 
 
 
