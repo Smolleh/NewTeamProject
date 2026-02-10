@@ -29,9 +29,8 @@
             <ul class="exhibits-grid">
                 {% for exhibit in exhibits %}
                     <li>
-                        <a href="/exhibits/{{ exhibit.exhibitId }}"> 
-                            {{exhibit.title}}
-                    </a>
+                        <a href="/gallery/{{ exhibit.exhibitId }}">  View Exhibit</a>
+                        <h2>{{exhibit.title}}</h2>
                         <p>{{exhibit.domain}}</p>
                     </li>
                 {% endfor %}

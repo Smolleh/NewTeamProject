@@ -67,6 +67,78 @@ class AttemptedQuizzes(models.Model):
 
 
 
+
+
+class BookMarks(models.Model):
+    pk = models.CompositePrimaryKey('userId', 'exhibitId')
+    userId = models.ForeignKey(Users, models.CASCADE, db_column='userId', blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=False)   
+
+    class Meta:
+        managed = False
+        db_table = 'book_marks'
+
+
+
+class ContributingFactors(models.Model):
+    contributingFactorId = models.AutoField(db_column='contributingFactorId', primary_key=True, blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE , db_column='exhibitId', blank=True, null=False)   
+    dataIssues = models.TextField(db_column='dataIssues', blank=True, null=False)   
+    designChoices = models.TextField(db_column='designChoices', blank=True, null=False)   
+    organisationalOrGovernanceIssues = models.TextField(db_column='organisationalOrGovernanceIssues', blank=True, null=False)   
+
+    class Meta:
+        managed = True
+        db_table = 'contributing_factors'
+
+
+class FailureDescription(models.Model):
+    failureDescriptioniId = models.AutoField(db_column='failureDescriptionId', primary_key=True, null=False)   
+    exhibit = models.OneToOneField(Exhibit, on_delete=models.CASCADE,related_name='failureDescription', null=True, blank= True)
+    whatWentWrong = models.TextField(db_column='whatWentWrong', blank=True, null=False)   
+    howItWasDetected = models.TextField(db_column='howItWasDetected', blank=True, null=False)   
+    whatWasAffected = models.TextField(db_column='whatWasAffected', blank=True, null=False)   
+
+    class Meta:
+        managed = True
+        db_table = 'failure_description'
+
+
+class LessonsLearned(models.Model):
+    lessonslearnedId = models.AutoField(db_column='lessonsLearnedId', primary_key=True, blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=False)   
+    practicalRecommendations = models.TextField(db_column='practicalRecommendations', blank=True, null=False)   
+    futureWarnings = models.TextField(db_column='futureWarnings', blank=True, null=False)   
+
+    class Meta:
+        managed = True
+        db_table = 'lessons_learned'
+
+
+
+
+
+
+
+class QuizzQuestions(models.Model):
+    questionId = models.AutoField(db_column='questionId', primary_key=True, blank=True, null=False)   
+    quizId = models.ForeignKey(Quizzes, models.CASCADE, db_column='quizId', blank=True, null=False)   
+    question = models.TextField(db_column='question', null=False)
+    option1 =  models.TextField(db_column='option1', null=False)  
+    option2 = models.TextField(db_column='option2', null=False)
+    option3 = models.TextField(db_column='option3', null=False)
+    option4 = models.TextField(db_column='option4', null=False)
+    questionAnswer = models.IntegerField(db_column='questionAnswer')   
+    completionRate = models.IntegerField(db_column='completionRate', blank=True, null=False)   
+    attemptRate = models.IntegerField(db_column='attemptRate', blank=True, null=False)   
+    points = models.IntegerField(db_column='points', blank=True, null=False)   
+
+    class Meta:
+        managed = False
+        db_table = 'quizz_questions'
+        
+
+
 """
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
@@ -133,31 +205,6 @@ class AuthUserUserPermissions(models.Model):
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
 
-"""
-
-class BookMarks(models.Model):
-    pk = models.CompositePrimaryKey('userId', 'exhibitId')
-    userId = models.ForeignKey(Users, models.CASCADE, db_column='userId', blank=True, null=False)   
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=False)   
-
-    class Meta:
-        managed = False
-        db_table = 'book_marks'
-
-
-
-class ContributingFactors(models.Model):
-    contributingFactorId = models.AutoField(db_column='contributingFactorId', primary_key=True, blank=True, null=False)   
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE , db_column='exhibitId', blank=True, null=False)   
-    dataIssues = models.TextField(db_column='dataIssues', blank=True, null=False)   
-    designChoices = models.TextField(db_column='designChoices', blank=True, null=False)   
-    organisationalOrGovernanceIssues = models.TextField(db_column='organisationalOrGovernanceIssues', blank=True, null=False)   
-
-    class Meta:
-        managed = True
-        db_table = 'contributing_factors'
-
-"""
 class DjangoAdminLog(models.Model):
     object_id = models.TextField(blank=True, null=True)
     object_repr = models.CharField(max_length=200)
@@ -208,50 +255,3 @@ class DjangoSession(models.Model):
 
 
 """
-class FailureDescription(models.Model):
-    failureDescriptioniId = models.AutoField(db_column='failureDescriptionId', primary_key=True, null=False)   
-    exhibit = models.OneToOneField(Exhibit, on_delete=models.CASCADE,related_name='failureDescription', null=True, blank= True)
-    whatWentWrong = models.TextField(db_column='whatWentWrong', blank=True, null=False)   
-    howItWasDetected = models.TextField(db_column='howItWasDetected', blank=True, null=False)   
-    whatWasAffected = models.TextField(db_column='whatWasAffected', blank=True, null=False)   
-
-    class Meta:
-        managed = True
-        db_table = 'failure_description'
-
-
-class LessonsLearned(models.Model):
-    lessonslearnedId = models.AutoField(db_column='lessonsLearnedId', primary_key=True, blank=True, null=False)   
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=False)   
-    practicalRecommendations = models.TextField(db_column='practicalRecommendations', blank=True, null=False)   
-    futureWarnings = models.TextField(db_column='futureWarnings', blank=True, null=False)   
-
-    class Meta:
-        managed = True
-        db_table = 'lessons_learned'
-
-
-
-
-
-
-
-class QuizzQuestions(models.Model):
-    questionId = models.AutoField(db_column='questionId', primary_key=True, blank=True, null=False)   
-    quizId = models.ForeignKey(Quizzes, models.CASCADE, db_column='quizId', blank=True, null=False)   
-    question = models.TextField(db_column='question', null=False)
-    option1 =  models.TextField(db_column='option1', null=False)  
-    option2 = models.TextField(db_column='option2', null=False)
-    option3 = models.TextField(db_column='option3', null=False)
-    option4 = models.TextField(db_column='option4', null=False)
-    questionAnswer = models.IntegerField(db_column='questionAnswer')   
-    completionRate = models.IntegerField(db_column='completionRate', blank=True, null=False)   
-    attemptRate = models.IntegerField(db_column='attemptRate', blank=True, null=False)   
-    points = models.IntegerField(db_column='points', blank=True, null=False)   
-
-    class Meta:
-        managed = False
-        db_table = 'quizz_questions'
-        
-
-
