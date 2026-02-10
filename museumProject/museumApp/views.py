@@ -6,7 +6,7 @@ from .serializers import *
 
 class UserExhibitsView(generics.ListAPIView):
     queryset = Exhibit.objects.all()
-    serializer_class = ExhibitSerializer
+    serializer_class = SimpleViewExhibitSerializer
 
 class UserSingleExhibitView(generics.RetrieveAPIView):
     queryset = Exhibit.objects.all()
@@ -14,7 +14,7 @@ class UserSingleExhibitView(generics.RetrieveAPIView):
     
 class AdminExhibitsView(generics.ListCreateAPIView):
     queryset = Exhibit.objects.all()
-    serializer_class = ExhibitSerializer
+    serializer_class = SimpleViewCreateExhibitSerializer
     
 class AdminEditExhibitView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Exhibit.objects.all()

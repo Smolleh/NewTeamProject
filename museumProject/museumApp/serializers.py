@@ -32,7 +32,26 @@ class ContributingFactorsSerilaizer(serializers.ModelSerializer):
     class Meta:
         model = ContributingFactors
         fields = ['contributingFactorId', 'exhibitId', 'dataIssues', 'designChoices', 'organisationalOrGovernanceIssues']
+class SimpleViewCreateExhibitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Exhibit
+        fields = ['exhibitId','title', 'domain','backgroundDeploymentContext', 'intededUse', 'viewNumber']
+class SimpleViewExhibitSerializer(serializers.ModelSerializer):
+    ArtefactObjectPath = serializers.SerializerMethodField()
+    class Meta:
+        model = Exhibit
+        fields = ['exhibitId', 'title', 'domain', 'viewNumber', 'ArtefactObjectPath']
 
+    def get_ArtefactObjectPath(self, obj):
+        artefact = (
+            Artefact.objects
+            .filter(exhibitId=obj)               # FK field is exhibitId
+            .order_by('artefactId')              # “first” by lowest id (change if you want by date)
+            .only('artefactObjectPath')
+            .first()
+        )
+        return artefact.artefactObjectPath if artefact else None
+    
 class ExhibitSerializer(serializers.ModelSerializer):
     artefacts = serializers.SerializerMethodField()
     lessons_learned = serializers.SerializerMethodField()
@@ -42,18 +61,8 @@ class ExhibitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exhibit
-        fields = [
-            'exhibitId',
-            'title',
-            'domain',
-            'backgroundDeploymentContext',
-            'intededUse',
-            'viewNumber',
-            'artefacts',
-            'lessons_learned',
-            'contributing_factors',
-            'failure_description',
-            'ai_system_description',
+        fields = ['exhibitId','title', 'domain','backgroundDeploymentContext', 'intededUse',
+            'viewNumber','artefacts','lessons_learned','contributing_factors','failure_description','ai_system_description',
         ]
 
     def get_artefacts(self, obj):
