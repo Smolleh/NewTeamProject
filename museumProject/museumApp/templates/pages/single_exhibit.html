@@ -24,7 +24,7 @@
     <h1> {{exhibit.title}}</h1>
 
     <section class="single-exhibit">
-        <h3> Domain: </h3>
+        <h3> Description: </h3>
         <p> {{exhibit.domain}}</p>
 
         <h3> Background Deployment Context</h3>
@@ -114,7 +114,7 @@
                 <h3> Practical Recommendations: </h3>
                 <p> {{lessons.practicalRecommendations}}</p>>
 
-                <h3> Future Warnings: </h3>
+                <h3> Warnings to Future Users: </h3>
                 <p> {{lessons.futureWarnings}}</p>
             </div>
         {% else %}
@@ -126,10 +126,13 @@
        
     
     <div class="footer">
-        <p>© Copyright 2026. All rights reserved</p>    
+ 
+        <a href="{% url 'about' %}">About Us</a></li>
+        <p>© Copyright 2026. All rights reserved</p>
+        <a href="{% url 'privacy_policy' %}">View our Priviacy Policy</a>
+        
+
     </div>
 
 </body>
-
-
-    
+</html>

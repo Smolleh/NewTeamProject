@@ -27,6 +27,20 @@ def singleExhibit(request, exhibitId):
 def home(request):
     return render(request, 'pages/home.html', {})
 
+def privacy_policy(request):
+    return render(request, 'pages/privacy_policy.html', {})
+
+def about(request):
+    return render(request, 'pages/about.html', {})
+
+def login(request):
+    return render(request, 'pages/login.html', {})
+
+
+
+def register(request):
+    return render(request, 'pages/register.html', {})
+
 """
 
 def quiz(request, quizId):

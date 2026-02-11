@@ -113,12 +113,16 @@ div a {
   }
 
 .footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: black;
-  text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: black;
+    align-items: flex;
+    display: flex;
+    justify-content: space-evenly; 
+    font-size: 16px;
+    height: 60px;
 }
 
 .footer p { 
@@ -126,6 +130,17 @@ div a {
     font-size: 16px;
     font-weight: bold;
 }
+
+.footer a { 
+    color: #ffffff;
+    font-size: 16px;
+    text-align: center;
+
+}
+
+.footer a:hover { 
+    text-decoration: underline;
+} 
 
 .row {
     display: flex;

@@ -16,31 +16,20 @@
         <ul>
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'exhibits' %}">Exhibits</a></li>
+            <li><a href="{% url 'exhibits' %}">Login</a></li>
+            <li><a href="{% url 'exhibits' %}">View Stats</a></li>
 
         </ul>
     </nav>
 
     
-    <h1>Exhibits</h1>
+    <h1>About Us</h1>
 
-
-    <section>
-        {% if exhibits %}
-            <ul class="exhibits-grid">
-                {% for exhibit in exhibits %}
-                    <li>
-                        
-                        <h2>{{exhibit.title}}</h2>
-                        <p>{{exhibit.domain}}</p>
-                        <a href="/gallery/{{ exhibit.exhibitId }}">  View Exhibit</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No exhibits found.</p>
-        {% endif %}
-    </section>
+    <p> Coco is amazing, she made this website, look how stunning it is </p>
     
+
+
+
 
 
     <div class="footer">
@@ -54,4 +43,11 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
 
