@@ -22,7 +22,7 @@ class Quizzes(models.Model):
 
 class Artefact(models.Model):
     artefactId = models.AutoField(db_column='artefactId', primary_key=True)  
-    info = models.CharField(db_column='info', blank=True, null=False)  
+    info = models.CharField(db_column='info', max_length=255, blank=True, null=False)  
     artefactDate = models.DateField(db_column='artefactDate', blank=True, null=False)  
     artefactObjectPath = models.TextField(db_column='artefactObjectPath', blank=True, null=False)  
     exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId')  
@@ -30,9 +30,9 @@ class Artefact(models.Model):
 class Users(models.Model):
     userId = models.AutoField(db_column='userId', primary_key=True, blank=True, null=False)   
     userLevel = models.IntegerField(db_column='userLevel')   
-    fName = models.CharField(db_column='fName', blank=True, null=False)   
-    lName = models.CharField(db_column='lName', blank=True, null=False)  
-    password = models.CharField(db_column='password', blank=True, null=False)  
+    fName = models.CharField(db_column='fName', max_length=255, blank=True, null=False)   
+    lName = models.CharField(db_column='lName', max_length=255, blank=True, null=False)  
+    password = models.CharField(db_column='password', max_length=255, blank=True, null=False)  
     totalQuizzPoints = models.IntegerField(db_column='totalQuizzPoints', blank=True, null=False) 
 
     class Meta:
