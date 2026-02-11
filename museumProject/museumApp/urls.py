@@ -4,7 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-     path('exhibits/', views.UserExhibitsView.as_view()),
+     #path('', views.home, name='home'),
+     path('exhibits/', views.UserExhibitsView.as_view(), name = 'exhibits'),
      path('exhibits/<int:pk>', views.UserSingleExhibitView.as_view()),
      path('exhibits/viewCreate', views.AdminExhibitsView.as_view()), 
      path('exhibits/<int:pk>/edit', views.AdminEditExhibitView.as_view()),
@@ -18,7 +19,8 @@ urlpatterns = [
      path('exhibits/<int:exhibitId>/lessonsLearned/edit/<int:pk>', views.AdminEditLessonLearnedView.as_view()),
      path("exhibits/<int:exhibitId>/contributingFactors/new", views.AdminCreateContributingFactorView.as_view()),
      path('exhibits/<int:exhibitId>/contributingFactors/edit/<int:pk>', views.AdminEditContributingFactorView.as_view()),
-     
+     path('login/', views.loginPage, name='login'),
+     path('register/', views.registerPage, name='register'),
 ]
 
 
