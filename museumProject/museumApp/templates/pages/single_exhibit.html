@@ -1,25 +1,6 @@
-{% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-
-
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Museum Project</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-</head>
-<body> 
-    <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'exhibits' %}">Exhibits</a></li>
-
-        </ul>
-    </nav>
+{% extends "base.html" %}
+{%block content %}
 
     <h1> {{exhibit.title}}</h1>
 
@@ -123,16 +104,4 @@
     </section>
 
 
-       
-    
-    <div class="footer">
- 
-        <a href="{% url 'about' %}">About Us</a></li>
-        <p>© Copyright 2026. All rights reserved</p>
-        <a href="{% url 'privacy_policy' %}">View our Priviacy Policy</a>
-        
-
-    </div>
-
-</body>
-</html>
+    {% endblock %}

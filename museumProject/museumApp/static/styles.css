@@ -10,7 +10,7 @@ body{
     background-color: #FBFEF9;
     color: #251605;
     line-height: 1.6;
-    padding-top: 100px;
+    padding: 80px;
     
 }
 
@@ -21,47 +21,92 @@ p {
 
 }
 
-nav{
+.sidebar { 
+    position: fixed; 
+    top: 0; 
+    left:0;
+    width: 260px;
+    height: 100%;
+    background-color: #777778;
+    display: none;
+    padding-top: 20px;
+    z-index: 1000;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar a { 
+    color: #fffefe;
+    display: block;
+    font-size: 18px;
+    text-decoration: none;
+    border-bottom: 1px solid #484a4b;
+    transition: background-color 0.3s ease;
+
+}
+
+.side{ 
+    color: #ffffff;
+    font-size: 20px;
+    margin-left: 15px;
+    cursor: pointer;
+    display: block;
+    width: 80%;
+    text-align: left;
+    border-bottom: 1px solid #484a4b;
+    border: none; 
+    background: none;
+    padding: 10px 15px;
+
+}
+
+.side:hover { 
+    background-color: #484a4b;
+}
+
+.sidebar a:hover { 
+    background-color: #484a4b;
+}
+
+.top-bar { 
+    background-color: #777778;
+    position: fixed;
+    top: 0; 
+    right: 0;
+    width: 100%;
+    height: 60px; 
+    display: flex;
+    align-content: center; 
+    padding: 0 20px;
+    z-index: 999;
+}
+
+.menu{ 
+    font-size: 28px;
+    padding: 10px 15px;
+    color: #484a4b; 
+    cursor: pointer;
+    border: none;
+    background: none;
+
+}
+
+.menu:hover { 
+    background-color: #484a4b;
+
+}
+
+.overlay { 
+    cursor: pointer;
+    display: none;
     position: fixed;
     top: 0;
-    left: 0;
+    left:0;
     width: 100%;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    padding: 30px 50px;
-    background-color: #3f4556;
-    z-index: 1000;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+    height: 100%;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-nav ul{
-    display:flex; 
-    justify-content: center;
-    gap: 5em;
-    list-style: none;
-}
-
-nav ul a {  
-    color: #fdfdfd; 
-    font-size: 16px;
-    font-weight: bold;
-    padding: 5px 15px; 
-    border-radius: 5px; 
-    transition: 20px; 
-    text-decoration: none; 
-
-}
-
-nav > a { 
-    color: #98c1d9; 
-    height: 20px;
-    width: auto;
-    margin-left: 0;
-    align-items: center;
-    display: flex;
-}
 
 section{
     padding: 40px;
@@ -69,29 +114,33 @@ section{
     margin: 40px; 
 }
 
-.home-icon { 
-    height: 40px;
-    width: 40px;
-    margin-right: 10px;
-}
-.home-header { 
-    width: 100%;
-    height: 100%; 
-    object-fit: cover;
-    display: block;
-    margin-bottom: 0;
+.home-button {
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 2px solid #a5a5a5;
+    
 
-}
-
-.home-image { 
-    margin-top: 40px;
-    height: auto;
-    width: 90%;
-    display: auto;
-    margin: 0 auto;
+  }
 
 
-}
+  
+.home-button:hover {
+    background-color: #a5a5a5;
+    color: white;
+  }
+
+
+
 
 div a { 
     margin-top: 30 px;
@@ -103,21 +152,21 @@ div a {
     margin-bottom: 50px ;
 }
 
+.intro p { 
+    margin-top: 40px;
+    margin-bottom: 40px;
 
-.first-man-image {
-    max-width: 400px;
-    width: 100%;
-    height: auto;
-    display: block;
-    margin: auto;
-  }
+}
+
+
+
 
 .footer {
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: black;
+    background-color: rgb(81, 79, 79);
     align-items: flex;
     display: flex;
     justify-content: space-evenly; 
@@ -153,7 +202,7 @@ div a {
 }
 
 h1 { 
-    font-size: 60px;
+    font-size: clamp(20px, 5vw, 40px);
     color: #2e2e2f;
     font-style: bold;
     text-align: center;
@@ -163,21 +212,23 @@ h1 {
 
 .exhibits-grid{ 
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(auto-fit, minmax(250, 1fr));
   flex-wrap: wrap;
   padding: 50px; 
-  gap: 10rem;
+  gap: 2rem;
   list-style: none;
   justify-content: center;
 }
 
 .exhibits-grid li{ 
     background: FBFEF9;
-    border-radius: 6px;
-    padding: 100px;
-    width: 300px;
+    
+    padding: 20px;
+    width: 100%;
+    max-width: 300px;
     height: auto;
     border: 1px solid #484a4b;
+
  
 }
 
@@ -246,6 +297,54 @@ h3 {
  
 
 
+/* Mobile phone css (smaller text etc */
+
+@media (max-width: 600px) {
+    body{ 
+        padding-top: 120px;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    nav{ 
+        padding: 15px 20px; 
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    nav ul {
+        gap: 0.5rem;
+    }
+
+    nav ul a{
+        font-size: 10px;
+        
+    }
+    
+    section { 
+        margin: 10px;
+        padding: 20px;
+    }
+
+    .row { 
+        flex-direction: column;
+    }
+
+    .exhibits-grid {
+        grid-template-columns: 1fr; 
+        padding: 20px; 
+    }
+    .exhibits-grid li {
+        max-width: none; 
+        gap: 2rem; 
+    }
+
+    footer { 
+        font-size: 14px;
+        height: auto; 
+        gap: 2rem;
+    }
+}
 
 
 

@@ -41,6 +41,17 @@ def login(request):
 def register(request):
     return render(request, 'pages/register.html', {})
 
+def results(request,quizId ): 
+    question = get_object_or_404(QuizzQuestion, questionId=quizId)
+    return (response, "pags/options.html" )
+
+
+def results(request,quizId ): 
+    response = " "
+    return Http404
+
+
+
 """
 
 def quiz(request, quizId):

@@ -130,6 +130,10 @@ def logoutUser(request):
     #logout button to be added to html in order for this to work, and url path to be added to urls.py, otherwise pointless.
 
 
+
+
+
+
 # def ExhibitsView(request):
 #     exhibits = Exhibit.objects.all()
 #     return render(request, "pages/exhibits.html", {"exhibits": exhibits})
@@ -160,12 +164,4 @@ def logoutUser(request):
 #          ):
 #     return render(request, 'pages/quiz.html', {})
 
-# def results(request,quizId ): 
-#     question = get_object_or_404(QuizzQuestion, questionId=quizId)
-#     return (response, "pags/options.html" )
-
-
-# def results(request,quizId ): 
-#     response = " "
-#     return Http404
 

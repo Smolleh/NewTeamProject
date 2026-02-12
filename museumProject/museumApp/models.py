@@ -205,6 +205,10 @@ class AuthUserUserPermissions(models.Model):
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
 
+"""
+
+
+"""
 class DjangoAdminLog(models.Model):
     object_id = models.TextField(blank=True, null=True)
     object_repr = models.CharField(max_length=200)
