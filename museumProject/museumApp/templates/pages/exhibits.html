@@ -9,12 +9,16 @@
         {% if exhibits %}
             <ul class="exhibits-grid">
                 {% for exhibit in exhibits %}
-                    <li>
-                        
+                    <li class="exhibit-card">
+                        <a href="/gallery/{{ exhibit.exhibitId }}">
                         <h2>{{exhibit.title}}</h2>
                         <p>{{exhibit.domain}}</p>
-                        <a href="/gallery/{{ exhibit.exhibitId }}">  View Exhibit</a>
+                        <p>{{exhibit.viewNumber}} </p>
+                        
+                         
+                        </a>
                     </li>
+
                 {% endfor %}
             </ul>
         {% else %}
