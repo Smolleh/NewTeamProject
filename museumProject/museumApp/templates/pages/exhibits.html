@@ -10,10 +10,11 @@
             <ul class="exhibits-grid">
                 {% for exhibit in exhibits %}
                     <li class="exhibit-card">
-                        <a href="/gallery/{{ exhibit.exhibitId }}">
+                        <a href="{% url 'single_exhibit' exhibitId=exhibit.exhibitId %}">
                         <h2>{{exhibit.title}}</h2>
                         <p>{{exhibit.domain}}</p>
                         <p>{{exhibit.viewNumber}} </p>
+                        
                         
                          
                         </a>

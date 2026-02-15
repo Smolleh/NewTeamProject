@@ -320,8 +320,65 @@ h3 {
 }
 
 
+/***************************** Curator Dashboard *******************************/
 
- 
+
+.curator-grid{ 
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    padding: 50px; 
+    gap: 2rem;
+    list-style: none;
+    margin: 0 auto;
+    max-width: 1400px;
+  
+  }
+  
+  .curator-card { 
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      transition: all 0.25s ease;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  
+  .curator-card:hover { 
+      transform: translateY(-8px); 
+      box-shadow: 0px 12px 28px rgb(0, 0, 0.12);
+  }
+  
+  .curator-grid ul li p{ 
+      text-decoration: none;
+      font-size: 1.4rem;
+      font-style: italic;
+      color: #1a1a1a;
+  
+  }
+  
+  .curator-card a { 
+      display: block;
+    padding: 1.5rem;
+    color: inherit;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  
+  }
+  
+  
+  
+  .curator-card a h2{ 
+      margin: 0; 
+      text-decoration: none;
+      font-size: 1.5rem;
+      color: #222;
+      text-align: center;
+  
+  }
+  
 
 
 /* Mobile phone css (smaller text etc */

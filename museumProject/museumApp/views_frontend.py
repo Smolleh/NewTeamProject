@@ -6,7 +6,7 @@ def exhibits(request):
     return render(request, "pages/exhibits.html", {"exhibits": exhibits})
 
 
-def singleExhibit(request, exhibitId):
+def single_exhibit(request,  exhibitId):
     exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
 
     artefacts = Artefact.objects.filter(exhibitId=exhibit)
@@ -41,8 +41,35 @@ def login(request):
 def register(request):
     return render(request, 'pages/register.html', {})
 
+def curator_dashboard(request):
+        exhibits = Exhibit.objects.all()
+        return render(request, 'pages/curator_dashboard.html', {"exhibits": exhibits})
 
 
+def exhibit_detail(request):
+        return render(request, 'pages/curator/exhibit_detail.html', {})
+
+def ai(request):
+        return render(request, 'pages/curator/ai.html', {})
+
+def artefact(request):
+        return render(request, 'pages/curator/artefact.html', {})
+
+def factors(request):
+        return render(request, 'pages/curator/factors.html', {})
+
+def failure(request):
+        return render(request, 'pages/curator/failure.html', {})
+
+def lessons(request):
+        return render(request, 'pages/curator/lessons.html', {})
+
+def system(request, exhibitId):
+        exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
+        ai_description = AiSystemDescription.objects.filter(exhibit_id=exhibit).first()
+        return render(request, 'pages/curator/system.html',
+                       {"exhibit": exhibit,
+                        "ai_description":ai_description})
 """
 def results(request,quizId ): 
     question = get_object_or_404(QuizzQuestion, questionId=quizId)

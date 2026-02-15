@@ -1,0 +1,30 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block content %}
+
+
+<h1> Edit AI System Description </h1>
+
+<form id="edit-ai-form">
+
+    <textarea id="description" placeholder="Description"></textarea>
+    <textarea id="purpose" placeholder="Purpose"></textarea>
+    <textarea id="outputs" placeholder="Outputs"></textarea>
+
+    <button type="submit">Save</button>
+
+</form>
+<p id="message"></p>
+<script>
+    const exhibitId = "{{ exhibit.exhibitId}}";
+    const pk = "{{ ai_description.pk}}";
+</script>
+
+<script src="{% static 'js/edit_system.js' %}"></script>
+
+
+
+
+
+{% endblock %}
