@@ -94,4 +94,31 @@ class AdminEditLessonLearnedView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return LessonsLearned.objects.filter(exhibitId_id=self.kwargs["exhibitId"])
 
+def registerPage(request):
+    form = createUserForm()
+
+    if request.method == 'POST':
+        form = createUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+
+    context = {'form': form}
+    return render(request, 'pages/register.html', context)
+
+def loginPage(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user()) 
+            return redirect('exhibits')
+    else:
+        form = AuthenticationForm()
+    
+    return render(request, 'pages/login.html', {'form': form})
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+    #logout button to be added to html in order for this to work, and url path to be added to urls.py, otherwise pointless.
 
