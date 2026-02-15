@@ -4,9 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-     #view all exhibits
-     path('exhibits/', views.UserExhibitsView.as_view()),
-     #view a specifc exhibit
+     #path('', views.home, name='home'),
+     path('exhibits/', views.UserExhibitsView.as_view(), name = 'exhibits'),
      path('exhibits/<int:pk>', views.UserSingleExhibitView.as_view()),
      #view and create exhibits
      path('exhibits/viewCreate', views.AdminExhibitsView.as_view()),
@@ -32,6 +31,8 @@ urlpatterns = [
      path("exhibits/<int:exhibitId>/contributingFactors/new", views.AdminCreateContributingFactorView.as_view()),
      # view, edit and delete contributing factors
      path('exhibits/<int:exhibitId>/contributingFactors/edit/<int:pk>', views.AdminEditContributingFactorView.as_view()),
+     path('login/', views.loginPage, name='login'),
+     path('register/', views.registerPage, name='register'),
 ]
 
 

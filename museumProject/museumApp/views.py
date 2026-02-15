@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework import generics
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from .forms import createUserForm
+from django.contrib.auth import login, logout, authenticate
 
 class UserExhibitsView(generics.ListAPIView):
     queryset = Exhibit.objects.all()
