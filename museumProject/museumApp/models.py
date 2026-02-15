@@ -1,50 +1,48 @@
 from django.db import models
 ##cammelcase exhibitId eg not ExhibitID or exhibitid 
+# very important to use column name same as varaible name
+# everything except primary key should be blank = True, null = True
+
 class Exhibit(models.Model):
     exhibitId = models.AutoField(db_column='exhibitId', primary_key=True)  
-    title = models.TextField(db_column='title', blank=True, null=False) 
-    domain = models.TextField(db_column='domain', blank=True, null=False)  
-    backgroundDeploymentContext = models.TextField(db_column='backgroundDeploymentContext', blank=True, null=False) 
-    intededUse = models.TextField(db_column='intededUse', blank=True, null=False) 
-    viewNumber = models.IntegerField(db_column='viewNumber', blank=True, null=False)  
-
-class Quizzes(models.Model):
-    quizId = models.AutoField(db_column='quizId', primary_key=True, blank=True, null=False)   
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=False)   
-    quizzDetails = models.TextField(db_column='quizzDetails', blank=True, null=False)   
-    completionRate = models.IntegerField(db_column='completionRate', blank=True, null=False)   
-    attemptRate = models.IntegerField(db_column='attemptRate', blank=True, null=False)   
-    totalQuestionPoints = models.IntegerField(db_column='totalQuestionPoints', blank=True, null=False)   
-
+    title = models.TextField(db_column='title', blank=True, null=True) 
+    domain = models.TextField(db_column='domain', blank=True, null=True)  
+    backgroundDeploymentContext = models.TextField(db_column='backgroundDeploymentContext', blank=True, null=True) 
+    intededUse = models.TextField(db_column='intededUse', blank=True, null=True) 
+    viewNumber = models.IntegerField(db_column='viewNumber', blank=True, null=True) 
     class Meta:
-        managed = False
-        db_table = 'quizzes'
+        managed = True
+        db_table = 'exhibits'
+
 
 class Artefact(models.Model):
     artefactId = models.AutoField(db_column='artefactId', primary_key=True)  
     info = models.CharField(db_column='info', blank=True, null=True)  
     artefactDate = models.DateField(db_column='artefactDate', blank=True, null=True)  
     artefactObjectPath = models.ImageField(db_column='artefactObjectPath',  null=True,upload_to='museumProject/museumApp/ArtefactImages/')  
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId')  
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=True)  
+    class Meta:
+        managed = True
+        db_table = 'artefacts'
 
 class Users(models.Model):
     userId = models.AutoField(db_column='userId', primary_key=True, blank=True, null=False)   
     userLevel = models.IntegerField(db_column='userLevel')   
-    fName = models.CharField(db_column='fName', blank=True, null=False)   
-    lName = models.CharField(db_column='lName', blank=True, null=False)  
-    password = models.CharField(db_column='password', blank=True, null=False)  
-    totalQuizzPoints = models.IntegerField(db_column='totalQuizzPoints', blank=True, null=False) 
+    fName = models.CharField(db_column='fName', blank=True, null=True)   
+    lName = models.CharField(db_column='lName', blank=True, null=True)  
+    password = models.CharField(db_column='password', blank=True, null=True)  
+    totalQuizzPoints = models.IntegerField(db_column='totalQuizzPoints', blank=True, null=True) 
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'users'
 
 class AiSystemDescription(models.Model):
     systemDescriptionId = models.AutoField(db_column='systemDescriptionId', primary_key=True, null=False)   
-    exhibit = models.OneToOneField(Exhibit, on_delete=models.CASCADE,related_name='systemDescription', blank= True, null = True)
-    systemDescription = models.TextField(db_column='systemDescription', blank=True, null=False)   
-    systemPurpose = models.TextField(db_column='systemPurpose', blank=True, null=False)   
-    systemOutputs = models.TextField(db_column='systemOutputs', blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, on_delete=models.CASCADE,db_column='exhibitId', blank= True, null = True)
+    systemDescription = models.TextField(db_column='systemDescription', blank=True, null=True)   
+    systemPurpose = models.TextField(db_column='systemPurpose', blank=True, null=True)   
+    systemOutputs = models.TextField(db_column='systemOutputs', blank=True, null=True)   
 
     class Meta:
         managed = True
@@ -53,39 +51,12 @@ class AiSystemDescription(models.Model):
 
 
 
-
-class AttemptedQuizzes(models.Model):
-    pk = models.CompositePrimaryKey('userId', 'quizId')
-    userId = models.ForeignKey(Users, models.CASCADE, db_column='userId', blank=True, null=False)   
-    quizId = models.ForeignKey(Quizzes, models.CASCADE, db_column='quizId', blank=True, null=False)   
-    pointsGained = models.IntegerField(db_column='pointsGained', blank=True, null=False)   
-    attemptDate = models.DateField(db_column='attemptDate', blank=True, null=False)   
-
-    class Meta:
-        managed = False
-        db_table = 'attempted_quizzes'
-
-
-
-
-
-class BookMarks(models.Model):
-    pk = models.CompositePrimaryKey('userId', 'exhibitId')
-    userId = models.ForeignKey(Users, models.CASCADE, db_column='userId', blank=True, null=False)   
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=False)   
-
-    class Meta:
-        managed = False
-        db_table = 'book_marks'
-
-
-
 class ContributingFactors(models.Model):
     contributingFactorId = models.AutoField(db_column='contributingFactorId', primary_key=True, blank=True, null=False)   
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE , db_column='exhibitId', blank=True, null=False)   
-    dataIssues = models.TextField(db_column='dataIssues', blank=True, null=False)   
-    designChoices = models.TextField(db_column='designChoices', blank=True, null=False)   
-    organisationalOrGovernanceIssues = models.TextField(db_column='organisationalOrGovernanceIssues', blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE , db_column='exhibitId', blank=True, null=True)   
+    dataIssues = models.TextField(db_column='dataIssues', blank=True, null=True)   
+    designChoices = models.TextField(db_column='designChoices', blank=True, null=True)   
+    organisationalOrGovernanceIssues = models.TextField(db_column='organisationalOrGovernanceIssues', blank=True, null=True)   
 
     class Meta:
         managed = True
@@ -93,11 +64,11 @@ class ContributingFactors(models.Model):
 
 
 class FailureDescription(models.Model):
-    failureDescriptioniId = models.AutoField(db_column='failureDescriptionId', primary_key=True, null=False)   
-    exhibit = models.OneToOneField(Exhibit, on_delete=models.CASCADE,related_name='failureDescription', null=True, blank= True)
-    whatWentWrong = models.TextField(db_column='whatWentWrong', blank=True, null=False)   
-    howItWasDetected = models.TextField(db_column='howItWasDetected', blank=True, null=False)   
-    whatWasAffected = models.TextField(db_column='whatWasAffected', blank=True, null=False)   
+    failureDescriptionId = models.AutoField(db_column='failureDescriptionId', primary_key=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE,db_column='exhibitId',blank = True, null=True)
+    whatWentWrong = models.TextField(db_column='whatWentWrong', blank=True, null=True)   
+    howItWasDetected = models.TextField(db_column='howItWasDetected', blank=True, null=True)   
+    whatWasAffected = models.TextField(db_column='whatWasAffected', blank=True, null=True)   
 
     class Meta:
         managed = True
@@ -106,9 +77,9 @@ class FailureDescription(models.Model):
 
 class LessonsLearned(models.Model):
     lessonslearnedId = models.AutoField(db_column='lessonsLearnedId', primary_key=True, blank=True, null=False)   
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=False)   
-    practicalRecommendations = models.TextField(db_column='practicalRecommendations', blank=True, null=False)   
-    futureWarnings = models.TextField(db_column='futureWarnings', blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=True)   
+    practicalRecommendations = models.TextField(db_column='practicalRecommendations', blank=True, null=True)   
+    futureWarnings = models.TextField(db_column='futureWarnings', blank=True, null=True)   
 
     class Meta:
         managed = True
@@ -117,6 +88,17 @@ class LessonsLearned(models.Model):
 
 
 
+class Quizzes(models.Model):
+    quizId = models.AutoField(db_column='quizId', primary_key=True, blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=True)   
+    quizzDetails = models.TextField(db_column='quizzDetails', blank=True, null=True)   
+    completionRate = models.IntegerField(db_column='completionRate', blank=True, null=True)   
+    attemptRate = models.IntegerField(db_column='attemptRate', blank=True, null=True)   
+    totalQuestionPoints = models.IntegerField(db_column='totalQuestionPoints', blank=True, null=True)   
+
+    class Meta:
+        managed = True
+        db_table = 'quizzes'
 
 
 
@@ -134,12 +116,33 @@ class QuizzQuestions(models.Model):
     points = models.IntegerField(db_column='points', blank=True, null=False)   
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'quizz_questions'
         
+class AttemptedQuizzes(models.Model):
+    userId = models.ForeignKey(Users, models.CASCADE, db_column='userId', blank=True, null=False)   
+    quizId = models.ForeignKey(Quizzes, models.CASCADE, db_column='quizId', blank=True, null=False)   
+    pointsGained = models.IntegerField(db_column='pointsGained', blank=True, null=False)   
+    attemptDate = models.DateField(db_column='attemptDate', blank=True, null=False)   
 
+    class Meta:
+        managed = True
+        db_table = 'attempted_quizzes'
+
+
+
+
+
+class BookMarks(models.Model):
+    userId = models.ForeignKey(Users, models.CASCADE, db_column='userId', blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=False)   
+
+    class Meta:
+        managed = True
+        db_table = 'book_marks'
 
 """
+## seperate stuff
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -251,8 +254,6 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
-
-
 
 
 
