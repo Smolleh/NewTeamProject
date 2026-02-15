@@ -4,7 +4,7 @@ from django.urls import reverse
 from .models import Exhibit, Artefact, AiSystemDescription, FailureDescription, LessonsLearned, ContributingFactors
 from datetime import date
 
-"""First commit needs much more work"""
+
 class ExhibitAPITestCase(APITestCase):
     
     def setUp(self):
@@ -26,19 +26,19 @@ class ExhibitAPITestCase(APITestCase):
         
     def test_get_all_exhibits_success(self):
         """Test retrieving all exhibits"""
-        response = self.client.get('/exhibits/')
+        response = self.client.get('/api/exhibits/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
         
     def test_get_single_exhibit_success(self):
         """Test retrieving a single exhibit"""
-        response = self.client.get(f'/exhibits/{self.exhibit1.exhibitId}')
+        response = self.client.get(f'/api/exhibits/{self.exhibit1.exhibitId}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], "Test Exhibit 1")
         
     def test_get_single_exhibit_not_found(self):
         """Test retrieving non-existent exhibit"""
-        response = self.client.get('/exhibits/9999')
+        response = self.client.get('/api/exhibits/9999')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         
     def test_create_exhibit_success(self):
@@ -50,7 +50,7 @@ class ExhibitAPITestCase(APITestCase):
             'intededUse': 'New use',
             'viewNumber': 0
         }
-        response = self.client.post('/exhibits/viewCreate', data)
+        response = self.client.post('/api/exhibits/viewCreate', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Exhibit.objects.count(), 3)
         
@@ -63,14 +63,14 @@ class ExhibitAPITestCase(APITestCase):
             'intededUse': 'Updated use',
             'viewNumber': 10
         }
-        response = self.client.put(f'/exhibits/{self.exhibit1.exhibitId}/edit', data)
+        response = self.client.put(f'/api/exhibits/{self.exhibit1.exhibitId}/edit', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.exhibit1.refresh_from_db()
         self.assertEqual(self.exhibit1.title, 'Updated Title')
         
     def test_delete_exhibit_success(self):
         """Test deleting an exhibit"""
-        response = self.client.delete(f'/exhibits/{self.exhibit1.exhibitId}/edit')
+        response = self.client.delete(f'/api/exhibits/{self.exhibit1.exhibitId}/edit')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Exhibit.objects.count(), 1)
 
@@ -100,7 +100,7 @@ class ArtefactAPITestCase(APITestCase):
             'artefactDate': '2024-02-01',
             'artefactObjectPath': '/new/path'
         }
-        response = self.client.post(f'/exhibits/{self.exhibit.exhibitId}/artefacts/new', data)
+        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/artefacts/new', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Artefact.objects.count(), 2)
         
@@ -111,12 +111,12 @@ class ArtefactAPITestCase(APITestCase):
             'artefactDate': '2024-02-01',
             'artefactObjectPath': '/new/path'
         }
-        response = self.client.post('/exhibits/9999/artefacts/new', data)
+        response = self.client.post('/api/exhibits/9999/artefacts/new', data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         
     def test_get_artefact_success(self):
         """Test retrieving an artefact"""
-        response = self.client.get(f'/exhibits/{self.exhibit.exhibitId}/artefacts/edit/{self.artefact.artefactId}')
+        response = self.client.get(f'/api/exhibits/{self.exhibit.exhibitId}/artefacts/edit/{self.artefact.artefactId}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['info'], 'Test artefact')
         
@@ -127,14 +127,14 @@ class ArtefactAPITestCase(APITestCase):
             'artefactDate': '2024-03-01',
             'artefactObjectPath': '/updated/path'
         }
-        response = self.client.put(f'/exhibits/{self.exhibit.exhibitId}/artefacts/edit/{self.artefact.artefactId}', data)
+        response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/artefacts/edit/{self.artefact.artefactId}', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.artefact.refresh_from_db()
         self.assertEqual(self.artefact.info, 'Updated artefact')
         
     def test_delete_artefact_success(self):
         """Test deleting an artefact"""
-        response = self.client.delete(f'/exhibits/{self.exhibit.exhibitId}/artefacts/edit/{self.artefact.artefactId}')
+        response = self.client.delete(f'/api/exhibits/{self.exhibit.exhibitId}/artefacts/edit/{self.artefact.artefactId}')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Artefact.objects.count(), 0)
 
@@ -158,7 +158,7 @@ class SystemDescriptionAPITestCase(APITestCase):
             'systemPurpose': 'Test purpose',
             'systemOutputs': 'Test outputs'
         }
-        response = self.client.post(f'/exhibits/{self.exhibit.exhibitId}/aiSystemDescription/new', data)
+        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/aiSystemDescription/new', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(AiSystemDescription.objects.count(), 1)
         
@@ -170,7 +170,7 @@ class SystemDescriptionAPITestCase(APITestCase):
             systemPurpose='Purpose',
             systemOutputs='Outputs'
         )
-        response = self.client.get(f'/exhibits/{self.exhibit.exhibitId}/aiSystemDescription/edit/{system_desc.systemDescriptionId}')
+        response = self.client.get(f'/api/exhibits/{self.exhibit.exhibitId}/aiSystemDescription/edit/{system_desc.systemDescriptionId}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
     def test_update_system_description_success(self):
@@ -186,7 +186,7 @@ class SystemDescriptionAPITestCase(APITestCase):
             'systemPurpose': 'Updated purpose',
             'systemOutputs': 'Updated outputs'
         }
-        response = self.client.put(f'/exhibits/{self.exhibit.exhibitId}/aiSystemDescription/edit/{system_desc.systemDescriptionId}', data)
+        response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/aiSystemDescription/edit/{system_desc.systemDescriptionId}', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -209,7 +209,7 @@ class FailureDescriptionAPITestCase(APITestCase):
             'howItWasDetected': 'We noticed',
             'whatWasAffected': 'Users impacted'
         }
-        response = self.client.post(f'/exhibits/{self.exhibit.exhibitId}/failureDescription/new', data)
+        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/failureDescription/new', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_delete_failure_description_success(self):
@@ -220,7 +220,7 @@ class FailureDescriptionAPITestCase(APITestCase):
             howItWasDetected='Test',
             whatWasAffected='Test'
         )
-        response = self.client.delete(f'/exhibits/{self.exhibit.exhibitId}/failureDescription/edit/{failure_desc.failureDescriptioniId}')
+        response = self.client.delete(f'/api/exhibits/{self.exhibit.exhibitId}/failureDescription/edit/{failure_desc.failureDescriptioniId}')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
@@ -242,7 +242,7 @@ class LessonsLearnedAPITestCase(APITestCase):
             'practicalRecommendations': 'Do this better',
             'futureWarnings': 'Watch out for this'
         }
-        response = self.client.post(f'/exhibits/{self.exhibit.exhibitId}/lessonsLearned/new', data)
+        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/lessonsLearned/new', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_get_lesson_learned_success(self):
@@ -252,7 +252,7 @@ class LessonsLearnedAPITestCase(APITestCase):
             practicalRecommendations='Test',
             futureWarnings='Test'
         )
-        response = self.client.get(f'/exhibits/{self.exhibit.exhibitId}/lessonsLearned/edit/{lesson.lessonslearnedId}')
+        response = self.client.get(f'/api/exhibits/{self.exhibit.exhibitId}/lessonsLearned/edit/{lesson.lessonslearnedId}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -275,7 +275,7 @@ class ContributingFactorsAPITestCase(APITestCase):
             'designChoices': 'Poor design',
             'organisationalOrGovernanceIssues': 'Lack of oversight'
         }
-        response = self.client.post(f'/exhibits/{self.exhibit.exhibitId}/contributingFactors/new', data)
+        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/contributingFactors/new', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_update_contributing_factor_success(self):
@@ -291,5 +291,5 @@ class ContributingFactorsAPITestCase(APITestCase):
             'designChoices': 'Updated design',
             'organisationalOrGovernanceIssues': 'Updated governance'
         }
-        response = self.client.put(f'/exhibits/{self.exhibit.exhibitId}/contributingFactors/edit/{factor.contributingFactorId}', data)
+        response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/contributingFactors/edit/{factor.contributingFactorId}', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -3,7 +3,7 @@ from .models import *
 
 
 
-    
+
 class ArtefactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artefact
