@@ -15,6 +15,6 @@ urlpatterns = [
     path("register/", views_frontend.register, name="register"),
     
     path('curator_dashboard/', views_frontend.curator_dashboard, name='curator_dashboard'),
-    path('system/<int:exhibitId>/', views_frontend.system, name='system'),
+    path('system/<int:exhibitId>/', views_frontend.edit_system, name='edit_system'),
 
 ]

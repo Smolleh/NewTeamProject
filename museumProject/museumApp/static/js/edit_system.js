@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function() {
-    fetch(`/exhibits/${exhibitId}/aiSystemDescription/edit/${pk}`) 
+    fetch(`/api/exhibits/${exhibitId}/aiSystemDescription/edit/${pk}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Data not loaded");
@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         
         .then(data => {
-            document.getElementById('description').value = data.description || '';
-            document.getElementById('purpose').value = data.purpose || '';
-            document.getElementById('outputs').value = data.outputs || '';
+            document.getElementById('systemDescription').value = data.systemDescription || '';
+            document.getElementById('systemPurpose').value = data.systemPurpose || '';
+            document.getElementById('systemOutputs').value = data.systemOutputs || '';
 
         })
         .catch(error => console.error(error));
@@ -25,12 +25,12 @@ form.addEventListener("submit", function(event) {
     event.preventDefault(); 
 
     const data = { 
-        description: document.getElementById('description').value,
-        purpose:  document.getElementById('purpose').value,
-        outputs: document.getElementById('outputs').value
+        systemDescription: document.getElementById('systemDescription').value,
+        systemPurpose:  document.getElementById('systemPurpose').value,
+        systemOutputs: document.getElementById('systemOutputs').value
     };
 
-    fetch(`/exhibits/${exhibitId}/aiSystemDescription/edit/${pk}`, { 
+    fetch(`/api/exhibits/${exhibitId}/aiSystemDescription/edit/${pk}`, { 
         method: "PUT", 
         headers: { 
             "Content-Type": "application/json",
@@ -44,7 +44,7 @@ form.addEventListener("submit", function(event) {
         if (!response.ok) {
             throw new Error("Failed to save edit");
         }
-        response.json();
+        return response.json();
     })
     .then(data => { 
         document.getElementById('message').innerText = "Edit saved";

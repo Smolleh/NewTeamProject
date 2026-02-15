@@ -323,9 +323,44 @@ h3 {
 /***************************** Curator Dashboard *******************************/
 
 
+
+
+  .management-grid{ 
+    display: flex;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    padding: 50px; 
+    gap: 2rem;
+    list-style: none;
+    margin: 0 auto 3rem auto;
+    max-width: 1400px;
+  
+  }
+
+  .management-card { 
+    background: rgb(186, 174, 255);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.management-card a { 
+    color: black;
+}
+
+
+.management-card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0px 12px 28px rgb(0, 0, 0.12);
+}
+  
 .curator-grid{ 
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     padding: 50px; 
     gap: 2rem;
     list-style: none;
@@ -333,44 +368,37 @@ h3 {
     max-width: 1400px;
   
   }
-  
+
+
   .curator-card { 
       background: white;
       border-radius: 12px;
       padding: 20px;
       border: 1px solid #e0e0e0;
-      transition: all 0.25s ease;
       flex-direction: column;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
   
   
-  .curator-card:hover { 
-      transform: translateY(-8px); 
-      box-shadow: 0px 12px 28px rgb(0, 0, 0.12);
-  }
-  
-  .curator-grid ul li p{ 
-      text-decoration: none;
-      font-size: 1.4rem;
-      font-style: italic;
-      color: #1a1a1a;
-  
-  }
-  
-  .curator-card a { 
-      display: block;
-    padding: 1.5rem;
+  .curator-links a { 
+    display: block;
     color: inherit;
     height: 100%;
     display: flex;
     flex-direction: column;
+    text-decoration: underline;
+    margin: 10px;
+    color: blue;
   
+  }
+
+  .curator-links a:hover{ 
+    color: darkblue;
   }
   
   
   
-  .curator-card a h2{ 
+  .curator-card h2{ 
       margin: 0; 
       text-decoration: none;
       font-size: 1.5rem;

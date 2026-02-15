@@ -21,25 +21,20 @@
             {% for exhibit in exhibits %}
                 <li class="curator-card">
                     <h2>{{exhibit.title}}</h2>
+                    <div class="curator-links">
 
-                    <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit Exibit Detail</a>
-                    <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit Contributing Factors</a>
-                    <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit AI Failure Description</a>
-                    <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit Lessons Learned </a>
-                    <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit System Description</a>
-                    <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit Artefacts </a>
-                    <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Add Artifact</a>
-
+                        <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit Exibit Detail</a>
+                        <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit Contributing Factors</a>
+                        <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit AI Failure Description</a>
+                        <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit Lessons Learned </a>
+                        <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit System Description</a>
+                        <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Edit Artefacts </a>
+                        <a href="{% url 'system' exhibitId=exhibit.exhibitId %}">Add Artifact</a>
+                    </div>
         
                 </li>
 
             {% endfor %}
-            <li class="curator-card">
-                <a href="{% url 'home' %}">Create Exhibit</a>
-                <a href="{% url 'home' %}">View User Feedback</a>
-                <a href="{% url 'home'%}">View Analytics </a>
-
-            </li>
         </ul>
     {% else %}
         <p>No exhibits found.</p>

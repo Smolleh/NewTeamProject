@@ -8,9 +8,9 @@
 
 <form id="edit-ai-form">
 
-    <textarea id="description" placeholder="Description"></textarea>
-    <textarea id="purpose" placeholder="Purpose"></textarea>
-    <textarea id="outputs" placeholder="Outputs"></textarea>
+    <textarea id="systemDescription" placeholder="systemDescription"> {{ ai_description.systemDescription }}</textarea>
+    <textarea id="systemPurpose" placeholder="systemPurpose">{{ ai_description.systemPurpose }}</textarea>
+    <textarea id="systemOutputs" placeholder="systemOutputs">{{ ai_description.systemOutputs }}</textarea>
 
     <button type="submit">Save</button>
 

@@ -64,10 +64,10 @@ def failure(request):
 def lessons(request):
         return render(request, 'pages/curator/lessons.html', {})
 
-def system(request, exhibitId):
+def edit_system(request, exhibitId):
         exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
-        ai_description = AiSystemDescription.objects.filter(exhibit_id=exhibit).first()
-        return render(request, 'pages/curator/system.html',
+        ai_description = AiSystemDescription.objects.filter(exhibitId=exhibit).first()
+        return render(request, 'pages/curator/edit_system.html',
                        {"exhibit": exhibit,
                         "ai_description":ai_description})
 """
