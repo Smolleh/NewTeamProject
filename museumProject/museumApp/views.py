@@ -92,7 +92,7 @@ class AdminEditLessonLearnedView(generics.RetrieveUpdateDestroyAPIView):
 
 
     def get_queryset(self):
-        return LessonsLearned.objects.filter(exhibitId_id=self.kwargs["exhibitId"])
+        return LessonsLearned.objects.filter(exhibitId=self.kwargs["exhibitId"])
 
 def registerPage(request):
     form = createUserForm()
