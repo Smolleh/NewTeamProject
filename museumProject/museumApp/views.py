@@ -9,7 +9,7 @@ from django.contrib.auth import login, logout, authenticate
 
 class UserExhibitsView(generics.ListAPIView):
     queryset = Exhibit.objects.all()
-    serializer_class = ExhibitSerializer
+    serializer_class = SimpleViewExhibitSerializer
 
 class UserSingleExhibitView(generics.RetrieveAPIView):
     queryset = Exhibit.objects.all()
@@ -17,7 +17,7 @@ class UserSingleExhibitView(generics.RetrieveAPIView):
     
 class AdminExhibitsView(generics.ListCreateAPIView):
     queryset = Exhibit.objects.all()
-    serializer_class = ExhibitSerializer
+    serializer_class = SimpleViewCreateExhibitSerializer
     
 class AdminEditExhibitView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Exhibit.objects.all()
@@ -92,14 +92,7 @@ class AdminEditLessonLearnedView(generics.RetrieveUpdateDestroyAPIView):
 
 
     def get_queryset(self):
-        return LessonsLearned.objects.filter(exhibitId=self.kwargs["exhibitId"])
-
-from django.shortcuts import render, get_object_or_404
-from .models import (
-    Exhibit
-)
-from django.http import Http404
-
+        return LessonsLearned.objects.filter(exhibitId_id=self.kwargs["exhibitId"])
 
 def registerPage(request):
     form = createUserForm()
@@ -128,8 +121,4 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
     #logout button to be added to html in order for this to work, and url path to be added to urls.py, otherwise pointless.
-
-
-
-
 
