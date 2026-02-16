@@ -64,7 +64,7 @@ class AdminCreateSystemDescView(CuratorProtectedView, generics.CreateAPIView):
 
     def perform_create(self, serializer):
         exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"])
-        serializer.save(exhibit=exhibit)
+        serializer.save(exhibitId=exhibit)
 
 class AdminEditSystemDescView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AiSystemDescriptionSerializer
@@ -84,7 +84,7 @@ class AdminEditFailureDescView(CuratorProtectedView, generics.RetrieveUpdateDest
 
 
     def get_queryset(self):
-        return FailureDescription.objects.filter(exhibitId=self.kwargs["exhibitId"])
+        return FailureDescription.objects.filter(exhibit=self.kwargs["exhibitId"])
 
 class AdminCreateLessonLearnedView(CuratorProtectedView, generics.CreateAPIView):
     serializer_class = LessonsLearnedSerializer
