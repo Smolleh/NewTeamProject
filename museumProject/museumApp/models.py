@@ -4,6 +4,7 @@ from django.db import models
 # everything except primary key should be blank = True, null = True
 
 class Exhibit(models.Model):
+    
     exhibitId = models.AutoField(db_column='exhibitId', primary_key=True)  
     title = models.TextField(db_column='title', blank=True, null=False) 
     domain = models.TextField(db_column='domain', blank=True, null=False)  
@@ -23,7 +24,7 @@ class Artefact(models.Model):
     info = models.CharField(db_column='info', max_length=255, blank=True, null=False)  
     artefactDate = models.DateField(db_column='artefactDate', blank=True, null=False)  
     artefactObjectPath = models.TextField(db_column='artefactObjectPath', blank=True, null=False,)  
-    exhibitId = models.OneToOneField(Exhibit, on_delete=models.CASCADE,db_column='exhibitId', null=True, blank= True)
+    exhibitId = models.ForeignKey(Exhibit, on_delete=models.CASCADE)
     class Meta:
         managed = True
         db_table = 'Artefact'

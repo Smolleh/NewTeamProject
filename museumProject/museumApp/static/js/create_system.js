@@ -10,7 +10,7 @@ form.addEventListener("submit", function(event) {
         systemOutputs: document.getElementById('systemOutputs').value
     };
 
-    fetch(`/api/exhibits/${pk}/aiSystemDescription/new`, { 
+    fetch(`/api/exhibits/${pk}/ai-system-description/new`, { 
         method: "POST", 
         headers: { 
             "Content-Type": "application/json",

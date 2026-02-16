@@ -7,7 +7,7 @@ name = "pypi"
 django = "*"
 djangorestframework = "*"
 tzdata = "*"
-requests = "*"
+
 
 [dev-packages]
 

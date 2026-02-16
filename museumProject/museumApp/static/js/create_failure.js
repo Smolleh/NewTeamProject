@@ -11,7 +11,7 @@ form.addEventListener("submit", function(event) {
         whatWasAffected: document.getElementById('whatWasAffected').value
     };
 
-    fetch(`/api/exhibits/${exhibitId}/failureDescription/new`, { 
+    fetch(`/api/exhibits/${exhibitId}/failure-description/new`, { 
         method: "POST", 
         headers: { 
             "Content-Type": "application/json",
