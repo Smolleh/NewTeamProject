@@ -10,10 +10,11 @@ document.addEventListener("DOMContentLoaded", function() {
             title: document.getElementById('title').value,
             domain:  document.getElementById('domain').value,
             backgroundDeploymentContext: document.getElementById('backgroundDeploymentContext').value,
-            intendedUse: document.getElementById('intendedUse').value
+            intendedUse: document.getElementById('intendedUse').value,
+            viewNumber : 0
         };
     
-        fetch(`api/exhibits/viewCreate`, { 
+        fetch(`/api/exhibits/viewCreate`, { 
             method: "POST", 
             headers: { 
                 "Content-Type": "application/json",
