@@ -35,6 +35,7 @@
             <form method="POST" action="{% url 'logout' %}" style="display:inline;">
               {% csrf_token %}
               <button type="submit" class="logout-btn">Logout</button>
+            </form>
 
         {% else %}
 
