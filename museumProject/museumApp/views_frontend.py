@@ -12,7 +12,7 @@ def single_exhibit(request,  exhibitId):
     artefacts = Artefact.objects.filter(exhibitId=exhibit)
     ai_description = AiSystemDescription.objects.filter(exhibitId=exhibit).first()
     contributing_factors = ContributingFactors.objects.filter(exhibitId=exhibit).first()
-    failures = FailureDescription.objects.filter(exhibit_id=exhibit).first()
+    failures = FailureDescription.objects.filter(exhibitId=exhibit).first()
     lessons = LessonsLearned.objects.filter(exhibitId=exhibit).first()
 
     return render(request, "pages/single_exhibit.html", {
@@ -59,7 +59,7 @@ def edit_failure(request, exhibitId):
         failures = FailureDescription.objects.filter(exhibitId=exhibit).first()
         return render(request, 'pages/curator/edit_failure.html',
                        {"exhibit": exhibit,
-                        "failures": failures,})
+                        "failures": failures})
 
 def edit_factors(request, exhibitId):
         exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
@@ -104,7 +104,7 @@ def create_factors(request, exhibitId):
                        {"exhibit": exhibit})
 
 def create_exhibit(request):
-        return render(request)
+        return render(request,'pages/curator/create_exhibit.html', {"exhibit": None})
 
 def create_artefect(request, exhibitId):
         exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)

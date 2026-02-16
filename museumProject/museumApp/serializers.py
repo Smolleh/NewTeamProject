@@ -12,7 +12,7 @@ class ArtefactSerializer(serializers.ModelSerializer):
 class FailureDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FailureDescription
-        fields = ['failureDescriptioniId','whatWentWrong', 'howItWasDetected', 'whatWasAffected']
+        fields = ['failureDescriptionId','whatWentWrong', 'howItWasDetected', 'whatWasAffected']
 
 class AiSystemDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,8 +56,8 @@ class ExhibitSerializer(serializers.ModelSerializer):
     artefacts = serializers.SerializerMethodField()
     lessons_learned = serializers.SerializerMethodField()
     contributing_factors = serializers.SerializerMethodField()
-    failure_description = FailureDescriptionSerializer(read_only=True, source="failureDescription")
-    ai_system_description = AiSystemDescriptionSerializer(read_only=True, source="systemDescription")
+    failure_description = FailureDescriptionSerializer(read_only=True, source="failuredescription")
+    ai_system_description = AiSystemDescriptionSerializer(read_only=True, source="aisystemdescription")
 
     class Meta:
         model = Exhibit
