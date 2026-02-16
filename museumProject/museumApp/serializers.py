@@ -8,30 +8,34 @@ class ArtefactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artefact
         fields = ['artefactId','info', 'artefactDate', 'artefactObjectPath']
+        read_only_fields = ['exhibitId']
         
 class FailureDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FailureDescription
         fields = ['failureDescriptionId','whatWentWrong', 'howItWasDetected', 'whatWasAffected']
+        read_only_fields = ['exhibitId']
 
 class AiSystemDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AiSystemDescription
         fields = ['systemDescriptionId','systemDescription', 'systemPurpose', 'systemOutputs']
-
+        read_only_fields = ['exhibitId']
 
 
 class LessonsLearnedSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonsLearned
         fields = ['lessonslearnedId','practicalRecommendations', 'futureWarnings']
+        read_only_fields = ['exhibitId']
 
-        
 
 class ContributingFactorsSerilaizer(serializers.ModelSerializer):
     class Meta:
         model = ContributingFactors
         fields = ['contributingFactorId', 'exhibitId', 'dataIssues', 'designChoices', 'organisationalOrGovernanceIssues']
+        read_only_fields = ['exhibitId']
+        
 class SimpleViewCreateExhibitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exhibit
@@ -45,17 +49,17 @@ class SimpleViewExhibitSerializer(serializers.ModelSerializer):
     def get_ArtefactObjectPath(self, obj):
         artefact = (
             Artefact.objects
-            .filter(exhibitId=obj)               # FK field is exhibitId
-            .order_by('artefactId')              # “first” by lowest id (change if you want by date)
+            .filter(exhibitId=obj)               
+            .order_by('artefactId')              
             .only('artefactObjectPath')
             .first()
         )
         return artefact.artefactObjectPath if artefact else None
     
 class ExhibitSerializer(serializers.ModelSerializer):
-    artefacts = serializers.SerializerMethodField()
-    lessons_learned = serializers.SerializerMethodField()
-    contributing_factors = serializers.SerializerMethodField()
+    artefacts = ArtefactSerializer(read_only=True, source="artefact")
+    lessons_learned = LessonsLearnedSerializer(read_only=True, source="lessonslearned")
+    contributing_factors = ContributingFactorsSerilaizer(read_only=True, source="contributingfactors")
     failure_description = FailureDescriptionSerializer(read_only=True, source="failuredescription")
     ai_system_description = AiSystemDescriptionSerializer(read_only=True, source="aisystemdescription")
 
@@ -64,18 +68,3 @@ class ExhibitSerializer(serializers.ModelSerializer):
         fields = ['exhibitId','title', 'domain','backgroundDeploymentContext', 'intededUse',
             'viewNumber','artefacts','lessons_learned','contributing_factors','failure_description','ai_system_description',
         ]
-
-    def get_artefacts(self, obj):
-        return ArtefactSerializer(
-            obj.artefact_set.all(), many=True
-        ).data
-
-    def get_lessons_learned(self, obj):
-        return LessonsLearnedSerializer(
-            obj.lessonslearned_set.all(), many=True
-        ).data
-
-    def get_contributing_factors(self, obj):
-        return ContributingFactorsSerilaizer(
-            obj.contributingfactors_set.all(), many=True
-        ).data
