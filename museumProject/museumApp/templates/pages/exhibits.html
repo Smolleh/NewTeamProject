@@ -1,25 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Museum Project</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-</head>
-<body> 
-    <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'exhibits' %}">Exhibits</a></li>
-
-        </ul>
-    </nav>
-
+{% extends "base.html" %}
+{%block content %}
     
     <h1>Exhibits</h1>
 
@@ -28,12 +9,18 @@
         {% if exhibits %}
             <ul class="exhibits-grid">
                 {% for exhibit in exhibits %}
-                    <li>
-                        <a href="/exhibits/{{ exhibit.exhibitId }}"> 
-                            {{exhibit.title}}
-                    </a>
+                    <li class="exhibit-card">
+                        <a href="{% url 'single_exhibit' exhibitId=exhibit.exhibitId %}">
+                        <h2>{{exhibit.title}}</h2>
                         <p>{{exhibit.domain}}</p>
+                        <p>{{exhibit.viewNumber}} </p>
+                        
+                        
+                        
+                         
+                        </a>
                     </li>
+
                 {% endfor %}
             </ul>
         {% else %}
@@ -42,13 +29,4 @@
     </section>
     
 
-
-    <div class="footer">
-        <p>© Copyright 2026. All rights reserved</p>
-    </div>
-
-</body>
-</html>
-
-
-
+    {% endblock %}

@@ -11,6 +11,7 @@ in order to run the app:
 5. run python manage.py runserver
 
 if you have made any changes to the models.py file:
+(note) python -m pip install Pillow     is necessary for image in Artefact
 1. run python manage.py makemigrations
 2. run python manage.py migrate
 3. run python manage.py runserver

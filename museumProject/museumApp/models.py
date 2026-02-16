@@ -1,5 +1,8 @@
 from django.db import models
 ##cammelcase exhibitId eg not ExhibitID or exhibitid 
+# very important to use column name same as varaible name
+# everything except primary key should be blank = True, null = True
+
 class Exhibit(models.Model):
     exhibitId = models.AutoField(db_column='exhibitId', primary_key=True)  
     title = models.TextField(db_column='title', blank=True, null=False) 
@@ -22,10 +25,10 @@ class Artefact(models.Model):
 
 class AiSystemDescription(models.Model):
     systemDescriptionId = models.AutoField(db_column='systemDescriptionId', primary_key=True, null=False)   
-    exhibit = models.OneToOneField(Exhibit, on_delete=models.CASCADE,related_name='systemDescription', blank= True, null = True)
-    systemDescription = models.TextField(db_column='systemDescription', blank=True, null=False)   
-    systemPurpose = models.TextField(db_column='systemPurpose', blank=True, null=False)   
-    systemOutputs = models.TextField(db_column='systemOutputs', blank=True, null=False)   
+    exhibitId = models.ForeignKey(Exhibit, on_delete=models.CASCADE,db_column='exhibitId', blank= True, null = True)
+    systemDescription = models.TextField(db_column='systemDescription', blank=True, null=True)   
+    systemPurpose = models.TextField(db_column='systemPurpose', blank=True, null=True)   
+    systemOutputs = models.TextField(db_column='systemOutputs', blank=True, null=True)   
 
     class Meta:
         managed = True

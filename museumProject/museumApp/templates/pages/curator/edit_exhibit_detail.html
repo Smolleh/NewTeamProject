@@ -1,0 +1,54 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="dash-btn"> 
+    <a href="{% url 'curator_dashboard'  %}"> Dashboard </a>
+    <a href="{% url 'curator_dashboard'  %}"> Previous </a>
+    <a href="{% url 'curator_dashboard'  %}"> Next </a>
+</div>
+
+<h1> Edit Exhibit Detail </h1>
+
+
+<form id="edit-exhibit-form" class="input-form">
+
+    <div class="input-form">
+        <label for="title">Title:</label>
+        <textarea id="title" placeholder="title"> {{ exhibit.title }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <label for="domain">Domain:</label>
+        <textarea id="domain" placeholder="domain">{{ exhibit.domain }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <label for="backgroundDeploymentContext">Background Deployment Context:</label>
+        <textarea id="backgroundDeploymentContext" placeholder="backgroundDeploymentContext">{{ exhibit.backgroundDeploymentContext }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <label for="intededUse">Intended Use:</label>
+        <textarea id="intededUse" placeholder="intededUse">{{ exhibit.intededUse }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
+
+</form>
+<p id="message"></p>
+<script>
+    const exhibitId = "{{ exhibit.exhibitId}}";
+</script>
+
+<script src="{% static 'js/edit_exhibit.js' %}"></script>
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,59 @@
+
+{% extends "base.html" %}
+{%block content %}
+
+<h1> Curator Dashboard</h1>
+
+<section>
+    <ul class="management-grid">
+        <li class="management-card"><a href="{% url 'home' %}">Create Exhibit</a></li>
+        <li class="management-card"><a href="{% url 'home' %}">View User Feedback</a></li>
+        <li class="management-card"><a href="{% url 'home'%}">View Analytics </a></li>
+
+    </ul>
+
+
+
+
+
+    {% if exhibits %}
+        <ul class="curator-grid">
+            {% for exhibit in exhibits %}
+                <li class="curator-card">
+                    <h2>{{exhibit.title}}</h2>
+                    <div class="curator-links">
+
+                        <a href="{% url 'edit_exhibit_detail' exhibitId=exhibit.exhibitId %}">Edit Exibit Detail</a>
+                        <a href="{% url 'edit_factors' exhibitId=exhibit.exhibitId %}">Edit Contributing Factors</a>
+                        <a href="{% url 'edit_failure' exhibitId=exhibit.exhibitId %}">Edit AI Failure Description</a>
+                        <a href="{% url 'edit_lessons' exhibitId=exhibit.exhibitId %}">Edit Lessons Learned </a>
+                        <a href="{% url 'edit_system' exhibitId=exhibit.exhibitId %}">Edit System Description</a>
+                        <a href="{% url 'create_system' exhibitId=exhibit.exhibitId %}">Create System Description</a>
+                        <a href="{% url 'edit_artefect' exhibitId=exhibit.exhibitId %}">Edit Artefacts </a>
+                        <a href="{% url 'edit_artefect' exhibitId=exhibit.exhibitId %}">Add Artifact</a>
+                    </div>
+        
+                </li>
+
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No exhibits found.</p>
+    {% endif %}
+</section>
+
+
+
+
+
+            
+  
+
+{% endblock %}
+
+
+
+
+
+
+

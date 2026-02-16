@@ -1,9 +1,14 @@
-<H3>Login Page</H3>
 
-<form method = "POST" action = "">
-    {% csrf_token %}
+{% extends "base.html" %}
+{%block content %}
+    <H3>Login Page</H3>
 
-    {{form.as_p}}
+    <form method = "POST" action = "">
+        {% csrf_token %}
 
-    <input type = "submit" value = "Log In">
-</form>
+        {{form.as_p}}
+
+        <input type = "submit" value = "Log In">
+    </form>
+
+{% endblock %}

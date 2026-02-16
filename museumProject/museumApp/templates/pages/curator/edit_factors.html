@@ -1,0 +1,44 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block content %}
+
+
+<h1> Edit The Contributing Factors of the Failure </h1>
+
+<form id="edit-factors-form" class="input-form">
+
+    <div class="input-form">
+        <label for="dataIssues">Data Issues:</label>
+        <textarea id="dataIssues" placeholder="dataIssues"> {{ contributing_factors.dataIssues }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <label for="designChoices">Design Choices:</label>
+        <textarea id="designChoices" placeholder="designChoices">{{ contributing_factors.designChoices }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <label for="organisationalOrGovernanceIssues">Organisational or Governance Issues:</label>
+        <textarea id="organisationalOrGovernanceIssues" placeholder="organisationalOrGovernanceIssues">{{ contributing_factors.organisationalOrGovernanceIssues }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
+
+</form>
+<p id="message"></p>
+<script>
+    const exhibitId = "{{ exhibit.exhibitId }}";
+    const pk = "{{ contributing_factors.pk }}";
+</script>
+
+<script src="{% static 'js/edit_factor.js' %}"></script>
+
+
+
+
+
+{% endblock %}

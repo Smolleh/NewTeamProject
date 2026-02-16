@@ -1,29 +1,23 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Museum Project</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-</head>
-<body> 
-    <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'exhibits' %}">Exhibits</a></li>
-
-        </ul>
-    </nav>
-
+{% extends "base.html" %}
+{%block content %}
     
-    <h1>AI Museum of Failures and Quiz</h1>
-    <p> 
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, ipsa incidunt. Libero molestiae officia quam consequuntur ea eveniet maxime ipsa harum animi officiis, veniam quibusdam sunt omnis vel minima est.
+<h1>AI Museum of Failures</h1>
+<div class="intro"> 
+    <p>  Welcome to the AI Museum of Failures, here we will showcase exhibits showing where AI has made incorrect predictions harming people, industries and more. 
+        Explore Our gallery of exhibits and complete short quizzes to test your knowlege. 
+        Track your progress in the "Statistics" section.
     </p>
-    <div>
-        <a href="{% url 'home' %}">Click here to learn more about AI failures</a>
-    </div>
+</div>
+
+</p>
+<div>
+    <p> Click here to learn more about AI Failures:</P>
+    <a href="{% url 'exhibits' %}">
+        <button class="home-button">Explore Exhibits</button>
+    </a>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,46 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block content %}
+
+
+<h1> Edit AI System Description </h1>
+
+<form id="edit-ai-form" class="input-form">
+
+    <div class="input-form">
+        <label for="systemDescription"> System Description:</label>
+        <textarea id="systemDescription" placeholder="systemDescription"> {{ ai_description.systemDescription }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <label for="systemPurpose"> System Purpose:</label>
+        <textarea id="systemPurpose" placeholder="systemPurpose">{{ ai_description.systemPurpose }}</textarea>
+
+    </div>
+
+    <div class="input-form">
+        <label for="systemOutputs"> System Outputs:</label>
+        <textarea id="systemOutputs" placeholder="systemOutputs">{{ ai_description.systemOutputs }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
+    
+
+</form>
+<p id="message"></p>
+<script>
+    const exhibitId = "{{ exhibit.exhibitId}}";
+    const pk = "{{ ai_description.pk}}";
+</script>
+
+<script src="{% static 'js/edit_system.js' %}"></script>
+
+
+
+
+
+{% endblock %}

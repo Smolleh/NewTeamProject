@@ -41,7 +41,7 @@ class AdminEditArtefactView(CuratorProtectedView, generics.RetrieveUpdateDestroy
 
 
     def get_queryset(self):
-        return Artefact.objects.filter(exhibitId_id=self.kwargs["exhibitId"])
+        return Artefact.objects.filter(exhibitId=self.kwargs["exhibitId"])
 
 
 class AdminCreateContributingFactorView(CuratorProtectedView, generics.CreateAPIView):
@@ -56,7 +56,7 @@ class AdminEditContributingFactorView(CuratorProtectedView, generics.RetrieveUpd
 
 
     def get_queryset(self):
-        return ContributingFactors.objects.filter(exhibitId_id=self.kwargs["exhibitId"])
+        return ContributingFactors.objects.filter(exhibitId=self.kwargs["exhibitId"])
 
 class AdminCreateSystemDescView(CuratorProtectedView, generics.CreateAPIView):
     serializer_class = AiSystemDescriptionSerializer
@@ -69,7 +69,7 @@ class AdminEditSystemDescView(CuratorProtectedView, generics.RetrieveUpdateDestr
     serializer_class = AiSystemDescriptionSerializer
 
     def get_queryset(self):
-        return AiSystemDescription.objects.filter(exhibit_id=self.kwargs["exhibitId"])
+        return AiSystemDescription.objects.filter(exhibitId=self.kwargs["exhibitId"])
 
 class AdminCreateFailureDescView(CuratorProtectedView, generics.CreateAPIView):
     serializer_class = FailureDescriptionSerializer
@@ -83,7 +83,7 @@ class AdminEditFailureDescView(CuratorProtectedView, generics.RetrieveUpdateDest
 
 
     def get_queryset(self):
-        return FailureDescription.objects.filter(exhibit_id=self.kwargs["exhibitId"])
+        return FailureDescription.objects.filter(exhibitId=self.kwargs["exhibitId"])
 
 class AdminCreateLessonLearnedView(CuratorProtectedView, generics.CreateAPIView):
     serializer_class = LessonsLearnedSerializer

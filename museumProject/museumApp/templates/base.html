@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Museum Project</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body> 
+
+    <div class="sidebar" id="sidebar">
+        <button class="side" onclick="s_close()">Close &times;</button>
+        
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'exhibits' %}">Exhibits</a>
+        <a href="{% url 'home' %}">Quiz</a>
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+        <a href="{% url 'curator_dashboard' %}">Curator Dashboard</a>
+
+    </div>
+    <div class="overlay" onclick="s_close()" id="overlay"></div>
+      
+      <div>
+      <div class="top-bar">
+        <button class="menu" onclick="s_open()">&#9776;</button>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'exhibits' %}">Exhibits</a>
+        <a href="{% url 'home' %}">Quiz</a>
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+      
+      </div>
+      
+      
+
+    {% block content %}
+    {% endblock %}
+
+    <div class="footer">
+ 
+        <a href="{% url 'about' %}">About Us</a>
+        <p>© Copyright 2026. All rights reserved</p>
+        <a href="{% url 'privacy_policy' %}">View our Privacy Policy</a>
+        
+
+    </div>
+
+    <script>
+        function s_open() {
+          document.getElementById("sidebar").style.display = "block";
+          document.getElementById("overlay").style.display = "block";
+        }
+        
+        function s_close() {
+          document.getElementById("sidebar").style.display = "none";
+          document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
+
+

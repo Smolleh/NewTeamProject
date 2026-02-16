@@ -1,0 +1,29 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block content %}
+
+
+<h1> Create Exhibit </h1>
+
+<form id="create-exhibit-form" class="input-form">
+
+    <textarea id="title" placeholder="title"></textarea>
+    <textarea id="domain" placeholder="domain"></textarea>
+    <textarea id="backgroundDeploymentContext" placeholder="backgroundDeploymentContext"></textarea>
+    <textarea id="intededUse" placeholder="intededUse"></textarea>
+
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
+
+</form>
+<p id="message"></p>
+<script src="{% static 'js/create_exhibit.js' %}"></script>
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,33 @@
+
+
+{% extends "base.html" %}
+{% load static %}
+{%block content %}
+
+
+<h1> Create Artefact</h1>
+
+<form id="edit-ai-form" class="input-form">
+
+    <textarea id="info" placeholder="info"></textarea>
+    <textarea id="artefactDate" placeholder="artefactDate"></textarea>
+    <textarea id="artefactObjectPath" placeholder="artefactObjectPath"></textarea>
+
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
+
+</form>
+<p id="message"></p>
+<script>
+    const exhibitId = "{{ exhibit.exhibitId}}";
+</script>
+
+<script src="{% static 'js/create_artefact.js' %}"></script>
+
+
+
+
+
+{% endblock %}

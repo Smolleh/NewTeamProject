@@ -1,30 +1,11 @@
-{% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{%block content %}
 
+    <h1> {{exhibit.title}}</h1>
 
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Museum Project</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-</head>
-<body> 
-    <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'exhibits' %}">Exhibits</a></li>
-
-        </ul>
-    </nav>
-
-    
-    <section>
-        <h2> {{exhibit.title}}</h2>
-        <h3> Domain: </h3>
+    <section class="single-exhibit">
+        <h3> Description: </h3>
         <p> {{exhibit.domain}}</p>
 
         <h3> Background Deployment Context</h3>
@@ -36,16 +17,16 @@
     </section>
 
 
-    <section>
-        {% if artifacts %}
+    <section class="single-exhibit">
+        {% if artefacts %}
             <ul class="exhibits-grid">
-                {% for artifact in artifacts %}
-                    <h2> {{artifact.artefactId}}</h2>
-                    <h3> Information: </h3>
-                    <p> {{artifact.info}}</p>
-        
-                    <p>Date: {{artifact.backgroundDeploymentContext}}</p>
-
+                {% for artefact in artefacts %}
+                <li class="exhibit-card">
+                    <h2> Artefacts : {{artefact.artefactId}}</h2>
+                    <p> Information: {{artefact.info}}</p>
+                    <p>Date: {{artefact.backgroundDeploymentContext}}</p>
+                    <img src="{{ artefact.artefactObjectPath.url }}">
+                </li>
                 {% endfor %}
             </ul>
         {% else %}
@@ -53,34 +34,35 @@
         {% endif %}
     </section>
 
-    <section>
+    <section class="single-exhibit">
         {% if ai_description %}
             <div class = 'ai_description'>
+                <h2> AI Used: </h2>
                 <h3> AI System Desription: </h3>
-                <p> {{description.systemDescription}}</p>
+                <p> {{ai_description.systemDescription}}</p>
 
                 <h3> AI System Purpose: </h3>
-                <p> {{description.systemPurpose}}</p>
+                <p> {{ai_description.systemPurpose}}</p>
 
                 <h3> AI System Outputs: </h3>
-                <p> {{description.systemOutputs}}</p>
+                <p> {{ai_description.systemOutputs}}</p>
             </div>
         {% else %}
             <p>No information of AI system found.</p>
         {% endif %}
     </section>
 
-    <section>
+    <section class="single-exhibit">
         {% if contributing_factors %}
             <div>
                 <h2> Contributing Factors: </h2>
                 <h3> Data Issues?: </h3>
                 <p> {{contributing_factors.dataIssues}}</p>
 
-                <h3> Design Choices ?: </h3>
+                <h3> Design Choices: </h3>
                 <p> {{contributing_factors.designChoices}}</p>
 
-                <h3> AI System Outputs?: </h3>
+                <h3> AI System Outputs: </h3>
                 <p> {{contributing_factors.organisationalOrGovernanceIssues}}</p>
             </div>
         {% else %}
@@ -88,31 +70,32 @@
         {% endif %}
     </section>
 
-    <section>
+    <section class="single-exhibit">
         {% if failures %}
             <div> 
-                <h3> AI System Desription: </h3>
-                <p> {{description.systemDescription}}</p>
+                <h2> AI Failure</h2>
+                <h3> What went wrong: </h3>
+                <p> {{failures.whatWentWrong}}</p>
 
-                <h3> AI System Purpose: </h3>
-                <p> {{description.systemPurpose}}</p>
+                <h3> How the fault was detected: </h3>
+                <p> {{failures.howItWasDetected}}</p>
 
-                <h3> AI System Outputs: </h3>
-                <p> {{description.systemOutputs}}</p>
+                <h3> What Was Affected: </h3>
+                <p> {{failures.whatWasAffected}}</p>
             </div>
         {% else %}
-            <p>No information of AI system found.</p>
+            <p>No information of AI failure found.</p>
         {% endif %}
     </section>
 
-    <section>
+    <section class="single-exhibit">
         {% if lessons %}
             <div>
-            <h2> Lessons Leart: </h2>
+            <h2> Lessons Learnt: </h2>
                 <h3> Practical Recommendations: </h3>
-                <p> {{lessons.practicalRecommendations}}</p>>
+                <p> {{lessons.practicalRecommendations}}</p>
 
-                <h3> Future Warnings: </h3>
+                <h3> Warnings to Future Users: </h3>
                 <p> {{lessons.futureWarnings}}</p>
             </div>
         {% else %}
@@ -120,14 +103,5 @@
         {% endif %}
     </section>
 
-    <section> 
-        <!--Input type = "button" value = "Take Quiz" onclick="window.location.{% url 'quiz' %}">Qui--> 
-    
-    <div class="footer">
-        <p>© Copyright 2026. All rights reserved</p>    
-    </div>
 
-</body>
-
-
-    
+    {% endblock %}

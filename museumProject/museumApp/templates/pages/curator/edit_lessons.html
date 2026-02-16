@@ -1,0 +1,41 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block content %}
+
+
+<h1> Edit Lessons Learnt </h1>
+
+<form id="edit-lessons-form" class="input-form">
+    <div class="input-form">
+        <label for="practicalRecommendations">Practical Recommendations:</label>
+        <textarea id="practicalRecommendations" placeholder="practicalRecommendations"> {{ lessons.practicalRecommendations }}</textarea>
+            
+    </div>
+
+    <div class="input-form">
+        <label for="futureWarnings">Future Warnings:</label>
+        <textarea id="futureWarnings" placeholder="futureWarnings">{{ lessons.futureWarnings }}</textarea>
+
+    </div>
+   
+    
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
+
+</form>
+<p id="message"></p>
+<script>
+    const exhibitId = "{{ exhibit.exhibitId}}";
+    const pk = "{{ lessons.pk}}";
+</script>
+
+<script src="{% static 'js/edit_lesson.js' %}"></script>
+
+
+
+
+
+{% endblock %}

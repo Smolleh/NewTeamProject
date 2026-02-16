@@ -1,0 +1,44 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block content %}
+
+
+<h1> Edit Description of Failure </h1>
+
+<form id="edit-failure-form" class="input-form">
+    <div class="input-form">
+        <label for="whatWentWrong"> What Went Wrong:</label>
+        <textarea id="whatWentWrong" placeholder="whatWentWrong"> {{ failures.whatWentWrong }}</textarea>
+    
+    </div>
+
+   <div class="input-form">
+        <label for="howItWasDetected"> How It Was Detected:</label>
+        <textarea id="howItWasDetected" placeholder="howItWasDetected">{{ failures.howItWasDetected }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <label for="whatWasAffected"> What Was Affected:</label>
+        <textarea id="whatWasAffected" placeholder="whatWasAffected">{{ failures.whatWasAffected }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
+
+</form>
+<p id="message"></p>
+<script>
+    const exhibitId = "{{ exhibit.exhibitId }}";
+    const pk = "{{ failures.pk }}";
+</script>
+
+<script src="{% static 'js/edit_failure.js' %}"></script>
+
+
+
+
+
+{% endblock %}
