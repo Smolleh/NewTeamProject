@@ -31,15 +31,15 @@ def single_exhibit(request,  exhibitId):
         "lessons": lessons,
     })
 
-@login_required
+
 def home(request):
     return render(request, 'pages/home.html', {})
 
-@login_required
+
 def privacy_policy(request):
     return render(request, 'pages/privacy_policy.html', {})
 
-@login_required
+
 def about(request):
     return render(request, 'pages/about.html', {})
 

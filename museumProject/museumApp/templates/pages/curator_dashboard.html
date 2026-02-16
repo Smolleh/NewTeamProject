@@ -19,25 +19,25 @@
                     <div class="curator-links">
 
                         <a href="{% url 'edit_exhibit_detail' exhibitId=exhibit.exhibitId %}">Edit Exhibit Detail</a>
-                        {% if contributing_factors %}
+                        {% if exhibit.contributingfactors %}
                             <a href="{% url 'edit_factors' exhibitId=exhibit.exhibitId %}">Edit Contributing Factors</a>
                         {% else %}
                             <a href="{% url 'create_factors' exhibitId=exhibit.exhibitId %}">Create Contributing Factors</a>
                         {% endif %}
 
-                        {% if failures %}
+                        {% if exhibit.failuredescription %}
                             <a href="{% url 'edit_failure' exhibitId=exhibit.exhibitId %}">Edit AI Failure Description</a>
                         {% else %}
                             <a href="{% url 'create_failure' exhibitId=exhibit.exhibitId %}">Create AI Failure Description</a>
                         {% endif %}
 
-                        {% if lessons %}
+                        {% if exhibit.lessonslearned %}
                              <a href="{% url 'edit_lessons' exhibitId=exhibit.exhibitId %}">Edit Lessons Learned</a>
                         {% else %}
                              <a href="{% url 'create_lessons' exhibitId=exhibit.exhibitId %}">Create Lessons Learned</a>
                         {% endif %}
                        
-                        {% if system %}
+                        {% if exhibit.aisystemdescription %}
                              <a href="{% url 'edit_system' exhibitId=exhibit.exhibitId %}">Edit System Description</a>
                         {% else %}
                              <a href="{% url 'create_system' exhibitId=exhibit.exhibitId %}">Create System Description</a>
@@ -48,7 +48,7 @@
                         {% comment %} Nested loop for artefacts {% endcomment %}
                         {% for artefact in exhibit.artefact_set.all %}
                             <a href="{% url 'edit_artefact' exhibitId=exhibit.exhibitId artefactId=artefact.artefactId %}">
-                                Edit {{ artefact.title }}
+                                Edit Artefact: {{ artefact.title }}
                             </a>
                         {% empty %}
                             <span>No artefacts yet</span>
@@ -64,5 +64,7 @@
         <p>No exhibits found.</p>
     {% endif %}
 </section>
+
+
 
 {% endblock %}

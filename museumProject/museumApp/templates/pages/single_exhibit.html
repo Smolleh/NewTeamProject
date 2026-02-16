@@ -37,7 +37,7 @@
     <section class="single-exhibit">
         {% if ai_description %}
             <div class = 'ai_description'>
-                <h2> AI Used: </h2>
+                <h2> AI System Used: </h2>
                 <h3> AI System Desription: </h3>
                 <p> {{ai_description.systemDescription}}</p>
 
@@ -55,7 +55,7 @@
     <section class="single-exhibit">
         {% if contributing_factors %}
             <div>
-                <h2> Contributing Factors: </h2>
+                <h2> Contributing Factors to Failure: </h2>
                 <h3> Data Issues?: </h3>
                 <p> {{contributing_factors.dataIssues}}</p>
 
@@ -73,7 +73,7 @@
     <section class="single-exhibit">
         {% if failures %}
             <div> 
-                <h2> AI Failure</h2>
+                <h2> AI Failure Description: </h2>
                 <h3> What went wrong: </h3>
                 <p> {{failures.whatWentWrong}}</p>
 
@@ -99,7 +99,7 @@
                 <p> {{lessons.futureWarnings}}</p>
             </div>
         {% else %}
-            <p>No information of AI system found.</p>
+            <p> No information on lessons learnt found</p>
         {% endif %}
     </section>
 
