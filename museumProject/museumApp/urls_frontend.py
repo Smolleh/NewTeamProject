@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views_frontend
+from . import views
 from django.contrib.auth import views as auth
 
 urlpatterns = [
@@ -10,9 +11,9 @@ urlpatterns = [
     path("privacy_policy/", views_frontend.privacy_policy, name="privacy_policy"),
     path("about/", views_frontend.about, name="about"),
     
-    path("login/", views_frontend.login, name="login"),
+    path("login/", views.loginPage, name="login"),
     path("logout/",  auth.LogoutView.as_view(template_name ='pages/home.html'), name ='logout'),
-    path("register/", views_frontend.register, name="register"),
+    path("register/", views.registerPage, name="register"),
     
     path('curator_dashboard/', views_frontend.curator_dashboard, name='curator_dashboard'),
     
