@@ -6,41 +6,49 @@ from .models import Quiz, Result, Answer, Question
 from .serializers import QuizDesplaySerializer, QuestionWithAnswersSerializer, QuizStartResponseSerializer, SubmitQuizSerializer, QuestionCreateSerializer, AnswerSerializer
 
 
+#for viewing all the available quizes details
 class QuizListView(generics.ListAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizDesplaySerializer
-    
+
+#(moderators) for viewing available quizes details and creating new ones
 class quizListCreateView(generics.ListCreateAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizDesplaySerializer
     
+# (moderators) for editing a specific quizes details
 class QuizEditView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizDesplaySerializer
-    
+
+# (moderators) for viewing all questions for a specific quiz,
+# creating quiz questions for a specifc quiz, as well as their answers
 class QuizQuestionListCreateView(generics.ListCreateAPIView):
     serializer_class = QuestionCreateSerializer
 
+    #getting all the questions and their answers associated with a specific quiz
     def get_queryset(self):
         return Question.objects.filter(quiz_id=self.kwargs["quiz_id"])
 
+    #creating the Question object and the answers objects
     def perform_create(self, serializer):
         serializer.save(quiz_id=self.kwargs["quiz_id"])
         
+#(moderators) edit a specific question
 class QuestionEditView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionCreateSerializer
 
-
+# taking a quiz
 class StartQuizView(generics.RetrieveAPIView):
     queryset = Quiz.objects.all()
     
     
-
+    ##gettting all the info needed for the quiz frontend
     def retrieve(self, request, *args, **kwargs):
         quiz = self.get_object()
         
-        
+        #check that the user is signed in
         if not request.user.is_authenticated:
             return Response({"detail": "Authentication required to start a quiz"}, status=401)
 
@@ -97,7 +105,7 @@ class StartQuizView(generics.RetrieveAPIView):
         return Response(QuizStartResponseSerializer(payload).data, status=status.HTTP_200_OK)
     
     
-
+#submitting a completed quiz
 class SubmitQuizView(generics.UpdateAPIView):
     queryset = Result.objects.all()
     serializer_class = SubmitQuizSerializer
@@ -196,7 +204,7 @@ class SubmitQuizView(generics.UpdateAPIView):
         answered = len(seen_questions)
         score = (correct / total) * 100
 
-
+        #updating result object
         result.score = score
         result.completed = True
         result.save(update_fields=["score", "completed"])
