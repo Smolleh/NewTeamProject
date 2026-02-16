@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('title').value = data.title || '';
             document.getElementById('domain').value = data.domain || '';
             document.getElementById('backgroundDeploymentContext').value = data.backgroundDeploymentContext || '';
-            document.getElementById('intededUse').value = data.intededUse || '';
+            document.getElementById('intenedUse').value = data.intenedUse || '';
 
         })
         .catch(error => console.error(error));
@@ -29,7 +29,7 @@ form.addEventListener("submit", function(event) {
         title: document.getElementById('title').value,
         domain:  document.getElementById('domain').value,
         backgroundDeploymentContext: document.getElementById('backgroundDeploymentContext').value,
-        intededUse: document.getElementById('intededUse').value
+        intenedUse: document.getElementById('intenedUse').value
     };
 
     fetch(`/api/exhibits/${exhibitId}/edit`, { 
