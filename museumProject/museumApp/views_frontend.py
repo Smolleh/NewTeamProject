@@ -72,7 +72,7 @@ def edit_failure(request, exhibitId):
         failures = FailureDescription.objects.filter(exhibitId=exhibit).first()
         return render(request, 'pages/curator/edit_failure.html',
                        {"exhibit": exhibit,
-                        "failures": failures,})
+                        "failures": failures})
 
 @login_required
 @curator_required
@@ -132,7 +132,7 @@ def create_factors(request, exhibitId):
 @login_required
 @curator_required
 def create_exhibit(request):
-        return render(request, 'pages/curator/create_exhibit.html')
+        return render(request,'pages/curator/create_exhibit.html', {"exhibit": None})
 
 @login_required
 @curator_required

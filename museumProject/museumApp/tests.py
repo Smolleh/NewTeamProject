@@ -249,12 +249,12 @@ class FailureDescriptionAPITestCase(APITestCase):
     def test_delete_failure_description_success(self):
         """Test deleting a failure description"""
         failure_desc = FailureDescription.objects.create(
-            exhibit=self.exhibit,  # Changed from exhibit= to exhibitId=
+            exhibitId=self.exhibit,  # Changed from exhibit= to exhibitId=
             whatWentWrong='Test',
             howItWasDetected='Test',
             whatWasAffected='Test'
         )
-        response = self.client.delete(f'/api/exhibits/{self.exhibit.exhibitId}/failureDescription/edit/{failure_desc.failureDescriptioniId}')
+        response = self.client.delete(f'/api/exhibits/{self.exhibit.exhibitId}/failureDescription/edit/{failure_desc.failureDescriptionId}')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 

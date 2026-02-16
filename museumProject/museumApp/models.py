@@ -12,6 +12,9 @@ class Exhibit(models.Model):
     viewNumber = models.IntegerField(db_column='viewNumber', blank=True, null=False)  
     def __str__(self):
         return str(self.title)
+    class Meta:
+        managed = True
+        db_table = 'Exhibit'
 
 
 
@@ -19,13 +22,16 @@ class Artefact(models.Model):
     artefactId = models.AutoField(db_column='artefactId', primary_key=True)  
     info = models.CharField(db_column='info', max_length=255, blank=True, null=False)  
     artefactDate = models.DateField(db_column='artefactDate', blank=True, null=False)  
-    artefactObjectPath = models.TextField(db_column='artefactObjectPath', blank=True, null=False)  
+    artefactObjectPath = models.TextField(db_column='artefactObjectPath', blank=True, null=False,)  
     exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId')  
+    class Meta:
+        managed = True
+        db_table = 'Artefact'
 
 
 class AiSystemDescription(models.Model):
     systemDescriptionId = models.AutoField(db_column='systemDescriptionId', primary_key=True, null=False)   
-    exhibitId = models.ForeignKey(Exhibit, on_delete=models.CASCADE,db_column='exhibitId', blank= True, null = True)
+    exhibitId = models.OneToOneField(Exhibit, on_delete=models.CASCADE,db_column='exhibitId', null=True, blank= True)
     systemDescription = models.TextField(db_column='systemDescription', blank=True, null=True)   
     systemPurpose = models.TextField(db_column='systemPurpose', blank=True, null=True)   
     systemOutputs = models.TextField(db_column='systemOutputs', blank=True, null=True)   
@@ -60,8 +66,8 @@ class ContributingFactors(models.Model):
 
 
 class FailureDescription(models.Model):
-    failureDescriptioniId = models.AutoField(db_column='failureDescriptionId', primary_key=True, null=False)   
-    exhibit = models.OneToOneField(Exhibit, on_delete=models.CASCADE,related_name='failureDescription', null=True, blank= True)
+    failureDescriptionId = models.AutoField(db_column='failureDescriptionId', primary_key=True, null=False)   
+    exhibitId = models.OneToOneField(Exhibit, on_delete=models.CASCADE,db_column='exhibitId', null=True, blank= True)
     whatWentWrong = models.TextField(db_column='whatWentWrong', blank=True, null=False)   
     howItWasDetected = models.TextField(db_column='howItWasDetected', blank=True, null=False)   
     whatWasAffected = models.TextField(db_column='whatWasAffected', blank=True, null=False)   
