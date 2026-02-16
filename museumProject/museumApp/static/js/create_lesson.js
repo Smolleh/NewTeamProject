@@ -1,6 +1,5 @@
-
-
-const form = document.getElementById('create-lessons-form')
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById('create-lessons-form')
 
 form.addEventListener("submit", function(event) { 
     event.preventDefault(); 
@@ -33,6 +32,10 @@ form.addEventListener("submit", function(event) {
         console.error("Error:", error);
         document.getElementById('message').innerText = "Error occured, Creation not save.";
     });
+
+
+});
+
 
 
 });

@@ -30,8 +30,20 @@
         <a href="{% url 'home' %}">Home</a>
         <a href="{% url 'exhibits' %}">Exhibits</a>
         <a href="{% url 'quiz' %}">Quiz</a>
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'register' %}">Register</a>
+        
+        {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="logout-btn">Logout</button>
+
+        {% else %}
+
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+        
+
+        
       
       </div>
       

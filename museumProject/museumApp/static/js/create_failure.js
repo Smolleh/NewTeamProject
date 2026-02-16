@@ -1,6 +1,6 @@
 
-
-const form = document.getElementById('edit-failure-form')
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById('create-failure-form')
 
 form.addEventListener("submit", function(event) { 
     event.preventDefault(); 
@@ -37,6 +37,9 @@ form.addEventListener("submit", function(event) {
 
 
 });
+
+
+})
 
 function getCSRFToken()  {
     return document.cookie
