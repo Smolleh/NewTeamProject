@@ -12,7 +12,7 @@ def single_exhibit(request,  exhibitId):
     artefacts = Artefact.objects.filter(exhibitId=exhibit)
     ai_description = AiSystemDescription.objects.filter(exhibitId=exhibit).first()
     contributing_factors = ContributingFactors.objects.filter(exhibitId=exhibit).first()
-    failures = FailureDescription.objects.filter(exhibitId=exhibit).first()
+    failures = FailureDescription.objects.filter(exhibit_id=exhibit).first()
     lessons = LessonsLearned.objects.filter(exhibitId=exhibit).first()
 
     return render(request, "pages/single_exhibit.html", {
