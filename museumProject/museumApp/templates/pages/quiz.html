@@ -11,13 +11,9 @@
                 {% for quiz in quiz %}
                     <li class="exhibit-card">
                         <a href="{% url 'single_quiz' quiz.id %}">>
-                        <h2>{{quiz.name}}</h2>
-                        <p>{{quiz.topic}}</p>
-                        <p>{{quiz.num_questions}} </p>
-                        
-                        
-                        
-                         
+                        <h2>Name: {{quiz.name}}</h2>
+                        <p>Topic: {{quiz.topic}}</p>
+                        <p>Number of Questions: {{quiz.num_questions}} </p> 
                         </a>
                     </li>
 
