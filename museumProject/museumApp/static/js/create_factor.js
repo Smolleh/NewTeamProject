@@ -1,5 +1,5 @@
-
-const form = document.getElementById('create-factors-form')
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById('create-factors-form')
 
 form.addEventListener("submit", function(event) { 
     event.preventDefault(); 
@@ -34,7 +34,10 @@ form.addEventListener("submit", function(event) {
     });
 
 
-});
+
+    });
+
+})
 
 function getCSRFToken()  {
     return document.cookie

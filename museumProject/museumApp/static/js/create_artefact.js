@@ -1,4 +1,4 @@
-
+document.addEventListener("DOMContentLoaded", function() {
 
 const form = document.getElementById('create-artefact-form')
 
@@ -37,6 +37,8 @@ form.addEventListener("submit", function(event) {
 
 
 });
+
+})
 
 function getCSRFToken()  {
     return document.cookie
