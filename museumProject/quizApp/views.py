@@ -1,10 +1,13 @@
 from rest_framework.response import Response
 from rest_framework import generics, status
 from django.db import IntegrityError
-
+from museumApp.permissions import isCurator
 from .models import Quiz, Result, Answer, Question
+from rest_framework.views import APIView
 from .serializers import QuizDesplaySerializer, QuestionWithAnswersSerializer, QuizStartResponseSerializer, SubmitQuizSerializer, QuestionCreateSerializer, AnswerSerializer
 
+class CuratorProtectedView(APIView):
+    permission_classes = [isCurator]
 
 #for viewing all the available quizes details
 class QuizListView(generics.ListAPIView):
@@ -12,18 +15,18 @@ class QuizListView(generics.ListAPIView):
     serializer_class = QuizDesplaySerializer
 
 #(moderators) for viewing available quizes details and creating new ones
-class quizListCreateView(generics.ListCreateAPIView):
+class quizListCreateView(CuratorProtectedView, generics.ListCreateAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizDesplaySerializer
     
 # (moderators) for editing a specific quizes details
-class QuizEditView(generics.RetrieveUpdateDestroyAPIView):
+class QuizEditView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizDesplaySerializer
 
 # (moderators) for viewing all questions for a specific quiz,
 # creating quiz questions for a specifc quiz, as well as their answers
-class QuizQuestionListCreateView(generics.ListCreateAPIView):
+class QuizQuestionListCreateView(CuratorProtectedView, generics.ListCreateAPIView):
     serializer_class = QuestionCreateSerializer
 
     #getting all the questions and their answers associated with a specific quiz
@@ -35,7 +38,7 @@ class QuizQuestionListCreateView(generics.ListCreateAPIView):
         serializer.save(quiz_id=self.kwargs["quiz_id"])
         
 #(moderators) edit a specific question
-class QuestionEditView(generics.RetrieveUpdateDestroyAPIView):
+class QuestionEditView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionCreateSerializer
 
