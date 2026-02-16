@@ -8,6 +8,7 @@ from .forms import createUserForm
 from django.contrib.auth import login, logout, authenticate
 from .permissions import isCurator
 from django.contrib.auth.models import Group
+from django.shortcuts import get_object_or_404
 
 class CuratorProtectedView(APIView):
     permission_classes = [isCurator]
@@ -33,7 +34,7 @@ class AdminCreateArtefactView(CuratorProtectedView, generics.CreateAPIView):
     serializer_class = ArtefactSerializer
 
     def perform_create(self, serializer):
-        exhibit = Exhibit.objects.get(exhibitId=self.kwargs["exhibitId"])
+        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"])
         serializer.save(exhibitId=exhibit)
 
 class AdminEditArtefactView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
@@ -48,7 +49,7 @@ class AdminCreateContributingFactorView(CuratorProtectedView, generics.CreateAPI
     serializer_class = ContributingFactorsSerilaizer
 
     def perform_create(self, serializer):
-        exhibit = Exhibit.objects.get(exhibitId=self.kwargs["exhibitId"])
+        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"])
         serializer.save(exhibitId=exhibit)
 
 class AdminEditContributingFactorView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
@@ -62,7 +63,7 @@ class AdminCreateSystemDescView(CuratorProtectedView, generics.CreateAPIView):
     serializer_class = AiSystemDescriptionSerializer
 
     def perform_create(self, serializer):
-        exhibit = Exhibit.objects.get(exhibitId=self.kwargs["exhibitId"])
+        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"])
         serializer.save(exhibit=exhibit)
 
 class AdminEditSystemDescView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
@@ -75,7 +76,7 @@ class AdminCreateFailureDescView(CuratorProtectedView, generics.CreateAPIView):
     serializer_class = FailureDescriptionSerializer
 
     def perform_create(self, serializer):
-        exhibit = Exhibit.objects.get(exhibitId=self.kwargs["exhibitId"])
+        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"])
         serializer.save(exhibit=exhibit)
 
 class AdminEditFailureDescView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
@@ -89,7 +90,7 @@ class AdminCreateLessonLearnedView(CuratorProtectedView, generics.CreateAPIView)
     serializer_class = LessonsLearnedSerializer
 
     def perform_create(self, serializer):
-        exhibit = Exhibit.objects.get(exhibitId=self.kwargs["exhibitId"])
+        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"])
         serializer.save(exhibitId=exhibit)
 
 class AdminEditLessonLearnedView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
