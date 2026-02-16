@@ -1,19 +1,20 @@
 from rest_framework import serializers
 from .models import *
-
+#serializer for answer objects
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = ["id", "answer_text"]
 
-
+#
 class QuestionWithAnswersSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(source="answer_set", many=True, read_only=True)
 
     class Meta:
         model = Question
         fields = ["id", "question_text", "answers"]
-        
+
+#serializer for the quiz taking view
 class QuizStartResponseSerializer(serializers.Serializer):
     result_id = serializers.IntegerField()
     quiz_id = serializers.IntegerField()
@@ -23,6 +24,7 @@ class QuizStartResponseSerializer(serializers.Serializer):
     passing_score = serializers.IntegerField()
     questions = QuestionWithAnswersSerializer(many=True)
     
+#serializer to store a selected answer 
 class SelectedAnswerSerializer(serializers.Serializer):
     question_id = serializers.IntegerField()
     answer_id = serializers.IntegerField()
@@ -39,6 +41,19 @@ class QuizDesplaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Quiz
         fields = ['id','name', 'topic', 'num_questions', 'passing_score','exhibit', 'exhibit_name']
+
+class QuizCreateDesplaySerializer(serializers.ModelSerializer):
+    exhibit = serializers.PrimaryKeyRelatedField(queryset=Exhibit.objects.all())
+    exhibit_name = serializers.StringRelatedField(source="exhibit", read_only=True)
+
+    average_score = serializers.FloatField(read_only=True)
+
+    class Meta:
+        model = Quiz
+        fields = [
+            "id", "name", "topic", "num_questions", "passing_score",
+            "exhibit", "exhibit_name", "average_score"
+        ]
 
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,14 +1,24 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
-from django.urls import reverse
+from django.contrib.auth.models import User, Group
 from .models import Exhibit, Artefact, AiSystemDescription, FailureDescription, LessonsLearned, ContributingFactors
 from datetime import date
+from unittest import mock
 
 
 class ExhibitAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
+        # Mock the isCurator permission to always return True for tests
+        patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
+        self.mock_permission = patcher.start()
+        self.addCleanup(patcher.stop)
+        
+        # Create user
+        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.client.force_authenticate(user=self.user)
+        
         self.exhibit1 = Exhibit.objects.create(
             title="Test Exhibit 1",
             domain="Healthcare",
@@ -79,6 +89,13 @@ class ArtefactAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
+        patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
+        self.mock_permission = patcher.start()
+        self.addCleanup(patcher.stop)
+        
+        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.client.force_authenticate(user=self.user)
+        
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -143,6 +160,13 @@ class SystemDescriptionAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
+        patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
+        self.mock_permission = patcher.start()
+        self.addCleanup(patcher.stop)
+        
+        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.client.force_authenticate(user=self.user)
+        
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -194,6 +218,13 @@ class FailureDescriptionAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
+        patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
+        self.mock_permission = patcher.start()
+        self.addCleanup(patcher.stop)
+        
+        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.client.force_authenticate(user=self.user)
+        
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -228,6 +259,14 @@ class LessonsLearnedAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
+        patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
+        self.mock_permission = patcher.start()
+        self.addCleanup(patcher.stop)
+        
+        # Create user
+        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.client.force_authenticate(user=self.user)
+        
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -260,6 +299,13 @@ class ContributingFactorsAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
+        patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
+        self.mock_permission = patcher.start()
+        self.addCleanup(patcher.stop)
+        
+        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.client.force_authenticate(user=self.user)
+        
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -293,3 +339,86 @@ class ContributingFactorsAPITestCase(APITestCase):
         }
         response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/contributingFactors/edit/{factor.contributingFactorId}', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class AuthenticationTestCase(APITestCase):
+    
+    def setUp(self):
+        """Create test user and exhibit"""
+        # Create Curator group
+        curator_group, created = Group.objects.get_or_create(name='Curator')
+        
+        # Create curator user
+        self.curator_user = User.objects.create_user(username='curator', password='testpass123')
+        self.curator_user.groups.add(curator_group)
+        
+        # Create non-curator user
+        self.regular_user = User.objects.create_user(username='regularuser', password='testpass123')
+        
+        self.exhibit = Exhibit.objects.create(
+            title="Test Exhibit",
+            domain="Healthcare",
+            backgroundDeploymentContext="Test context",
+            intededUse="Test use",
+            viewNumber=0
+        )
+    
+    def test_unauthenticated_get_fails(self):
+        """Test that unauthenticated GET requests are rejected"""
+        response = self.client.get('/api/exhibits/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    
+    def test_unauthenticated_post_fails(self):
+        """Test that unauthenticated POST requests are rejected"""
+        data = {
+            'title': 'New Exhibit',
+            'domain': 'Finance',
+            'backgroundDeploymentContext': 'Context',
+            'intededUse': 'Use',
+            'viewNumber': 0
+        }
+        response = self.client.post('/api/exhibits/viewCreate', data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    
+    def test_authenticated_curator_get_succeeds(self):
+        """Test that authenticated curator GET requests succeed"""
+        self.client.force_authenticate(user=self.curator_user)
+        response = self.client.get('/api/exhibits/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_authenticated_curator_post_succeeds(self):
+        """Test that authenticated curator POST requests succeed"""
+        self.client.force_authenticate(user=self.curator_user)
+        data = {
+            'title': 'New Exhibit',
+            'domain': 'Finance',
+            'backgroundDeploymentContext': 'Context',
+            'intededUse': 'Use',
+            'viewNumber': 0
+        }
+        response = self.client.post('/api/exhibits/viewCreate', data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    
+    def test_non_curator_user_denied(self):
+        """Test that authenticated non-curator users are denied"""
+        self.client.force_authenticate(user=self.regular_user)
+        data = {
+            'title': 'New Exhibit',
+            'domain': 'Finance',
+            'backgroundDeploymentContext': 'Context',
+            'intededUse': 'Use',
+            'viewNumber': 0
+        }
+        response = self.client.post('/api/exhibits/viewCreate', data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    
+    def test_logout_prevents_access(self):
+        """Test that logging out prevents access"""
+        self.client.force_authenticate(user=self.curator_user)
+        response = self.client.get('/api/exhibits/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Logout
+        self.client.force_authenticate(user=None)
+        response = self.client.get('/api/exhibits/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
