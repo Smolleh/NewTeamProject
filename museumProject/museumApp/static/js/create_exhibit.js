@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
             title: document.getElementById('title').value,
             domain:  document.getElementById('domain').value,
             backgroundDeploymentContext: document.getElementById('backgroundDeploymentContext').value,
-            intededUse: document.getElementById('intededUse').value
+            intendedUse: document.getElementById('intendedUse').value
         };
     
         fetch(`api/exhibits/viewCreate`, { 
