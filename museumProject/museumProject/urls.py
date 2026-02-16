@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('museumApp.urls')),
     path("", include("museumApp.urls_frontend")),
-    path('quizzes/', include('quizApp.urls')),
+    path('quizzes-api/', include('quizApp.urls')),
 ]
 
 if settings.DEBUG:

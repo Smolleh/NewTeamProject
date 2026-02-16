@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block content %}
+
+<form id="quiz-form">
+    <h1 id="quiz-title"></h1>
+
+    <div id="quiz"></div>
+    
+        <button id="submit" class="submit" type="submit">Submit Quiz</button>
+    
+    <div id="result"></div>
+    
+</form>
+
+
+
+<script src="{% static 'js/quiz.js' %}"></script>
+
+{% endblock %}
+
+

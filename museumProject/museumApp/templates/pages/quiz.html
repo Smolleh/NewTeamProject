@@ -1,18 +1,32 @@
+
 {% extends "base.html" %}
 {%block content %}
+    
+    <h1>Quizzes</h1>
 
 
+    <section>
+        {% if quiz %}
+            <ul class="exhibits-grid">
+                {% for quiz in quiz %}
+                    <li class="exhibit-card">
+                        <a href="{% url 'single_quiz' quiz.id %}">>
+                        <h2>{{quiz.name}}</h2>
+                        <p>{{quiz.topic}}</p>
+                        <p>{{quiz.num_questions}} </p>
+                        
+                        
+                        
+                         
+                        </a>
+                    </li>
 
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No quizzes found.</p>
+        {% endif %}
+    </section>
+    
 
-
-
-
-
-
-
-
-{% endblock %}
-
-
-
-
+    {% endblock %}

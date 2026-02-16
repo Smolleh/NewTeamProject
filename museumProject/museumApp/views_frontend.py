@@ -1,5 +1,9 @@
 from django.shortcuts import render, get_object_or_404
+from rest_framework import request
+import requests
+from django.conf import settings
 from .models import *
+from quizApp.models import Quiz, Question
 # URLs to render actual HTML pages for the front end 
 def exhibits(request):
     exhibits = Exhibit.objects.all()
@@ -111,6 +115,14 @@ def create_artefect(request, exhibitId):
         return render(request, 'pages/curator/create_artefect.html',
                        {"exhibit": exhibit})
 
+
+def quiz(request): 
+        quiz = Quiz.objects.all()
+        return render(request, "pages/quiz.html", {"quiz": quiz})
+    
+def single_quiz(request, quizId):
+        quizzes = Quiz.objects.all()
+        return render(request, "pages/single_quiz.html", {"quizId": quizId, "quizzes": quizzes})    
 
 
 """

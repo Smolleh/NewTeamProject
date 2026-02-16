@@ -31,4 +31,6 @@ urlpatterns = [
     path('create_exhibit/', views_frontend.create_exhibit, name='create_exhibit'),
     path('create_artefect/<int:exhibitId>/', views_frontend.create_artefect, name='create_artefect'),
 
+    path('quiz/', views_frontend.quiz, name='quiz'),
+    path('single_quiz/<int:quizId>/', views_frontend.single_quiz, name='single_quiz'),
 ]
