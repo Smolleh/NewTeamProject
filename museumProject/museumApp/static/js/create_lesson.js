@@ -9,7 +9,7 @@ form.addEventListener("submit", function(event) {
         futureWarnings:  document.getElementById('futureWarnings').value,
     };
 
-    fetch(`/api/exhibits/${exhibitId}/lessonsLearned/new`, { 
+    fetch(`/api/exhibits/${exhibitId}/lessons-learned/new`, { 
         method: "POST", 
         headers: { 
             "Content-Type": "application/json",

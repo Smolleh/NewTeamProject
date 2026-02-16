@@ -57,7 +57,7 @@ class SimpleViewExhibitSerializer(serializers.ModelSerializer):
         return artefact.artefactObjectPath if artefact else None
     
 class ExhibitSerializer(serializers.ModelSerializer):
-    artefacts = ArtefactSerializer(read_only=True, source="artefact")
+    artefacts = serializers.SerializerMethodField()
     lessons_learned = LessonsLearnedSerializer(read_only=True, source="lessonslearned")
     contributing_factors = ContributingFactorsSerilaizer(read_only=True, source="contributingfactors")
     failure_description = FailureDescriptionSerializer(read_only=True, source="failuredescription")
@@ -68,3 +68,5 @@ class ExhibitSerializer(serializers.ModelSerializer):
         fields = ['exhibitId','title', 'domain','backgroundDeploymentContext', 'intededUse',
             'viewNumber','artefacts','lessons_learned','contributing_factors','failure_description','ai_system_description',
         ]
+    def get_artefacts(self, obj):
+        return ArtefactSerializer(obj.artefact_set.all(), many=True).data

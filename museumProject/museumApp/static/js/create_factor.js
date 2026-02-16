@@ -10,7 +10,7 @@ form.addEventListener("submit", function(event) {
         organisationalOrGovernanceIssues: document.getElementById('organisationalOrGovernanceIssues').value
     };
 
-    fetch(`/api/exhibits/${exhibitId}/contributingFactors/new`, { 
+    fetch(`/api/exhibits/${exhibitId}/contributing-factors/new`, { 
         method: "POST", 
         headers: { 
             "Content-Type": "application/json",

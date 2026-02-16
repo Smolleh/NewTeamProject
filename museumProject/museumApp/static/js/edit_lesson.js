@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function() {
-    fetch(`/api/exhibits/${exhibitId}/lessonsLearned/edit/${pk}`)
+    fetch(`/api/exhibits/${exhibitId}/lessons-learned/edit/`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Data not loaded");
@@ -28,7 +28,7 @@ form.addEventListener("submit", function(event) {
         futureWarnings:  document.getElementById('futureWarnings').value,
     };
 
-    fetch(`/api/exhibits/${exhibitId}/lessonsLearned/edit/${pk}`, { 
+    fetch(`/api/exhibits/${exhibitId}/lessons-learned/edit/`, { 
         method: "PUT", 
         headers: { 
             "Content-Type": "application/json",

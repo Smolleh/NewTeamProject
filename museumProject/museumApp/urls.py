@@ -14,7 +14,7 @@ urlpatterns = [
      #crearte artefact
      path("exhibits/<int:exhibitId>/artefacts/new", views.AdminCreateArtefactView.as_view()),
      # view, edit and delete artefact
-     path('exhibits/<int:exhibitId>/artefacts/edit/', views.AdminEditArtefactView.as_view()),
+     path('exhibits/<int:exhibitId>/artefacts/edit/<int:artefactId>', views.AdminEditArtefactView.as_view()),
      #crearte System description
      path("exhibits/<int:exhibitId>/ai-system-description/new", views.AdminCreateSystemDescView.as_view()),
      # view, edit and delete system description
