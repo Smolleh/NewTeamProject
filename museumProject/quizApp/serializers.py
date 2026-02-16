@@ -42,6 +42,19 @@ class QuizDesplaySerializer(serializers.ModelSerializer):
         model = Quiz
         fields = ['id','name', 'topic', 'num_questions', 'passing_score','exhibit', 'exhibit_name']
 
+class QuizCreateDesplaySerializer(serializers.ModelSerializer):
+    exhibit = serializers.PrimaryKeyRelatedField(queryset=Exhibit.objects.all())
+    exhibit_name = serializers.StringRelatedField(source="exhibit", read_only=True)
+
+    average_score = serializers.FloatField(read_only=True)
+
+    class Meta:
+        model = Quiz
+        fields = [
+            "id", "name", "topic", "num_questions", "passing_score",
+            "exhibit", "exhibit_name", "average_score"
+        ]
+
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer

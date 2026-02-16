@@ -1,10 +1,12 @@
 from rest_framework.response import Response
 from rest_framework import generics, status
 from django.db import IntegrityError
+from django.db.models.functions import Coalesce
+from django.db.models import Q, Avg
 from museumApp.permissions import isCurator
 from .models import Quiz, Result, Answer, Question
 from rest_framework.views import APIView
-from .serializers import QuizDesplaySerializer, QuestionWithAnswersSerializer, QuizStartResponseSerializer, SubmitQuizSerializer, QuestionCreateSerializer, AnswerSerializer
+from .serializers import QuizDesplaySerializer, QuestionWithAnswersSerializer, QuizStartResponseSerializer, SubmitQuizSerializer, QuestionCreateSerializer, AnswerSerializer, QuizCreateDesplaySerializer
 
 class CuratorProtectedView(APIView):
     permission_classes = [isCurator]
@@ -16,8 +18,13 @@ class QuizListView(generics.ListAPIView):
 
 #(moderators) for viewing available quizes details and creating new ones
 class quizListCreateView(CuratorProtectedView, generics.ListCreateAPIView):
-    queryset = Quiz.objects.all()
-    serializer_class = QuizDesplaySerializer
+    queryset = Quiz.objects.annotate(
+        average_score=Coalesce(
+            Avg("result__score", filter=Q(result__completed=True)),
+            0.0
+        )
+    )
+    serializer_class = QuizCreateDesplaySerializer
     
 # (moderators) for editing a specific quizes details
 class QuizEditView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
