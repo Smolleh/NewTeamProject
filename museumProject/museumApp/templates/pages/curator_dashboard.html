@@ -10,9 +10,10 @@
         <li class="management-card"><a href="{% url 'home'%}">View Analytics </a></li>
     </ul>
 
-    {% if exhibit %}
+    {% if exhibits %}
         <ul class="curator-grid">
-            {% for exhibit in exhibit %}
+            {% for exhibit in exhibits %}
+
                 <li class="curator-card">
                     <h2>{{ exhibit.title }}</h2>
                     <div class="curator-links">

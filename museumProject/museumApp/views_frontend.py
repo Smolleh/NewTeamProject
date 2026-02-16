@@ -3,6 +3,8 @@ from django.conf import settings
 from .models import *
 from .decorators import curator_required
 from django.contrib.auth.decorators import login_required
+from quizApp.models import Quiz
+
 
 # URLs to render actual HTML pages for the front end
 @login_required
