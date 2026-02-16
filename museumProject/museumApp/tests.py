@@ -1,23 +1,15 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
-<<<<<<< HEAD
-from django.urls import reverse
-from .models import Exhibit, Artefact, AiSystemDescription, FailureDescription, LessonsLearned, ContributingFactors
-from datetime import date
-=======
 from django.contrib.auth.models import User, Group
 from .models import Exhibit, Artefact, AiSystemDescription, FailureDescription, LessonsLearned, ContributingFactors
 from datetime import date
 from unittest import mock
->>>>>>> origin/access-control-testing
 
 
 class ExhibitAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
-<<<<<<< HEAD
-=======
         # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
@@ -27,7 +19,6 @@ class ExhibitAPITestCase(APITestCase):
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
->>>>>>> origin/access-control-testing
         self.exhibit1 = Exhibit.objects.create(
             title="Test Exhibit 1",
             domain="Healthcare",
@@ -98,18 +89,13 @@ class ArtefactAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
-<<<<<<< HEAD
-=======
-        # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
         
-        # Create user
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
->>>>>>> origin/access-control-testing
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -174,18 +160,13 @@ class SystemDescriptionAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
-<<<<<<< HEAD
-=======
-        # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
         
-        # Create user
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
->>>>>>> origin/access-control-testing
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -237,18 +218,13 @@ class FailureDescriptionAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
-<<<<<<< HEAD
-=======
-        # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
         
-        # Create user
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
->>>>>>> origin/access-control-testing
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -283,9 +259,6 @@ class LessonsLearnedAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
-<<<<<<< HEAD
-=======
-        # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
@@ -294,7 +267,6 @@ class LessonsLearnedAPITestCase(APITestCase):
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
->>>>>>> origin/access-control-testing
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -327,18 +299,13 @@ class ContributingFactorsAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
-<<<<<<< HEAD
-=======
-        # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
         
-        # Create user
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
->>>>>>> origin/access-control-testing
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -372,8 +339,6 @@ class ContributingFactorsAPITestCase(APITestCase):
         }
         response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/contributingFactors/edit/{factor.contributingFactorId}', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-<<<<<<< HEAD
-=======
 
 
 class AuthenticationTestCase(APITestCase):
@@ -457,4 +422,3 @@ class AuthenticationTestCase(APITestCase):
         self.client.force_authenticate(user=None)
         response = self.client.get('/api/exhibits/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
->>>>>>> origin/access-control-testing
