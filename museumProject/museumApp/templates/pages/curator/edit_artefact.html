@@ -1,6 +1,36 @@
 
+
 {% extends "base.html" %}
+{% load static %}
 {%block content %}
 
 
+<h1> Edit Artefact </h1>
+
+<form id="edit-artefact-form"class="input-form">
+
+    <textarea id="info" placeholder="info"> {{ artefact.info }}</textarea>
+    <textarea id="artefactDate" placeholder="artefactDate">{{ artefact.artefactDate }}</textarea>
+    <textarea id="artefactObjectPath" placeholder="artefactObjectPath">{{ artefact.artefactObjectPath }}</textarea>
+
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
+
+</form>
+<p id="message"></p>
+<script>
+    const exhibitId = "{{ exhibit.exhibitId}}";
+    const pk = "{{ artefact.pk}}";
+</script>
+
+<script src="{% static 'js/edit_artefact.js' %}"></script>
+
+
+
+
+
 {% endblock %}
+
+

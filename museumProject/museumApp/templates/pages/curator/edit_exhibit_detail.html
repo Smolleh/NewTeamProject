@@ -1,32 +1,51 @@
 
 {% extends "base.html" %}
-{%block content %}
-
-
-{% endblock %}
-{% extends "base.html" %}
 {% load static %}
-{%block content %}
+{% block content %}
+
+<div class="dash-btn"> 
+    <a href="{% url 'curator_dashboard'  %}"> Dashboard </a>
+    <a href="{% url 'curator_dashboard'  %}"> Previous </a>
+    <a href="{% url 'curator_dashboard'  %}"> Next </a>
+</div>
+
+<h1> Edit Exhibit Detail </h1>
 
 
-<h1> Edit AI System Description </h1>
+<form id="edit-exhibit-form" class="input-form">
 
-<form id="edit-ai-form">
+    <div class="input-form">
+        <label for="title">Title:</label>
+        <textarea id="title" placeholder="title"> {{ exhibit.title }}</textarea>
+    </div>
 
-    <textarea id="systemDescription" placeholder="systemDescription"> {{ ai_description.systemDescription }}</textarea>
-    <textarea id="systemPurpose" placeholder="systemPurpose">{{ ai_description.systemPurpose }}</textarea>
-    <textarea id="systemOutputs" placeholder="systemOutputs">{{ ai_description.systemOutputs }}</textarea>
+    <div class="input-form">
+        <label for="domain">Domain:</label>
+        <textarea id="domain" placeholder="domain">{{ exhibit.domain }}</textarea>
+    </div>
 
-    <button type="submit">Save</button>
+    <div class="input-form">
+        <label for="backgroundDeploymentContext">Background Deployment Context:</label>
+        <textarea id="backgroundDeploymentContext" placeholder="backgroundDeploymentContext">{{ exhibit.backgroundDeploymentContext }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <label for="intededUse">Intended Use:</label>
+        <textarea id="intededUse" placeholder="intededUse">{{ exhibit.intededUse }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
 
 </form>
 <p id="message"></p>
 <script>
     const exhibitId = "{{ exhibit.exhibitId}}";
-    const pk = "{{ ai_description.pk}}";
 </script>
 
-<script src="{% static 'js/edit_system.js' %}"></script>
+<script src="{% static 'js/edit_exhibit.js' %}"></script>
 
 
 

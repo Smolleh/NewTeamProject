@@ -4,24 +4,35 @@
 {%block content %}
 
 
-<h1> Edit AI System Description </h1>
+<h1> Edit Lessons Learnt </h1>
 
-<form id="edit-ai-form">
+<form id="edit-lessons-form" class="input-form">
+    <div class="input-form">
+        <label for="practicalRecommendations">Practical Recommendations:</label>
+        <textarea id="practicalRecommendations" placeholder="practicalRecommendations"> {{ lessons.practicalRecommendations }}</textarea>
+            
+    </div>
 
-    <textarea id="systemDescription" placeholder="systemDescription"> {{ ai_description.systemDescription }}</textarea>
-    <textarea id="systemPurpose" placeholder="systemPurpose">{{ ai_description.systemPurpose }}</textarea>
-    <textarea id="systemOutputs" placeholder="systemOutputs">{{ ai_description.systemOutputs }}</textarea>
+    <div class="input-form">
+        <label for="futureWarnings">Future Warnings:</label>
+        <textarea id="futureWarnings" placeholder="futureWarnings">{{ lessons.futureWarnings }}</textarea>
 
-    <button type="submit">Save</button>
+    </div>
+   
+    
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
 
 </form>
 <p id="message"></p>
 <script>
     const exhibitId = "{{ exhibit.exhibitId}}";
-    const pk = "{{ ai_description.pk}}";
+    const pk = "{{ lessons.pk}}";
 </script>
 
-<script src="{% static 'js/edit_system.js' %}"></script>
+<script src="{% static 'js/edit_lesson.js' %}"></script>
 
 
 

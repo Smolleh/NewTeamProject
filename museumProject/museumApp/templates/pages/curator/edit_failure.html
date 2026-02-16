@@ -4,24 +4,38 @@
 {%block content %}
 
 
-<h1> Edit AI System Description </h1>
+<h1> Edit Description of Failure </h1>
 
-<form id="edit-ai-form">
+<form id="edit-failure-form" class="input-form">
+    <div class="input-form">
+        <label for="whatWentWrong"> What Went Wrong:</label>
+        <textarea id="whatWentWrong" placeholder="whatWentWrong"> {{ failures.whatWentWrong }}</textarea>
+    
+    </div>
 
-    <textarea id="systemDescription" placeholder="systemDescription"> {{ ai_description.systemDescription }}</textarea>
-    <textarea id="systemPurpose" placeholder="systemPurpose">{{ ai_description.systemPurpose }}</textarea>
-    <textarea id="systemOutputs" placeholder="systemOutputs">{{ ai_description.systemOutputs }}</textarea>
+   <div class="input-form">
+        <label for="howItWasDetected"> How It Was Detected:</label>
+        <textarea id="howItWasDetected" placeholder="howItWasDetected">{{ failures.howItWasDetected }}</textarea>
+    </div>
 
-    <button type="submit">Save</button>
+    <div class="input-form">
+        <label for="whatWasAffected"> What Was Affected:</label>
+        <textarea id="whatWasAffected" placeholder="whatWasAffected">{{ failures.whatWasAffected }}</textarea>
+    </div>
+
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
 
 </form>
 <p id="message"></p>
 <script>
-    const exhibitId = "{{ exhibit.exhibitId}}";
-    const pk = "{{ ai_description.pk}}";
+    const exhibitId = "{{ exhibit.exhibitId }}";
+    const pk = "{{ failures.pk }}";
 </script>
 
-<script src="{% static 'js/edit_system.js' %}"></script>
+<script src="{% static 'js/edit_failure.js' %}"></script>
 
 
 

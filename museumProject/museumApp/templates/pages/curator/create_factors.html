@@ -1,0 +1,32 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block content %}
+
+
+<h1> Create The Contributing Factors of the Failure </h1>
+
+<form id="create-factors-form" class="input-form">
+
+    <textarea id="dataIssues" placeholder="dataIssues"></textarea>
+    <textarea id="designChoices" placeholder="designChoices"></textarea>
+    <textarea id="organisationalOrGovernanceIssues" placeholder="organisationalOrGovernanceIssues"></textarea>
+
+    <div class="input-form">
+        <button class="submit" type="submit">Save</button>
+
+    </div>
+
+</form>
+<p id="message"></p>
+<script>
+    const exhibitId = "{{ exhibit.exhibitId }}";
+</script>
+
+<script src="{% static 'js/create_factor.js' %}"></script>
+
+
+
+
+
+{% endblock %}

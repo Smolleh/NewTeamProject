@@ -7,6 +7,7 @@
 
 }
 body{
+    margin-top: 60px;
     background-color: #FBFEF9;
     color: #251605;
     line-height: 1.6;
@@ -78,13 +79,28 @@ section{
     background-color: #777778;
     position: fixed;
     top: 0; 
-    right: 0;
+    left: 0;
     width: 100%;
     height: 60px; 
     display: flex;
-    align-content: center; 
-    padding: 0 20px;
+    align-items: center; 
+    justify-content: flex-end;
+    padding: 40px 40px;
     z-index: 999;
+    gap: 20px;  
+}
+
+.top-bar a { 
+    display: flex;
+    text-align: right;
+    color: black;
+    font-weight: bold;
+    height: 100%;
+    font-size: 20px;
+}
+
+.top-bar a:hover { 
+    text-decoration: underline;
 }
 
 .menu{ 
@@ -94,6 +110,7 @@ section{
     cursor: pointer;
     border: none;
     background: none;
+    margin-right: auto;
 
 }
 
@@ -406,9 +423,90 @@ h3 {
       text-align: center;
   
   }
-  
+
+/***************************** Input forms *******************************/
+
+.dash-btn{ 
+    border-radius: 10px;
+    color: #2f5aa8;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+
+}
+
+.dash-btn a{ 
+    text-align: left;
+    color: #2f5aa8;
+    padding: 10px;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 20px;
+}
+
+form.input-form {
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 16px;
+    border: 2px solid #293241;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-form div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-form label {
+    font-weight: bold;
+    font-size: 16px;
+    color: #293241;
+}
+
+.input-form input,
+.input-form textarea {
+    padding: 14px 16px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 2px solid #98c1d9;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-form input:focus,
+.input-form textarea:focus {
+    border-color: #243a73;
+    box-shadow: 0 0 0 3px rgba(238, 108, 77, 0.2);
+}
 
 
+.input-form textarea {
+    min-height: 180px;
+    resize: vertical;
+}
+
+
+.submit {
+    margin: 20px 100px 20px 100px; ;
+    border-radius: 12px;
+    border: none;
+    background-color: #243a73;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.submit:hover {
+    background-color: #92b2db;
+
+}
 /* Mobile phone css (smaller text etc */
 
 @media (max-width: 600px) {

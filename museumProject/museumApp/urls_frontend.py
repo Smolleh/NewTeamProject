@@ -15,6 +15,19 @@ urlpatterns = [
     path("register/", views_frontend.register, name="register"),
     
     path('curator_dashboard/', views_frontend.curator_dashboard, name='curator_dashboard'),
+    
     path('system/<int:exhibitId>/', views_frontend.edit_system, name='edit_system'),
+    path('lessons/<int:exhibitId>/', views_frontend.edit_lessons, name='edit_lessons'),
+    path('failure/<int:exhibitId>/', views_frontend.edit_failure, name='edit_failure'),
+    path('factors/<int:exhibitId>/', views_frontend.edit_factors, name='edit_factors'),
+    path('exhibit_detail/<int:exhibitId>/', views_frontend.edit_exhibit_detail, name='edit_exhibit_detail'),
+    path('artefect/<int:exhibitId>/<int:artefactID>/', views_frontend.edit_artefect, name='edit_artefect'),
+
+    path('create_system/<int:exhibitId>/', views_frontend.create_system, name='create_system'),
+    path('create_lessons/<int:exhibitId>/', views_frontend.create_lessons, name='create_lessons'),
+    path('create_failure/<int:exhibitId>/', views_frontend.create_failure, name='create_failure'),
+    path('create_factors/<int:exhibitId>/', views_frontend.create_factors, name='create_factors'),
+    path('create_exhibit/', views_frontend.create_exhibit, name='create_exhibit'),
+    path('create_artefect/<int:exhibitId>/', views_frontend.create_artefect, name='create_artefect'),
 
 ]
