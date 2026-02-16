@@ -14,23 +14,23 @@ urlpatterns = [
      #crearte artefact
      path("exhibits/<int:exhibitId>/artefacts/new", views.AdminCreateArtefactView.as_view()),
      # view, edit and delete artefact
-     path('exhibits/<int:exhibitId>/artefacts/edit/<int:pk>', views.AdminEditArtefactView.as_view()),
+     path('exhibits/<int:exhibitId>/artefacts/edit/', views.AdminEditArtefactView.as_view()),
      #crearte System description
-     path("exhibits/<int:exhibitId>/aiSystemDescription/new", views.AdminCreateSystemDescView.as_view()),
+     path("exhibits/<int:exhibitId>/ai-system-description/new", views.AdminCreateSystemDescView.as_view()),
      # view, edit and delete system description
-     path('exhibits/<int:exhibitId>/aiSystemDescription/edit/<int:pk>', views.AdminEditSystemDescView.as_view()),
+     path('exhibits/<int:exhibitId>/ai-system-description/edit/', views.AdminEditSystemDescView.as_view()),
      #crearte failure description
-     path("exhibits/<int:exhibitId>/failureDescription/new", views.AdminCreateFailureDescView.as_view()),
+     path("exhibits/<int:exhibitId>/failure-description/new", views.AdminCreateFailureDescView.as_view()),
      # view, edit and delete failure description
-     path('exhibits/<int:exhibitId>/failureDescription/edit/<int:pk>', views.AdminEditFailureDescView.as_view()),
+     path('exhibits/<int:exhibitId>/failure-description/edit/', views.AdminEditFailureDescriptionView.as_view()),
      #crearte a lesson learned
-     path("exhibits/<int:exhibitId>/lessonsLearned/new", views.AdminCreateLessonLearnedView.as_view()),
+     path("exhibits/<int:exhibitId>/lessons-learned/new", views.AdminCreateLessonLearnedView.as_view()),
      # view, edit and delete lessons learned
-     path('exhibits/<int:exhibitId>/lessonsLearned/edit/<int:pk>', views.AdminEditLessonLearnedView.as_view()),
+     path('exhibits/<int:exhibitId>/lessons-learned/edit/', views.AdminEditLessonsLearnedView.as_view()),
      #crearte contributing factor
-     path("exhibits/<int:exhibitId>/contributingFactors/new", views.AdminCreateContributingFactorView.as_view()),
+     path("exhibits/<int:exhibitId>/contributing-factors/new", views.AdminCreateContributingFactorView.as_view()),
      # view, edit and delete contributing factors
-     path('exhibits/<int:exhibitId>/contributingFactors/edit/<int:pk>', views.AdminEditContributingFactorView.as_view()),
+     path('exhibits/<int:exhibitId>/contributing-factors/edit/', views.AdminEditCotributingFactorsView.as_view()),
      path('login/', views.loginPage, name='login'),
      path('register/', views.registerPage, name='register'),
 ]

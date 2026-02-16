@@ -23,7 +23,7 @@ class Artefact(models.Model):
     info = models.CharField(db_column='info', max_length=255, blank=True, null=False)  
     artefactDate = models.DateField(db_column='artefactDate', blank=True, null=False)  
     artefactObjectPath = models.TextField(db_column='artefactObjectPath', blank=True, null=False,)  
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId')  
+    exhibitId = models.OneToOneField(Exhibit, on_delete=models.CASCADE,db_column='exhibitId', null=True, blank= True)
     class Meta:
         managed = True
         db_table = 'Artefact'
@@ -55,7 +55,7 @@ class BookMarks(models.Model):
 
 class ContributingFactors(models.Model):
     contributingFactorId = models.AutoField(db_column='contributingFactorId', primary_key=True, blank=True, null=False)   
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE , db_column='exhibitId', blank=True, null=False)   
+    exhibitId = models.OneToOneField(Exhibit, on_delete=models.CASCADE,db_column='exhibitId', null=True, blank= True)
     dataIssues = models.TextField(db_column='dataIssues', blank=True, null=False)   
     designChoices = models.TextField(db_column='designChoices', blank=True, null=False)   
     organisationalOrGovernanceIssues = models.TextField(db_column='organisationalOrGovernanceIssues', blank=True, null=False)   
@@ -79,7 +79,7 @@ class FailureDescription(models.Model):
 
 class LessonsLearned(models.Model):
     lessonslearnedId = models.AutoField(db_column='lessonsLearnedId', primary_key=True, blank=True, null=False)   
-    exhibitId = models.ForeignKey(Exhibit, models.CASCADE, db_column='exhibitId', blank=True, null=False)   
+    exhibitId = models.OneToOneField(Exhibit, on_delete=models.CASCADE,db_column='exhibitId', null=True, blank= True)
     practicalRecommendations = models.TextField(db_column='practicalRecommendations', blank=True, null=False)   
     futureWarnings = models.TextField(db_column='futureWarnings', blank=True, null=False)   
 
