@@ -3,10 +3,10 @@
 {% load static %}
 {% block content %}
 
-<div class="dash-btn"> 
-    <a href="{% url 'curator_dashboard'  %}"> Dashboard </a>
-    <a href="{% url 'curator_dashboard'  %}"> Previous </a>
-    <a href="{% url 'curator_dashboard'  %}"> Next </a>
+<div class="dash-btns"> 
+    <a class="dash-btn left" href="{% url 'curator_dashboard' %}">Previous</a>
+    <a class="dash-btn center" href="{% url 'curator_dashboard' %}">Dashboard</a>
+    <a class="dash-btn right" href="{% url 'edit_factors' %}">Next</a>
 </div>
 
 <h1> Edit Exhibit Detail </h1>

@@ -51,7 +51,7 @@ form.addEventListener("submit", function(event) {
     })
     .catch(error => {
         console.error("Error:", error);
-        document.getElementById('message').innerText = "Error occured, edit not save.";
+        document.getElementById('message').innerText = "Error occured, edit not saved.";
     });
 
 

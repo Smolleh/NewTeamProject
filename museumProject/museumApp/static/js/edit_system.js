@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function() {
-    fetch(`/api/exhibits/${exhibitId}/ai-system-description/edit/${pk}`)
+    fetch(`/api/exhibits/${exhibitId}/ai-system-description/edit/`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Data not loaded");
@@ -30,7 +30,7 @@ form.addEventListener("submit", function(event) {
         systemOutputs: document.getElementById('systemOutputs').value
     };
 
-    fetch(`/api/exhibits/${exhibitId}/ai-system-description/edit/${pk}`, { 
+    fetch(`/api/exhibits/${exhibitId}/ai-system-description/edit/`, { 
         method: "PUT", 
         headers: { 
             "Content-Type": "application/json",
@@ -51,7 +51,7 @@ form.addEventListener("submit", function(event) {
     })
     .catch(error => {
         console.error("Error:", error);
-        document.getElementById('message').innerText = "Error occured, edit not save.";
+        document.getElementById('message').innerText = "Error occured, edit not saved.";
     });
 
 
