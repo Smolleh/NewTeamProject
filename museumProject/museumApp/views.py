@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .forms import createUserForm
 from django.contrib.auth import login, logout, authenticate
 from .permissions import isCurator
+from django.contrib.auth.models import Group
 
 class CuratorProtectedView(APIView):
     permission_classes = [isCurator]
@@ -104,7 +105,9 @@ def registerPage(request):
     if request.method == 'POST':
         form = createUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            group = Group.objects.get(name='Visitor')
+            user.groups.add(group)
             return redirect('login')
 
     context = {'form': form}

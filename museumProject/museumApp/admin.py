@@ -11,6 +11,5 @@ admin.site.register(AiSystemDescription)
 admin.site.register(ContributingFactors)
 admin.site.register(FailureDescription)
 admin.site.register(LessonsLearned)
-admin.site.register(Quizzes)
-admin.site.register(QuizzQuestions)
+
 
