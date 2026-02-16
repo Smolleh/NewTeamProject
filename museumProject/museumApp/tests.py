@@ -160,10 +160,12 @@ class SystemDescriptionAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
+        # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
         
+        # Create user
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
@@ -189,7 +191,7 @@ class SystemDescriptionAPITestCase(APITestCase):
     def test_get_system_description_success(self):
         """Test retrieving a system description"""
         system_desc = AiSystemDescription.objects.create(
-            exhibit=self.exhibit,
+            exhibitId=self.exhibit,  # Changed from exhibit= to exhibitId=
             systemDescription='Test',
             systemPurpose='Purpose',
             systemOutputs='Outputs'
@@ -200,7 +202,7 @@ class SystemDescriptionAPITestCase(APITestCase):
     def test_update_system_description_success(self):
         """Test updating a system description"""
         system_desc = AiSystemDescription.objects.create(
-            exhibit=self.exhibit,
+            exhibitId=self.exhibit,  # Changed from exhibit= to exhibitId=
             systemDescription='Test',
             systemPurpose='Purpose',
             systemOutputs='Outputs'
@@ -213,15 +215,16 @@ class SystemDescriptionAPITestCase(APITestCase):
         response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/aiSystemDescription/edit/{system_desc.systemDescriptionId}', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-
 class FailureDescriptionAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
+        # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
         
+        # Create user
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
@@ -246,12 +249,12 @@ class FailureDescriptionAPITestCase(APITestCase):
     def test_delete_failure_description_success(self):
         """Test deleting a failure description"""
         failure_desc = FailureDescription.objects.create(
-            exhibit=self.exhibit,
+            exhibitId=self.exhibit,  # Changed from exhibit= to exhibitId=
             whatWentWrong='Test',
             howItWasDetected='Test',
             whatWasAffected='Test'
         )
-        response = self.client.delete(f'/api/exhibits/{self.exhibit.exhibitId}/failureDescription/edit/{failure_desc.failureDescriptioniId}')
+        response = self.client.delete(f'/api/exhibits/{self.exhibit.exhibitId}/failureDescription/edit/{failure_desc.failureDescriptionId}')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 

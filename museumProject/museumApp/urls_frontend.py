@@ -22,14 +22,14 @@ urlpatterns = [
     path('failure/<int:exhibitId>/', views_frontend.edit_failure, name='edit_failure'),
     path('factors/<int:exhibitId>/', views_frontend.edit_factors, name='edit_factors'),
     path('exhibit_detail/<int:exhibitId>/', views_frontend.edit_exhibit_detail, name='edit_exhibit_detail'),
-    path('artefect/<int:exhibitId>/<int:artefactID>/', views_frontend.edit_artefect, name='edit_artefect'),
+    path('artefact/<int:exhibitId>/<int:artefactId>/', views_frontend.edit_artefact, name='edit_artefact'),
 
     path('create_system/<int:exhibitId>/', views_frontend.create_system, name='create_system'),
     path('create_lessons/<int:exhibitId>/', views_frontend.create_lessons, name='create_lessons'),
     path('create_failure/<int:exhibitId>/', views_frontend.create_failure, name='create_failure'),
     path('create_factors/<int:exhibitId>/', views_frontend.create_factors, name='create_factors'),
     path('create_exhibit/', views_frontend.create_exhibit, name='create_exhibit'),
-    path('create_artefect/<int:exhibitId>/', views_frontend.create_artefect, name='create_artefect'),
+    path('create_artefact/<int:exhibitId>/', views_frontend.create_artefact, name='create_artefact'),
 
     path('quiz/', views_frontend.quiz, name='quiz'),
     path('single_quiz/<int:quizId>/', views_frontend.single_quiz, name='single_quiz'),

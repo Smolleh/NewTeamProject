@@ -7,24 +7,24 @@ from .models import *
 class ArtefactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Artefact
-        fields = ['info', 'artefactDate', 'artefactObjectPath']
+        fields = ['artefactId','info', 'artefactDate', 'artefactObjectPath']
         
 class FailureDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FailureDescription
-        fields = ['whatWentWrong', 'howItWasDetected', 'whatWasAffected']
+        fields = ['failureDescriptionId','whatWentWrong', 'howItWasDetected', 'whatWasAffected']
 
 class AiSystemDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AiSystemDescription
-        fields = ['systemDescription', 'systemPurpose', 'systemOutputs']
+        fields = ['systemDescriptionId','systemDescription', 'systemPurpose', 'systemOutputs']
 
 
 
 class LessonsLearnedSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonsLearned
-        fields = ['practicalRecommendations', 'futureWarnings']
+        fields = ['lessonslearnedId','practicalRecommendations', 'futureWarnings']
 
         
 
@@ -56,8 +56,8 @@ class ExhibitSerializer(serializers.ModelSerializer):
     artefacts = serializers.SerializerMethodField()
     lessons_learned = serializers.SerializerMethodField()
     contributing_factors = serializers.SerializerMethodField()
-    failure_description = FailureDescriptionSerializer(read_only=True, source="failureDescription")
-    ai_system_description = AiSystemDescriptionSerializer(read_only=True, source="systemDescription")
+    failure_description = FailureDescriptionSerializer(read_only=True, source="failuredescription")
+    ai_system_description = AiSystemDescriptionSerializer(read_only=True, source="aisystemdescription")
 
     class Meta:
         model = Exhibit
