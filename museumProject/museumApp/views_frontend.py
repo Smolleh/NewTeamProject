@@ -144,11 +144,12 @@ def create_artefact(request, exhibitId):
         return render(request, 'pages/curator/create_artefact.html',
                        {"exhibit": exhibit})
 
-
+@login_required
 def quiz(request): 
         quiz = Quiz.objects.all()
         return render(request, "pages/quiz.html", {"quiz": quiz})
-    
+
+@login_required
 def single_quiz(request, quizId):
         quizzes = Quiz.objects.all()
         return render(request, "pages/single_quiz.html", {"quizId": quizId, "quizzes": quizzes})    
