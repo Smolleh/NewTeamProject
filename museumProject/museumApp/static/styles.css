@@ -491,6 +491,23 @@ form.input-form {
     resize: vertical;
 }
 
+.input-form p {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+
+.input-form input[type="text"],
+.input-form input[type="password"],
+.input-form input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 5px;
+    display: block;
+}
 
 .submit {
     margin: 20px 100px 20px 100px; ;

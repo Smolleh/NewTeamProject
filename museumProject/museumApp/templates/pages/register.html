@@ -2,9 +2,9 @@
 {% extends "base.html" %}
 {%block content %}
 
-<H3>Register Page</H3>
+<H1>Register Page</H1>
 
-<form method = "POST" action = "">
+<form method = "POST" action = "" class="input-form">
     {% csrf_token %}
 
     {{form.as_p}}

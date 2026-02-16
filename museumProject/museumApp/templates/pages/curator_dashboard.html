@@ -10,19 +10,39 @@
         <li class="management-card"><a href="{% url 'home'%}">View Analytics </a></li>
     </ul>
 
-    {% if exhibits %}
+    {% if exhibit %}
         <ul class="curator-grid">
-            {% for exhibit in exhibits %}
+            {% for exhibit in exhibit %}
                 <li class="curator-card">
                     <h2>{{ exhibit.title }}</h2>
                     <div class="curator-links">
 
                         <a href="{% url 'edit_exhibit_detail' exhibitId=exhibit.exhibitId %}">Edit Exhibit Detail</a>
-                        <a href="{% url 'edit_factors' exhibitId=exhibit.exhibitId %}">Edit Contributing Factors</a>
-                        <a href="{% url 'edit_failure' exhibitId=exhibit.exhibitId %}">Edit AI Failure Description</a>
-                        <a href="{% url 'edit_lessons' exhibitId=exhibit.exhibitId %}">Edit Lessons Learned</a>
-                        <a href="{% url 'edit_system' exhibitId=exhibit.exhibitId %}">Edit System Description</a>
-                        <a href="{% url 'create_system' exhibitId=exhibit.exhibitId %}">Create System Description</a>
+                        {% if contributing_factors %}
+                            <a href="{% url 'edit_factors' exhibitId=exhibit.exhibitId %}">Edit Contributing Factors</a>
+                        {% else %}
+                            <a href="{% url 'create_factors' exhibitId=exhibit.exhibitId %}">Create Contributing Factors</a>
+                        {% endif %}
+
+                        {% if failures %}
+                            <a href="{% url 'edit_failure' exhibitId=exhibit.exhibitId %}">Edit AI Failure Description</a>
+                        {% else %}
+                            <a href="{% url 'create_failure' exhibitId=exhibit.exhibitId %}">Create AI Failure Description</a>
+                        {% endif %}
+
+                        {% if lessons %}
+                             <a href="{% url 'edit_lessons' exhibitId=exhibit.exhibitId %}">Edit Lessons Learned</a>
+                        {% else %}
+                             <a href="{% url 'create_lessons' exhibitId=exhibit.exhibitId %}">Create Lessons Learned</a>
+                        {% endif %}
+                       
+                        {% if system %}
+                             <a href="{% url 'edit_system' exhibitId=exhibit.exhibitId %}">Edit System Description</a>
+                        {% else %}
+                             <a href="{% url 'create_system' exhibitId=exhibit.exhibitId %}">Create System Description</a>
+                        {% endif %}
+                       
+                        
 
                         {% comment %} Nested loop for artefacts {% endcomment %}
                         {% for artefact in exhibit.artefact_set.all %}
