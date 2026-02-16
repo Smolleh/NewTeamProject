@@ -24,11 +24,24 @@ class UserSingleExhibitView(generics.RetrieveAPIView):
 class AdminExhibitsView(CuratorProtectedView, generics.ListCreateAPIView):
     queryset = Exhibit.objects.all()
     serializer_class = SimpleViewCreateExhibitSerializer
-    
-    
+
 class AdminEditExhibitView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
     queryset = Exhibit.objects.all()
     serializer_class = ExhibitSerializer
+    
+class AdminCreateArtefactView(CuratorProtectedView, generics.CreateAPIView): 
+    serializer_class = ArtefactSerializer 
+    def perform_create(self, serializer): 
+        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"]) 
+        serializer.save(exhibitId=exhibit) 
+        
+class AdminEditArtefactView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView): 
+    serializer_class = ArtefactSerializer 
+    def get_queryset(self): 
+        return Artefact.objects.filter(exhibitId=self.kwargs["exhibitId"])
+    
+    
+
     
 class AdminEditSystemDescView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AiSystemDescriptionSerializer
@@ -37,12 +50,6 @@ class AdminEditSystemDescView(CuratorProtectedView, generics.RetrieveUpdateDestr
         
         return get_object_or_404(AiSystemDescription, exhibitId=self.kwargs["exhibitId"])
     
-class AdminEditArtefactView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = ArtefactSerializer
-
-    def get_object(self):
-
-        return get_object_or_404(AiSystemDescription, exhibitId=self.kwargs["exhibitId"])
     
 class AdminEditLessonsLearnedView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = LessonsLearnedSerializer
@@ -65,12 +72,6 @@ class AdminEditCotributingFactorsView(CuratorProtectedView, generics.RetrieveUpd
 
         return get_object_or_404(ContributingFactors, exhibitId=self.kwargs["exhibitId"])
     
-class AdminCreateArtefactView(CuratorProtectedView, generics.CreateAPIView):
-    serializer_class = ArtefactSerializer
-
-    def perform_create(self, serializer):
-        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"])
-        serializer.save(exhibitId=exhibit)
 
 
 class AdminCreateContributingFactorView(CuratorProtectedView, generics.CreateAPIView):

@@ -3,6 +3,7 @@ from rest_framework import generics, status
 from django.db import IntegrityError
 from django.db.models.functions import Coalesce
 from django.db.models import Q, Avg
+from django.shortcuts import get_object_or_404
 from museumApp.permissions import isCurator
 from .models import Quiz, Result, Answer, Question
 from rest_framework.views import APIView
@@ -119,6 +120,10 @@ class StartQuizView(generics.RetrieveAPIView):
 class SubmitQuizView(generics.UpdateAPIView):
     queryset = Result.objects.all()
     serializer_class = SubmitQuizSerializer
+    
+    def get_object(self):
+        quiz_id = self.kwargs["quiz_id"]
+        return get_object_or_404(Result, quiz_id=quiz_id, user=self.request.user)
 
     def update(self, request, *args, **kwargs):
         

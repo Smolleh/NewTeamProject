@@ -41,5 +41,5 @@ urlpatterns = [
     #{"question_id": 3, "answer_id": 10}
     #]
     #}
-    path("<int:pk>/submit/", SubmitQuizView.as_view()),
+    path("<int:quiz_id>/submit/", SubmitQuizView.as_view()),
 ]
