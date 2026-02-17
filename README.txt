@@ -1,3 +1,6 @@
+In order to access the repository clone using:
+git clone https://github.com/Smolleh/NewTeamProject.git
+
 *first time you run the app*
 install pipenv (pip install pipenv, or however else you want to instal it)
 ensure you cloned the github repository to your computer
