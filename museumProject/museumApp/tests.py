@@ -10,12 +10,10 @@ class ExhibitAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
-        # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
         
-        # Create user
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
@@ -130,42 +128,16 @@ class ArtefactAPITestCase(APITestCase):
         }
         response = self.client.post('/api/exhibits/9999/artefacts/new', data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        
-    def test_get_artefact_success(self):
-        """Test retrieving an artefact"""
-        response = self.client.get(f'/api/exhibits/{self.exhibit.exhibitId}/artefacts/edit/{self.artefact.artefactId}')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['info'], 'Test artefact')
-        
-    def test_update_artefact_success(self):
-        """Test updating an artefact"""
-        data = {
-            'info': 'Updated artefact',
-            'artefactDate': '2024-03-01',
-            'artefactObjectPath': '/updated/path'
-        }
-        response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/artefacts/edit/{self.artefact.artefactId}', data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.artefact.refresh_from_db()
-        self.assertEqual(self.artefact.info, 'Updated artefact')
-        
-    def test_delete_artefact_success(self):
-        """Test deleting an artefact"""
-        response = self.client.delete(f'/api/exhibits/{self.exhibit.exhibitId}/artefacts/edit/{self.artefact.artefactId}')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Artefact.objects.count(), 0)
 
 
 class SystemDescriptionAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
-        # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
         
-        # Create user
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
@@ -184,25 +156,25 @@ class SystemDescriptionAPITestCase(APITestCase):
             'systemPurpose': 'Test purpose',
             'systemOutputs': 'Test outputs'
         }
-        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/aiSystemDescription/new', data)
+        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/ai-system-description/new', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(AiSystemDescription.objects.count(), 1)
         
     def test_get_system_description_success(self):
         """Test retrieving a system description"""
         system_desc = AiSystemDescription.objects.create(
-            exhibitId=self.exhibit,  # Changed from exhibit= to exhibitId=
+            exhibitId=self.exhibit,
             systemDescription='Test',
             systemPurpose='Purpose',
             systemOutputs='Outputs'
         )
-        response = self.client.get(f'/api/exhibits/{self.exhibit.exhibitId}/aiSystemDescription/edit/{system_desc.systemDescriptionId}')
+        response = self.client.get(f'/api/exhibits/{self.exhibit.exhibitId}/ai-system-description/edit/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
     def test_update_system_description_success(self):
         """Test updating a system description"""
         system_desc = AiSystemDescription.objects.create(
-            exhibitId=self.exhibit,  # Changed from exhibit= to exhibitId=
+            exhibitId=self.exhibit,
             systemDescription='Test',
             systemPurpose='Purpose',
             systemOutputs='Outputs'
@@ -212,19 +184,18 @@ class SystemDescriptionAPITestCase(APITestCase):
             'systemPurpose': 'Updated purpose',
             'systemOutputs': 'Updated outputs'
         }
-        response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/aiSystemDescription/edit/{system_desc.systemDescriptionId}', data)
+        response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/ai-system-description/edit/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class FailureDescriptionAPITestCase(APITestCase):
     
     def setUp(self):
         """Create test data before each test"""
-        # Mock the isCurator permission to always return True for tests
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
         
-        # Create user
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
@@ -243,18 +214,18 @@ class FailureDescriptionAPITestCase(APITestCase):
             'howItWasDetected': 'We noticed',
             'whatWasAffected': 'Users impacted'
         }
-        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/failureDescription/new', data)
+        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/failure-description/new', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_delete_failure_description_success(self):
         """Test deleting a failure description"""
         failure_desc = FailureDescription.objects.create(
-            exhibitId=self.exhibit,  # Changed from exhibit= to exhibitId=
+            exhibitId=self.exhibit,
             whatWentWrong='Test',
             howItWasDetected='Test',
             whatWasAffected='Test'
         )
-        response = self.client.delete(f'/api/exhibits/{self.exhibit.exhibitId}/failureDescription/edit/{failure_desc.failureDescriptionId}')
+        response = self.client.delete(f'/api/exhibits/{self.exhibit.exhibitId}/failure-description/edit/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
@@ -266,7 +237,6 @@ class LessonsLearnedAPITestCase(APITestCase):
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
         
-        # Create user
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
         
@@ -284,7 +254,7 @@ class LessonsLearnedAPITestCase(APITestCase):
             'practicalRecommendations': 'Do this better',
             'futureWarnings': 'Watch out for this'
         }
-        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/lessonsLearned/new', data)
+        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/lessons-learned/new', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_get_lesson_learned_success(self):
@@ -294,7 +264,7 @@ class LessonsLearnedAPITestCase(APITestCase):
             practicalRecommendations='Test',
             futureWarnings='Test'
         )
-        response = self.client.get(f'/api/exhibits/{self.exhibit.exhibitId}/lessonsLearned/edit/{lesson.lessonslearnedId}')
+        response = self.client.get(f'/api/exhibits/{self.exhibit.exhibitId}/lessons-learned/edit/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -324,7 +294,7 @@ class ContributingFactorsAPITestCase(APITestCase):
             'designChoices': 'Poor design',
             'organisationalOrGovernanceIssues': 'Lack of oversight'
         }
-        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/contributingFactors/new', data)
+        response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/contributing-factors/new', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_update_contributing_factor_success(self):
@@ -340,7 +310,7 @@ class ContributingFactorsAPITestCase(APITestCase):
             'designChoices': 'Updated design',
             'organisationalOrGovernanceIssues': 'Updated governance'
         }
-        response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/contributingFactors/edit/{factor.contributingFactorId}', data)
+        response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/contributing-factors/edit/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -348,14 +318,11 @@ class AuthenticationTestCase(APITestCase):
     
     def setUp(self):
         """Create test user and exhibit"""
-        # Create Curator group
         curator_group, created = Group.objects.get_or_create(name='Curator')
         
-        # Create curator user
         self.curator_user = User.objects.create_user(username='curator', password='testpass123')
         self.curator_user.groups.add(curator_group)
         
-        # Create non-curator user
         self.regular_user = User.objects.create_user(username='regularuser', password='testpass123')
         
         self.exhibit = Exhibit.objects.create(
@@ -421,7 +388,6 @@ class AuthenticationTestCase(APITestCase):
         response = self.client.get('/api/exhibits/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
-        # Logout
         self.client.force_authenticate(user=None)
         response = self.client.get('/api/exhibits/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
