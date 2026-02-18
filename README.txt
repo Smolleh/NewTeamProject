@@ -1,3 +1,6 @@
+In order to access the repository clone using:
+git clone https://github.com/Smolleh/NewTeamProject.git
+
 *first time you run the app*
 install pipenv (pip install pipenv, or however else you want to instal it)
 ensure you cloned the github repository to your computer
@@ -5,13 +8,24 @@ ensure you are using the python 3.13 interpreter
 
 in order to run the app:
 1. in the terminal, naviagate to the NEWTEAMPROJECT repository (the one that pipfile is in)
-2. run pipenv install (to install all dependencies)
-3. run pipenv shell (to enter the virtual environmenrt)
-4. cd into museumProject
-5. run python manage.py runserver
+2. run:
+pipenv install (to install all dependencies)
+3. run:
+pipenv shell (to enter the virtual environment)
+4. run:
+cd museumProject
+5. run:
+python manage.py runserver
+
+Testing:
+1. Do the above (steps 1-4) 
+2. run:
+python manage.py test museumApp
 
 if you have made any changes to the models.py file:
-(note) python -m pip install Pillow     is necessary for image in Artefact
-1. run python manage.py makemigrations
-2. run python manage.py migrate
-3. run python manage.py runserver
+1. run: 
+python manage.py makemigrations
+2. run:
+python manage.py migrate
+3. run:
+python manage.py runserver
