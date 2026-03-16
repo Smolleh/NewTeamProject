@@ -23,7 +23,7 @@ class Artefact(models.Model):
     artefactId = models.AutoField(db_column='artefactId', primary_key=True)  
     info = models.CharField(db_column='info', max_length=255, blank=True, null=False)  
     artefactDate = models.DateField(db_column='artefactDate', blank=True, null=False)  
-    artefactObjectPath = models.TextField(db_column='artefactObjectPath', blank=True, null=False,)  
+    artefactObjectPath = models.ImageField(db_column='artefactObjectPath', blank=True, null=False, upload_to='ArtefactImages/')  
     exhibitId = models.ForeignKey(Exhibit, on_delete=models.CASCADE)
     class Meta:
         managed = True

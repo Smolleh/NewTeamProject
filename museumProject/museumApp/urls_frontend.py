@@ -2,6 +2,8 @@ from django.urls import path
 from . import views_frontend
 from . import views
 from django.contrib.auth import views as auth
+from django.conf import settings 
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("exhibit/", views_frontend.exhibits, name="exhibits"),
@@ -33,4 +35,4 @@ urlpatterns = [
 
     path('quiz/', views_frontend.quiz, name='quiz'),
     path('single_quiz/<int:quizId>/', views_frontend.single_quiz, name='single_quiz'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #needed for images 
