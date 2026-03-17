@@ -20,14 +20,18 @@
 
 </form>
 <p id="message"></p>
+
+<ul class="curator-navs">
+  <li><a href="{% url 'curator_dashboard' %}"><img src="{% static 'images/arrow_back.png' %}"></a></li>
+  <li><a href="{% url 'curator_dashboard' %}">Dashboard</li>
+  <li><a href="{% url 'curator_dashboard' %}"><img src="{% static 'images/arrow_forward.png' %}"></a></li>
+</ul>
+
+
+
 <script>
     const exhibitId = "{{ exhibit.exhibitId}}";
 </script>
 
 <script src="{% static 'js/create_artefact.js' %}"></script>
-
-
-
-
-
 {% endblock %}
