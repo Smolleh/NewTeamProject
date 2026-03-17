@@ -1,3 +1,23 @@
+Project Purpose:
+The AI Failures Museum is a web-based application that presents exhibits of failures, limitations or 
+misuses of AI-supported systems. The aim is to highlight the faults in previous AI systems and 
+provide learning techniques such as quizzes to help educate users on how these issues arose.
+
+Developers:
+- Dom Clegg (Project Lead)
+- Leo Hudson (Software Developer)
+- Sam James (Testing & DevOps)
+- Alex Parsons (Technical Lead)
+- Coco Bemand (UI Designer)
+- Jimi Mandeville (Data/ML lead)
+- Dylan Ryan (Documentation)
+
+Technology Stack:
+- Python
+- Django
+- SQLite
+- HTML/CSS
+
 In order to access the repository clone using:
 git clone https://github.com/Smolleh/NewTeamProject.git
 
