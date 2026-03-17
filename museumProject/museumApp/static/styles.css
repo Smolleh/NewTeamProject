@@ -3,30 +3,39 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Verdana', sans-serif;
 
 }
 body{
     margin-top: 60px;
     background-color: #FBFEF9;
-    color: #251605;
-    line-height: 1.6;
-    padding: 80px;
+    color: #1a1a1a;
+    line-height: 1.7;
+    padding: 60px 40px;
     
 }
 
 p {
     font-size: 16px;
-    color: #251605;
+    color: #2e2e2e;
     text-align: center;
-
 }
 
 section{
     padding: 40px;
+    font-size: 15px;
     text-align: center;
-    margin: 40px; 
+    margin: 40px;
 }
+
+h1 { 
+    font-size: clamp(24px, 5vw, 48px);
+    color: #1a1a1a;
+    font-style: bold;
+    text-align: center;
+
+}
+
 
 /*****************************************base.html*******************************/
 .sidebar { 
@@ -35,48 +44,53 @@ section{
     left:0;
     width: 260px;
     height: 100%;
-    background-color: #777778;
+    background-color: #0f172a;
     display: none;
     padding-top: 20px;
-    z-index: 1000;
-    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    box-shadow: 4px 0px 12px rgba(0, 0, 0, 0.4);
 }
 
 .sidebar a { 
-    color: #fffefe;
+    color: #e2e8f0;
     display: block;
-    font-size: 18px;
+    font-size: 15px;
     text-decoration: none;
+    padding: 12px 20px;
     border-bottom: 1px solid #484a4b;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease, padding-left 0.2s ease;
 
 }
 
 .side{ 
-    color: #ffffff;
-    font-size: 20px;
+    color: #e2e8f0;
+    font-size: 15px;
     margin-left: 15px;
     cursor: pointer;
     display: block;
-    width: 80%;
+    width: 100%;
     text-align: left;
-    border-bottom: 1px solid #484a4b;
-    border: none; 
+    border-bottom: 1px solid #1e293b;
+    border-top: none; 
+    border-left: none; 
+    border-right: none; 
     background: none;
     padding: 10px 15px;
-
+    transition: background-color 0.2s ease, padding-left 0.2s ease;
 }
 
 .side:hover { 
-    background-color: #484a4b;
+    background-color: #1e293b;
+    padding-left: 28px;
 }
 
 .sidebar a:hover { 
-    background-color: #484a4b;
+    background-color: #1e293b;
+    padding-left: 28px;
 }
 
 .top-bar { 
-    background-color: #777778;
+    background-color: #0f172a;
     position: fixed;
     top: 0; 
     left: 0;
@@ -85,37 +99,65 @@ section{
     display: flex;
     align-items: center; 
     justify-content: flex-end;
-    padding: 40px 40px;
+    padding: 0px 40px;
     z-index: 999;
     gap: 20px;  
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
-.top-bar a { 
+.top-bar a {
     display: flex;
-    text-align: right;
-    color: black;
-    font-weight: bold;
+    align-items: center;
+    color: #e2e8f0;
+    font-weight: 600;
     height: 100%;
-    font-size: 20px;
+    font-size: 14px;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
 }
 
-.top-bar a:hover { 
+.top-bar a:hover {
     text-decoration: underline;
+    color: #94a3b8;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0;
+    height: 60px;
+    transition: color 0.2s ease;
+}
+
+.logout-btn:hover {
+    text-decoration: underline;
+    color: #94a3b8;
 }
 
 .menu{ 
     font-size: 28px;
     padding: 10px 15px;
-    color: #484a4b; 
+    color: #e2e8f0; 
     cursor: pointer;
     border: none;
     background: none;
     margin-right: auto;
-
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    line-height: 1;
 }
 
 .menu:hover { 
-    background-color: #484a4b;
+    background-color: #1e293b;
 
 }
 
@@ -127,7 +169,7 @@ section{
     left:0;
     width: 100%;
     height: 100%;
-    z-index: 999;
+    z-index: 1000;
     background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -136,17 +178,17 @@ section{
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: rgb(81, 79, 79);
-    align-items: flex;
+    background-color: #0f172a;
     display: flex;
     justify-content: space-evenly; 
-    font-size: 16px;
+    padding: 0 20px;
     height: 60px;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
 }
 
 .footer p { 
-    color: #ffffff;
-    font-size: 16px;
+    color: #e2e8f0;
+    font-size: 13px;
     font-weight: bold;
 }
 
@@ -154,11 +196,13 @@ section{
     color: #ffffff;
     font-size: 16px;
     text-align: center;
+    text-decoration: none;
+    transition: color 0.2s ease;
 
 }
 
 .footer a:hover { 
-    text-decoration: underline;
+    color: #94a3b8;
 } 
 
 .row {
@@ -171,64 +215,86 @@ section{
 
 /*****************************************home.html*******************************/
 
-.home-button {
-    border: none;
-    color: white;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-    background-color: white;
-    color: black;
-    border: 2px solid #a5a5a5;
-
-  }
-
-  
-.home-button:hover {
-    background-color: #a5a5a5;
-    color: white;
-  }
-
-
-
-
-div a { 
-    margin-top: 30 px;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-    color: #ffffff;
-    font-style: italic;
-    margin-bottom: 50px ;
+.hero {
+    background-color: #0f172a;
+    margin: -60px -40px 40px -40px;
+    padding: 80px 60px 60px 60px;
 }
 
-.intro p { 
+.hero-register {
+    font-size: 14px;
+    color: #94a3b8;
+    text-align: left;
+    margin-bottom: 24px;
+}
+
+.hero-register a {
+    color: #e2e8f0;
+    text-decoration: underline;
+}
+
+.hero-register a:hover {
+    color: #94a3b8;
+}
+
+.hero-title {
+    font-size: clamp(32px, 5vw, 56px);
+    color: #ffffff;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.hero-text {
+    text-align: left;
+    color: #94a3b8;
+    font-size: 16px;
+    max-width: 600px;
+    margin-bottom: 40px;
+    line-height: 1.8;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.home-button {
+    padding: 16px 32px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    background-color: transparent;
+    color: #e2e8f0;
+    border: 2px solid #e2e8f0;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.home-button:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+
+.intro p {
     margin-top: 40px;
     margin-bottom: 80px;
-
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #444;
 }
-
-
-
-
-
 
 .column {
     flex: 1;
 }
 
-h1 { 
-    font-size: clamp(20px, 5vw, 40px);
-    color: #2e2e2f;
-    font-style: bold;
-    text-align: center;
 
-}
 /*****************************************exhibits.html*******************************/
 
 .exhibits-grid{ 
@@ -356,18 +422,18 @@ h3 {
   }
 
   .management-card { 
-    background: rgb(186, 174, 255);
+    background: #0f172a;
     border-radius: 12px;
     padding: 20px;
     border: 1px solid #e0e0e0;
     flex-direction: column;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
+    text-decoration: none;
 }
 
 .management-card a { 
-    color: black;
+    color: white;
 }
 
 

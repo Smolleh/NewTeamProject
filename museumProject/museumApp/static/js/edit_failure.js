@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function() {
-    fetch(`/api/exhibits/${exhibitId}/failure-description/edit`)
+    fetch(`/api/exhibits/${exhibitId}/failure-description/edit/`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Data not loaded");
@@ -30,8 +30,8 @@ form.addEventListener("submit", function(event) {
         whatWasAffected: document.getElementById('whatWasAffected').value
     };
 
-    fetch(`/api/exhibits/${exhibitId}/failure-description/edit`, { 
-        method: "PUT", 
+    fetch(`/api/exhibits/${exhibitId}/failure-description/edit/`, {
+        method: "PUT",
         headers: { 
             "Content-Type": "application/json",
             "X-CSRFToken": getCSRFToken()
@@ -46,7 +46,7 @@ form.addEventListener("submit", function(event) {
         }
         return response.json();
     })
-    .then(data => { 
+    .then(() => {
         document.getElementById('message').innerText = "Edit saved";
     })
     .catch(error => {

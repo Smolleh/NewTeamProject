@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             document.getElementById('dataIssues').value = data.dataIssues || '';
             document.getElementById('designChoices').value = data.designChoices || '';
-            document.getElementById('organisationalOrGovernanceIssues').value = data.systemOutputs || '';
+            document.getElementById('organisationalOrGovernanceIssues').value = data.organisationalOrGovernanceIssues || '';
 
         })
         .catch(error => console.error(error));
@@ -46,7 +46,7 @@ form.addEventListener("submit", function(event) {
         }
         return response.json();
     })
-    .then(data => { 
+    .then(() => {
         document.getElementById('message').innerText = "Edit saved";
     })
     .catch(error => {
