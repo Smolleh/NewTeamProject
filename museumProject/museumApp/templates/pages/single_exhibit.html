@@ -3,7 +3,35 @@
 {%block content %}
 
     <h1> {{exhibit.title}}</h1>
+    <section class = "single-exhibit">
+        <h3> BookMark Button - use this to save an exhibit to your bookmarks page for easy access later </h3>
+        <button onclick="bookmarkExhibit({{ exhibit.exhibitId }})">Bookmark</button>
+        <script>
+        function bookmarkExhibit(exhibitId) {
+            fetch(`/exhibit/${exhibitId}/bookmark/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Bookmarked!');
+                }
+            });
+        }
 
+        function getCookie(name) {
+            return document.cookie.split('; ')
+                .find(row => row.startsWith(name + '='))
+                ?.split('=')[1];
+        }
+        </script>
+
+
+    </section>
     <section class="single-exhibit">
         <h3> Description: </h3>
         <p> {{exhibit.domain}}</p>

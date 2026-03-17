@@ -8,6 +8,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("exhibit/", views_frontend.exhibits, name="exhibits"),
     path("exhibit/<int:exhibitId>/", views_frontend.single_exhibit, name="single_exhibit"),
+    path('exhibit/<int:exhibitId>/bookmark/', views_frontend.bookmarkExhibit, name='bookmarkExhibit'),#new path for bookmark function 
+    path('bookmarks/', views_frontend.bookmarkedExhibits, name='bookmarks'),#new path to view the bookmarked exhibits
+    path('bookmarks/<int:exhibitId>/unbookmark/', views_frontend.unbookmarkExhibit, name='unbookmarkExhibit'),
     path("", views_frontend.home, name="home"),
     
     path("privacy_policy/", views_frontend.privacy_policy, name="privacy_policy"),
@@ -18,7 +21,6 @@ urlpatterns = [
     path("register/", views.registerPage, name="register"),
     
     path('curator_dashboard/', views_frontend.curator_dashboard, name='curator_dashboard'),
-    
     path('system/<int:exhibitId>/', views_frontend.edit_system, name='edit_system'),
     path('lessons/<int:exhibitId>/', views_frontend.edit_lessons, name='edit_lessons'),
     path('failure/<int:exhibitId>/', views_frontend.edit_failure, name='edit_failure'),

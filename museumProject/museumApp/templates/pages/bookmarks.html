@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>My Bookmarks</h1>
+
+{% if exhibits %}
+    {% for exhibit in exhibits %}
+    <div id="exhibit-{{ exhibit.exhibitId }}">
+        <h2>{{ exhibit.title }}</h2>
+        <a href="{% url 'single_exhibit' exhibit.exhibitId %}">View Exhibit</a>
+        <button onclick="unbookmarkItem({{ exhibit.exhibitId }})">Remove your Bookmark</button>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>No bookmarks yet.</p>
+{% endif %}
+
+<script>
+function unbookmarkItem(exhibitId) {
+    fetch(`/bookmarks/${exhibitId}/unbookmark/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById(`exhibit-${exhibitId}`).remove();
+        }
+    });
+}
+
+function getCookie(name) {
+    return document.cookie.split('; ')
+        .find(row => row.startsWith(name + '='))
+        ?.split('=')[1];
+}
+</script>
+
+{% endblock %}
