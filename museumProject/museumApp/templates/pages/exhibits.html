@@ -1,32 +1,40 @@
 
 {% extends "base.html" %}
 {%block content %}
-    
+
     <h1>Exhibits</h1>
 
-
     <section>
-        {% if exhibits %}
-            <ul class="exhibits-grid">
-                {% for exhibit in exhibits %}
-                    <li class="exhibit-card">
-                        <a href="{% url 'single_exhibit' exhibitId=exhibit.exhibitId %}">
-                        <h2>{{exhibit.title}}</h2>
-                        <p>{{exhibit.domain}}</p>
-                        <p>Views : {{exhibit.viewNumber}} </p>
-                        
-                        
-                        
-                         
-                        </a>
-                    </li>
-
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No exhibits found.</p>
-        {% endif %}
+        <ul class="exhibits-grid" id="exhibits-grid">
+            <li id="exhibits-loading"><p>Loading exhibits...</p></li>
+        </ul>
     </section>
-    
 
-    {% endblock %}
+    <script>
+    fetch('/api/exhibits/')
+        .then(res => res.json())
+        .then(exhibits => {
+            const grid = document.getElementById('exhibits-grid');
+            grid.innerHTML = '';
+            if (exhibits.length === 0) {
+                grid.innerHTML = '<p>No exhibits found.</p>';
+                return;
+            }
+            exhibits.forEach(exhibit => {
+                const li = document.createElement('li');
+                li.className = 'exhibit-card';
+                li.innerHTML = `
+                    <a href="/exhibit/${exhibit.exhibitId}/">
+                        <h2>${exhibit.title}</h2>
+                        <p>${exhibit.domain}</p>
+                    </a>
+                `;
+                grid.appendChild(li);
+            });
+        })
+        .catch(() => {
+            document.getElementById('exhibits-grid').innerHTML = '<p>Failed to load exhibits.</p>';
+        });
+    </script>
+
+{% endblock %}

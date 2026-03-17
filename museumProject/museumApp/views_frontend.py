@@ -11,8 +11,7 @@ from quizApp.models import Quiz
 # URLs to render actual HTML pages for the front end
 @login_required
 def exhibits(request):
-    exhibits = Exhibit.objects.all()
-    return render(request, "pages/exhibits.html", {"exhibits": exhibits})
+    return render(request, "pages/exhibits.html", {})
 @login_required
 def bookmarkExhibit(request, exhibitId):
     exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
@@ -33,30 +32,8 @@ def unbookmarkExhibit(request, exhibitId):
         return JsonResponse({'success': False})
    
 @login_required
-def single_exhibit(request,  exhibitId):
-    exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
-
-    artefacts = Artefact.objects.filter(exhibitId=exhibit)
-    ai_description = AiSystemDescription.objects.filter(exhibitId=exhibit).first()
-    contributing_factors = ContributingFactors.objects.filter(exhibitId=exhibit).first()
-    failures = FailureDescription.objects.filter(exhibitId=exhibit).first()
-    lessons = LessonsLearned.objects.filter(exhibitId=exhibit).first()
-    #creates a bookmark entry if it doesnt exist already
-    #userId = request.user
-    #BookMarks.objects.get_or_create(exhibitId=exhibit.exhibitId,userId=userId)#functionality should be assigned to the bookmark button 
-    #if not BookMarks.objects.filter(exhibitId = exhibitId, userId = userId).exists():
-     #      BookMarks.objects.create(exhibitId =exhibitId,userId=userId)
-     #^ alterntive method of creating a bookmark entry if it doesnt exist already
-
-
-    return render(request, "pages/single_exhibit.html", {
-        "exhibit": exhibit,
-        "artefacts": artefacts,
-        "ai_description": ai_description,
-        "contributing_factors": contributing_factors,
-        "failures": failures,
-        "lessons": lessons,
-    })
+def single_exhibit(request, exhibitId):
+    return render(request, "pages/single_exhibit.html", {"exhibitId": exhibitId})
 
 
 def home(request):

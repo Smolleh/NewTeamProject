@@ -16,6 +16,7 @@
 
                 <li class="curator-card">
                     <h2>{{ exhibit.title }}</h2>
+                    <p> Views: {{exhibit.viewNumber}} </p>
                     <div class="curator-links">
 
                         <a href="{% url 'edit_exhibit_detail' exhibitId=exhibit.exhibitId %}">Edit Exhibit Detail</a>

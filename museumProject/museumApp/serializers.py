@@ -44,7 +44,7 @@ class SimpleViewExhibitSerializer(serializers.ModelSerializer):
     ArtefactObjectPath = serializers.SerializerMethodField()
     class Meta:
         model = Exhibit
-        fields = ['exhibitId', 'title', 'domain', 'viewNumber', 'ArtefactObjectPath']
+        fields = ['exhibitId', 'title', 'domain', 'ArtefactObjectPath']
 
     def get_ArtefactObjectPath(self, obj):
         artefact = (
@@ -66,7 +66,7 @@ class ExhibitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exhibit
         fields = ['exhibitId','title', 'domain','backgroundDeploymentContext', 'intededUse',
-            'viewNumber','artefacts','lessons_learned','contributing_factors','failure_description','ai_system_description',
+            'artefacts','lessons_learned','contributing_factors','failure_description','ai_system_description',
         ]
     def get_artefacts(self, obj):
         return ArtefactSerializer(obj.artefact_set.all(), many=True).data

@@ -15,7 +15,7 @@
         <button class="side" onclick="s_close()">Close &times;</button>
         <a href="{% url 'home' %}">Home</a>
         <a href="{% url 'exhibits' %}">Exhibits</a>
-        <a href="{% url 'quiz' %}">Quiz</a>
+        <a href="{% url 'quiz' %}">Quizzes</a>
 
         <a href="{% url 'curator_dashboard' %}">Curator Dashboard</a>
 
@@ -25,19 +25,20 @@
       <div>
       <div class="top-bar">
         <button class="menu" onclick="s_open()">&#9776;</button>
-        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'home' %}"><img src="{% static 'images/home.png' %}"></a>
         <a href="{% url 'exhibits' %}">Exhibits</a>
-        <a href="{% url 'quiz' %}">Quiz</a>
-        
+        <a href="{% url 'quiz' %}"> Quizzes</a>
+
         {% if user.is_authenticated %}
+            <a href="{% url 'bookmarks' %}"><img src="{% static 'images/all_bookmarks.png' %}"></a>
             <form method="POST" action="{% url 'logout' %}" style="display:inline;">
               {% csrf_token %}
-              <button type="submit" class="logout-btn">Logout</button>
+              <button type="submit" class="logout-btn"><img src="{% static 'images/logout.png' %}"></button>
             </form>
 
         {% else %}
 
-          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'login' %}"><img src="{% static 'images/account.png' %}"></a>
           <a href="{% url 'register' %}">Register</a>
         {% endif %}
         
