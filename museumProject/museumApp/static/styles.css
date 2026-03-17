@@ -491,6 +491,29 @@ h3 {
   
   }
 
+/***************************** Curator nav *******************************/
+
+.curator-navs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+    margin: 40px auto;
+}
+
+.curator-navs a {
+    color: #2f5aa8;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.curator-navs a:hover {
+    text-decoration: underline;
+    color: #243a73;
+}
+
 /***************************** Input forms *******************************/
 
 .dash-btn{ 
