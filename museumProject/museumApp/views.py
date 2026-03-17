@@ -9,6 +9,7 @@ from django.contrib.auth import login, logout, authenticate
 from .permissions import isCurator
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
+from .decorators import rate_limiter
 
 class CuratorProtectedView(APIView):
     permission_classes = [isCurator]
@@ -119,6 +120,7 @@ def registerPage(request):
     context = {'form': form}
     return render(request, 'pages/register.html', context)
 
+@rate_limiter
 def loginPage(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
