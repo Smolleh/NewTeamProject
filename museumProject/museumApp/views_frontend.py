@@ -1,5 +1,7 @@
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
+from rest_framework import request
 from .models import *
 from .decorators import curator_required
 from django.contrib.auth.decorators import login_required
@@ -11,7 +13,25 @@ from quizApp.models import Quiz
 def exhibits(request):
     exhibits = Exhibit.objects.all()
     return render(request, "pages/exhibits.html", {"exhibits": exhibits})
-
+@login_required
+def bookmarkExhibit(request, exhibitId):
+    exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
+    userId = request.user
+    BookMarks.objects.get_or_create(exhibitId=exhibit,userId=userId)
+    return JsonResponse({'success': True})
+@login_required
+def bookmarkedExhibits(request):
+        bookmarks = BookMarks.objects.filter(userId=request.user).select_related('exhibitId')
+        exhibits = [i.exhibitId for i in bookmarks]
+        return render(request, 'pages/bookmarks.html', {"exhibits": exhibits})
+@login_required
+def unbookmarkExhibit(request, exhibitId):
+    if request.method == 'POST':
+        BookMarks.objects.filter(exhibitId=exhibitId, userId=request.user).delete()
+        return JsonResponse({'success': True})
+    else: 
+        return JsonResponse({'success': False})
+   
 @login_required
 def single_exhibit(request,  exhibitId):
     exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
@@ -21,6 +41,13 @@ def single_exhibit(request,  exhibitId):
     contributing_factors = ContributingFactors.objects.filter(exhibitId=exhibit).first()
     failures = FailureDescription.objects.filter(exhibitId=exhibit).first()
     lessons = LessonsLearned.objects.filter(exhibitId=exhibit).first()
+    #creates a bookmark entry if it doesnt exist already
+    #userId = request.user
+    #BookMarks.objects.get_or_create(exhibitId=exhibit.exhibitId,userId=userId)#functionality should be assigned to the bookmark button 
+    #if not BookMarks.objects.filter(exhibitId = exhibitId, userId = userId).exists():
+     #      BookMarks.objects.create(exhibitId =exhibitId,userId=userId)
+     #^ alterntive method of creating a bookmark entry if it doesnt exist already
+
 
     return render(request, "pages/single_exhibit.html", {
         "exhibit": exhibit,
