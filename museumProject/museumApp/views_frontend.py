@@ -41,7 +41,7 @@ def single_exhibit(request,  exhibitId):
     contributing_factors = ContributingFactors.objects.filter(exhibitId=exhibit).first()
     failures = FailureDescription.objects.filter(exhibitId=exhibit).first()
     lessons = LessonsLearned.objects.filter(exhibitId=exhibit).first()
-    exhibit.view_count += 1
+    exhibit.viewNumber += 1
     exhibit.save()
     
 
