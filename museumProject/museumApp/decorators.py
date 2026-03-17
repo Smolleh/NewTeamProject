@@ -6,4 +6,3 @@ def curator_required(view_func):
             return view_func(request, *args, **kwargs)
         return HttpResponseForbidden("You are not authorized to access this page.")
     return wrapper
-
