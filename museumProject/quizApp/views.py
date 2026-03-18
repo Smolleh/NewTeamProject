@@ -2,15 +2,51 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from django.db import IntegrityError
 from django.db.models.functions import Coalesce
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Count
 from django.shortcuts import get_object_or_404
 from museumApp.permissions import isCurator
-from .models import Quiz, Result, Answer, Question
+from .models import Quiz, Result, Answer, Question, UserAchievements
 from rest_framework.views import APIView
-from .serializers import QuizDesplaySerializer, QuestionWithAnswersSerializer, QuizStartResponseSerializer, SubmitQuizSerializer, QuestionCreateSerializer, AnswerSerializer, QuizCreateDesplaySerializer
+from .serializers import QuizDesplaySerializer, QuizStartResponseSerializer, SubmitQuizSerializer, QuestionCreateSerializer, QuizCreateDesplaySerializer, UserAchievementsSerializer
 
 class CuratorProtectedView(APIView):
     permission_classes = [isCurator]
+    
+#for getting your score and badge
+class UserAchievementsView(generics.RetrieveAPIView):
+    serializer_class = UserAchievementsSerializer
+    def get_object(self):
+        obj, _ = UserAchievements.objects.get_or_create(user=self.request.user)
+        return obj
+
+
+#for gettng quiz analytics
+class QuizAnalyticsView(CuratorProtectedView, APIView):
+    
+    def get(self, request, quiz_id):
+        #getting the quiz onject
+        quiz = get_object_or_404(Quiz, id=quiz_id)
+        #getting all result objects related to the quiz which are completed
+        results = Result.objects.filter(quiz=quiz, completed=True)
+
+        #calculating number of attempts, average score, average points and number of attempts passed
+        analytics = results.aggregate(
+            attempts=Count("id"),
+            average_score=Avg("score"),
+            average_points=Avg("points"),
+            passed_count=Count("id", filter=Q(passed=True)),
+        )
+        #calculating the pass rate
+        attempts = analytics["attempts"]
+        pass_rate = round((analytics["passed_count"] / attempts) * 100, 2) if attempts else 0
+
+        return Response({
+            "quiz_id": quiz.id,
+            "attempts": attempts,
+            "average_score": round(analytics["average_score"], 2) if analytics["average_score"] is not None else 0,
+            "average_points": round(analytics["average_points"], 2) if analytics["average_points"] is not None else 0,
+            "pass_rate": pass_rate,
+        })
 
 #for viewing all the available quizes details
 class QuizListView(generics.ListAPIView):
@@ -19,12 +55,7 @@ class QuizListView(generics.ListAPIView):
 
 #(moderators) for viewing available quizes details and creating new ones
 class quizListCreateView(CuratorProtectedView, generics.ListCreateAPIView):
-    queryset = Quiz.objects.annotate(
-        average_score=Coalesce(
-            Avg("result__score", filter=Q(result__completed=True)),
-            0.0
-        )
-    )
+    queryset = Quiz.objects.all()
     serializer_class = QuizCreateDesplaySerializer
     
 # (moderators) for editing a specific quizes details
@@ -156,6 +187,7 @@ class SubmitQuizView(generics.UpdateAPIView):
 
         # if no answers are submitted:
         if not selections:
+            passed = True if result.quiz.passing_score == 0 else False
             result.score = 0
             result.points = 0
             result.completed = True
@@ -169,7 +201,9 @@ class SubmitQuizView(generics.UpdateAPIView):
                     "answered": 0,
                     "total": total,
                     "score": result.score,
+                    "passed": passed,
                     "points" : 0
+                    
 
                 },
                 status=200
@@ -235,9 +269,10 @@ class SubmitQuizView(generics.UpdateAPIView):
             points = int(result.quiz.max_points * (score / 100))
             result.points = points
             changed_fields.append("points")
-            result.user.achievements.add_points(points)
+
             
         result.save(update_fields=changed_fields)
+        result.user.achievements.add_points(points)
 
 
         return Response(
@@ -248,6 +283,7 @@ class SubmitQuizView(generics.UpdateAPIView):
                 "answered": answered,
                 "total": total,
                 "score": score,
+                "passed": passed,
                 "points": points
 
             },

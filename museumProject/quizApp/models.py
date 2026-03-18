@@ -52,12 +52,12 @@ class Result(models.Model):
         constraints = [models.UniqueConstraint(fields=["quiz", "user"], name="one_attempt")]
         
         
-class QuestionAttempt(models.Model):
-    result = models.ForeignKey(Result, on_delete = models.CASCADE, null=False)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, null= False)
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, null=False)
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=["result", "question"], name="unique_question")]
+# class QuestionAttempt(models.Model):
+#     result = models.ForeignKey(Result, on_delete = models.CASCADE, null=False)
+#     question = models.ForeignKey(Question, on_delete=models.CASCADE, null= False)
+#     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, null=False)
+#     class Meta:
+#         constraints = [models.UniqueConstraint(fields=["result", "question"], name="unique_question")]
     
     
     
@@ -70,7 +70,7 @@ class UserAchievements(models.Model):
         PLATINUM = 4, "Patinum"
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="achievements")
     points = models.IntegerField(default=0)
-    badge = models.IntegerField(choices=Badges, default=Badges.NEWBIE)
+    badge = models.IntegerField(choices=Badges.choices, default=Badges.NEWBIE)
     
         
     def add_points(self, points: int):

@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'museumApp',
     'quizApp',
-    'quizApp.apps.QuizAppConfig',
 ]
 
 MIDDLEWARE = [
