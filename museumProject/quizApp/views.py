@@ -157,8 +157,10 @@ class SubmitQuizView(generics.UpdateAPIView):
         # if no answers are submitted:
         if not selections:
             result.score = 0
+            result.points = 0
             result.completed = True
-            result.save(update_fields=["score", "completed"])
+            result.passed = False
+            result.save(update_fields=["score", "points", "completed", "passed"])
             return Response(
                 {
                     "result_id": result.id,
@@ -167,6 +169,7 @@ class SubmitQuizView(generics.UpdateAPIView):
                     "answered": 0,
                     "total": total,
                     "score": result.score,
+                    "points" : 0
 
                 },
                 status=200
@@ -218,11 +221,23 @@ class SubmitQuizView(generics.UpdateAPIView):
         #calculating the score
         answered = len(seen_questions)
         score = (correct / total) * 100
+        passed = True if score >= result.quiz.passing_score else False
 
         #updating result object
         result.score = score
         result.completed = True
-        result.save(update_fields=["score", "completed"])
+        result.passed = passed
+        
+        changed_fields = ["score", "completed", "passed"]
+        #points only get assigned if the quiz is passed
+        points : int = 0
+        if(passed):
+            points = int(result.quiz.max_points * (score / 100))
+            result.points = points
+            changed_fields.append("points")
+            result.user.achievements.add_points(points)
+            
+        result.save(update_fields=changed_fields)
 
 
         return Response(
@@ -233,6 +248,7 @@ class SubmitQuizView(generics.UpdateAPIView):
                 "answered": answered,
                 "total": total,
                 "score": score,
+                "points": points
 
             },
             status=200
