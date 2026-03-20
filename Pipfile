@@ -8,6 +8,7 @@ django = "*"
 djangorestframework = "*"
 tzdata = "*"
 pillow = "*"
+django-enum = "*"
 
 [dev-packages]
 

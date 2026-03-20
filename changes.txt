@@ -1,0 +1,2 @@
+added max_points for Quiz (should be added to front end)
+quiz submission now returns 2 more fields: "passed" (bool), "points" (int) - should be reflected in front end

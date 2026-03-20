@@ -1,14 +1,23 @@
 from rest_framework import serializers
 from .models import *
-#serializer for answer objects
-class AnswerSerializer(serializers.ModelSerializer):
+
+
+#serilizer for user achievements
+class UserAchievementsSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username")
+    class Meta:
+        model = UserAchievements
+        fields = ["username", "points", "badge"]
+        
+#serializer for answer objects obfuscating whether the answer is correct 
+class AnswerDisplaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = ["id", "answer_text"]
 
 #
 class QuestionWithAnswersSerializer(serializers.ModelSerializer):
-    answers = AnswerSerializer(source="answer_set", many=True, read_only=True)
+    answers = AnswerDisplaySerializer(source="answer_set", many=True, read_only=True)
 
     class Meta:
         model = Question
@@ -40,7 +49,7 @@ class QuizDesplaySerializer(serializers.ModelSerializer):
     exhibit_name = serializers.StringRelatedField(source="exhibit", read_only=True)
     class Meta:
         model = Quiz
-        fields = ['id','name', 'topic', 'num_questions', 'passing_score','exhibit', 'exhibit_name']
+        fields = ['id','name', 'topic', 'num_questions', 'passing_score','exhibit', 'exhibit_name', 'max_points']
 
 class QuizCreateDesplaySerializer(serializers.ModelSerializer):
     exhibit = serializers.PrimaryKeyRelatedField(queryset=Exhibit.objects.all())
@@ -52,7 +61,7 @@ class QuizCreateDesplaySerializer(serializers.ModelSerializer):
         model = Quiz
         fields = [
             "id", "name", "topic", "num_questions", "passing_score",
-            "exhibit", "exhibit_name", "average_score"
+            "exhibit", "exhibit_name", "average_score", "max_points"
         ]
 
 class AnswerSerializer(serializers.ModelSerializer):
