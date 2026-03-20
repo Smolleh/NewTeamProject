@@ -35,6 +35,12 @@
     const pk = "{{ contributing_factors.pk }}";
 </script>
 
+<ul class="curator-navs">
+    <li><a href="{% url 'edit_exhibit_detail' exhibitId=exhibit.exhibitId %}"><img src="{% static 'images/arrow_back.png' %}"></a></li>
+    <li><a href="{% url 'curator_dashboard' %}">Dashboard</a></li>
+    <li><a href="{% url 'edit_failure' exhibitId=exhibit.exhibitId %}"><img src="{% static 'images/arrow_forward.png' %}"></a></li>
+</ul>
+
 <script src="{% static 'js/edit_factor.js' %}"></script>
 
 

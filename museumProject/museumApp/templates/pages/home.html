@@ -7,7 +7,7 @@
         <p class="hero-register">Not registered? <a href="{% url 'register' %}">Register here</a></p>
     {% endif %}
     <h1 class="hero-title">AI Museum of Failures</h1>
-    <p class="hero-text">Welcome to the AI Museum of Failures — showcasing exhibits where AI has made incorrect predictions, harming people, industries and more. Explore our gallery and complete short quizzes to test your knowledge.</p>
+    <p class="hero-text"> Welcome to the to Museum of AI failures.  Explore exhibits, complete reflective quizzes to learn more about how LLM's have failed. </p>
     <div class="hero-buttons">
         <a href="{% url 'exhibits' %}"><button class="home-button">Explore Exhibits</button></a>
         <a href="{% url 'quiz' %}"><button class="home-button">Explore Quizzes</button></a>
@@ -15,16 +15,6 @@
 </div>
 
 <div>
-    <p> Click here to learn more about AI Failures:</P>
-    <a href="{% url 'exhibits' %}">
-        <button class="home-button">Explore Exhibits</button>
-    </a>
-    <a href="{% url 'bookmarks' %}">
-        <button class="home-button">View your Bookmarked Exhibits</button>
-    </a>
-    <a href="{% url 'quiz' %}">
-        <button class="home-button">Explore Quizzes</button>
-    </a>
-</div>
+
 
 {% endblock %}

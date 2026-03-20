@@ -11,6 +11,7 @@ urlpatterns = [
     path('exhibit/<int:exhibitId>/bookmark/', views_frontend.bookmarkExhibit, name='bookmarkExhibit'),#new path for bookmark function 
     path('bookmarks/', views_frontend.bookmarkedExhibits, name='bookmarks'),#new path to view the bookmarked exhibits
     path('bookmarks/<int:exhibitId>/unbookmark/', views_frontend.unbookmarkExhibit, name='unbookmarkExhibit'),
+    path('profile/edit/', views_frontend.edit_profile, name='edit_profile'),
     path("", views_frontend.home, name="home"),
     
     path("privacy_policy/", views_frontend.privacy_policy, name="privacy_policy"),

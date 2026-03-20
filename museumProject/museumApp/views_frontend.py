@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from rest_framework import request
 from .models import *
+from .forms import EditUserForm
 from .decorators import curator_required
 from django.contrib.auth.decorators import login_required
 from quizApp.models import Quiz
@@ -22,7 +23,18 @@ def bookmarkExhibit(request, exhibitId):
 def bookmarkedExhibits(request):
         bookmarks = BookMarks.objects.filter(userId=request.user).select_related('exhibitId')
         exhibits = [i.exhibitId for i in bookmarks]
-        return render(request, 'pages/bookmarks.html', {"exhibits": exhibits})
+        form = EditUserForm(instance=request.user)
+        return render(request, 'pages/bookmarks.html', {"exhibits": exhibits, "form": form})
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = EditUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'errors': form.errors})
+    return JsonResponse({'success': False})
 @login_required
 def unbookmarkExhibit(request, exhibitId):
     if request.method == 'POST':

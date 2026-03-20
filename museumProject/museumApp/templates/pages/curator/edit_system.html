@@ -37,6 +37,11 @@
     const pk = "{{ ai_description.pk}}";
 </script>
 
+<ul class="curator-navs">
+    <li><a href="{% url 'edit_lessons' exhibitId=exhibit.exhibitId %}"><img src="{% static 'images/arrow_back.png' %}"></a></li>
+    <li><a href="{% url 'curator_dashboard' %}">Dashboard</a></li>
+</ul>
+
 <script src="{% static 'js/edit_system.js' %}"></script>
 
 

@@ -25,6 +25,11 @@
     const pk = "{{ artefact.pk}}";
 </script>
 
+<ul class="curator-navs">
+    <li><a href="{% url 'curator_dashboard' %}"><img src="{% static 'images/arrow_back.png' %}"></a></li>
+    <li><a href="{% url 'curator_dashboard' %}">Dashboard</a></li>
+</ul>
+
 <script src="{% static 'js/edit_artefact.js' %}"></script>
 
 

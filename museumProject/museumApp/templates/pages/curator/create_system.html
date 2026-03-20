@@ -23,6 +23,12 @@
     const pk = "{{ exhibit.exhibitId}}";
 </script>
 
+<ul class="curator-navs">
+    <li><a href="{% url 'create_lessons' exhibitId=exhibit.exhibitId %}"><img src="{% static 'images/arrow_back.png' %}"></a></li>
+    <li><a href="{% url 'curator_dashboard' %}">Dashboard</a></li>
+    <li><a href="{% url 'create_artefact' exhibitId=exhibit.exhibitId %}"><img src="{% static 'images/arrow_forward.png' %}"></a></li>
+</ul>
+
 <script src="{% static 'js/create_system.js' %}"></script>
 
 
