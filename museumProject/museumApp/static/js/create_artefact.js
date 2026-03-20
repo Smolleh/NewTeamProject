@@ -1,42 +1,46 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-const form = document.getElementById('create-artefact-form')
+    const form = document.getElementById('create-artefact-form')
 
-form.addEventListener("submit", function(event) { 
-    event.preventDefault(); 
+    form.addEventListener("submit", function(event) { 
+        event.preventDefault(); 
 
-    const data = { 
-        artefactDate:  document.getElementById('artefactDate').value,
-        info: document.getElementById('info').value,
-        artefactObjectPath: document.getElementById('artefactObjectPath').value
-    };
+        const formData = new FormData();
 
-    fetch(`/api/exhibits/${exhibitId}/artefacts/new`, { 
-        method: "POST", 
-        headers: { 
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCSRFToken()
+            formData.append('artefactDate', document.getElementById('artefactDate').value);
+            formData.append('info', document.getElementById('info').value);
+            //formData.append('artefactObjectPath', document.getElementById('artefactObjectPath').value);
 
-        },
-        body: JSON.stringify(data)
-    })
-
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Failed to create ");
+        const imageFile = document.getElementById('artefactObjectPath').files[0];
+        if (imageFile) {
+            formData.append('artefactObjectPath', imageFile);
         }
-        return response.json();
-    })
-    .then(data => { 
-        document.getElementById('message').innerText = "Creation saved";
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        document.getElementById('message').innerText = "Error occured, Creation not saved.";
+        fetch(`/api/exhibits/${exhibitId}/artefacts/new`, { 
+            method: "POST", 
+            headers: { 
+                //"Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken()
+
+            },
+            body: formData
+        })
+
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to create ");
+            }
+            return response.json();
+        })
+        .then(data => { 
+            document.getElementById('message').innerText = "Creation saved";
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            document.getElementById('message').innerText = "Error occured, Creation not saved.";
+        });
+
+
     });
-
-
-});
 
 })
 

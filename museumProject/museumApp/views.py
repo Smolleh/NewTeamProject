@@ -43,7 +43,8 @@ class AdminCreateArtefactView(CuratorProtectedView, generics.CreateAPIView):
     serializer_class = ArtefactSerializer 
     def perform_create(self, serializer): 
         exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"]) 
-        serializer.save(exhibitId=exhibit) 
+        image = self.request.FILES.get('artefactObjectPath')
+        serializer.save(exhibitId=exhibit, artefactObjectPath=image) 
         
 class AdminEditArtefactView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView): 
     serializer_class = ArtefactSerializer 
