@@ -88,5 +88,11 @@ class LessonsLearned(models.Model):
         managed = True
         db_table = 'lessons_learned'
 
-
+class Comments(models.Model):
+    commentId = models.AutoField(db_column='commentId', primary_key=True, blank=True, null=False)
+    exhibit = models.ForeignKey(Exhibit, on_delete=models.CASCADE,db_column='exhibitId', null=True, blank= True)
+    user = models.ForeignKey('auth.User', on_delete=models.SET_NULL, db_column='userId', blank=True, null=True)
+    content = models.TextField(db_column='content', blank=True, null=False)
+    date = models.DateTimeField(db_column='timestamp', auto_now_add=True)
+    isApproved = models.BooleanField(db_column='isApproved', default=False)
 

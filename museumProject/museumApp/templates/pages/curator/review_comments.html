@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Pending Comments</h1>
+
+{% for comment in comments %}
+    <div class="incoming-comment">
+        <p>{{ comment.content }}</p>
+        <small>
+            {{ comment.date|date:"D M Y" }} — 
+            Exhibit: {{ comment.exhibit.title }}
+        </small>
+        <button onclick="approveComment({{ comment.commentId }})">Approve</button>
+        <button onclick="deleteComment({{ comment.commentId }})">Delete</button>
+    </div>
+{% empty %}
+    <p>No incoming comments.</p>
+{% endfor %}
+
+<script>
+async function approveComment(id) {
+    await fetch(`/api/comments/${id}/`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ isApproved: true })
+    });
+    location.reload();
+}
+
+async function deleteComment(id) {
+    await fetch(`/api/comments/${id}/`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    });
+    location.reload();
+}
+</script>
+
+{% endblock %}

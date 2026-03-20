@@ -70,3 +70,22 @@ class ExhibitSerializer(serializers.ModelSerializer):
         ]
     def get_artefacts(self, obj):
         return ArtefactSerializer(obj.artefact_set.all(), many=True).data
+    
+class CommentSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comments
+        fields = ['commentId', 'exhibit', 'content', 'date', 'isApproved', 'username']
+        read_only_fields = ['isApproved', 'date', 'commentId']
+
+    def get_username(self, obj):
+        if obj.user is None:
+            return 'Deleted User'
+        return obj.user.username
+        
+class CuratorCommentReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comments
+        fields = ['commentId', 'exhibit', 'content', 'date', 'isApproved']
+        read_only_fields = ['exhibit', 'content', 'date']

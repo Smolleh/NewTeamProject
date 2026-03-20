@@ -135,5 +135,28 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('login')
-    #logout button to be added to html in order for this to work, and url path to be added to urls.py, otherwise pointless.
+
+class ExhibitCommentsView(generics.ListCreateAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs['exhibitId'])
+        return Comments.objects.filter(exhibit=exhibit, isApproved=True)
+
+    def perform_create(self, serializer):
+        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs['exhibitId'])
+        serializer.save(exhibit=exhibit, user=self.request.user)
+
+class CuratorIncomingCommentsView(CuratorProtectedView, generics.ListAPIView):
+    serializer_class = CuratorCommentReviewSerializer
+
+    def get_queryset(self):
+        return Comments.objects.filter(isApproved=False)
+
+class CuratorReviewCommentView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CuratorCommentReviewSerializer
+
+    def get_object(self):
+        return get_object_or_404(Comments, commentId=self.kwargs['commentId'])
+
 

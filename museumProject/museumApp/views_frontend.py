@@ -41,6 +41,7 @@ def single_exhibit(request,  exhibitId):
     contributing_factors = ContributingFactors.objects.filter(exhibitId=exhibit).first()
     failures = FailureDescription.objects.filter(exhibitId=exhibit).first()
     lessons = LessonsLearned.objects.filter(exhibitId=exhibit).first()
+    comments = Comments.objects.filter(exhibit=exhibit, isApproved=True)
     #creates a bookmark entry if it doesnt exist already
     #userId = request.user
     #BookMarks.objects.get_or_create(exhibitId=exhibit.exhibitId,userId=userId)#functionality should be assigned to the bookmark button 
@@ -56,6 +57,7 @@ def single_exhibit(request,  exhibitId):
         "contributing_factors": contributing_factors,
         "failures": failures,
         "lessons": lessons,
+        "comments": comments,
     })
 
 
@@ -200,3 +202,10 @@ def quiz(request, quizId):
 
 
 """
+
+@login_required
+@curator_required
+def review_comments(request):
+    incoming = Comments.objects.filter(isApproved=False)
+    return render(request, 'pages/curator/review_comments.html', {'comments': incoming})
+
