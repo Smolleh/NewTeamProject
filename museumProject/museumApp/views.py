@@ -10,6 +10,7 @@ from django.contrib.auth import login, logout, authenticate
 from .permissions import isCurator
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 class CuratorProtectedView(APIView):
     permission_classes = [isCurator]
