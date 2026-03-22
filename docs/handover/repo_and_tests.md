@@ -1,20 +1,20 @@
 # Repository Structure
 NewTeamProject/
-|-docs/
-|-- architecture/
-|--- ReadMe.md
-|-- data/
-|--- ReadMe.md
-|-- decisions/
-|--- license-decisions.md
-|-- handover/
-|--- ReadMe.md
-|--- data_management.md
-|--- deployment.md
-|--- development.md
-|--- operations_and_maintenance.md
-|--- repo_and_tests.md
-|- museumProject/ 
+├── docs/
+│   ├── architecture/
+│   │   └── ReadMe.md
+│   ├── data/
+│   │   └── ReadMe.md
+│   ├── decisions/
+│   │   └── license-decisions.md
+│   └── handover/
+│       ├── ReadMe.md
+│       ├── data_management.md
+│       ├── deployment.md
+│       ├── development.md
+│       ├── operations_and_maintenance.md
+│       └── repo_and_tests.md
+└── museumProject/
 
 # How to Run Tests
 ## First, in order to run the app:
