@@ -38,4 +38,6 @@ urlpatterns = [
 
     path('quiz/', views_frontend.quiz, name='quiz'),
     path('single_quiz/<int:quizId>/', views_frontend.single_quiz, name='single_quiz'),
+
+    path('curator/comments/', views_frontend.review_comments, name='review_comments'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #needed for images 

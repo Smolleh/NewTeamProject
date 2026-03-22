@@ -114,6 +114,53 @@
                     <p>${exhibit.intededUse}</p>
                 </section>
 
+    <section>
+        <h2>Comments</h2>
+        {% for comment in comments %}
+            <div class="comment">
+                <p>{{ comment.content }}</p>
+                <small>
+                    {{ comment.user.username|default:"Deleted User" }} — 
+                    {{ comment.date|date:"d M Y" }}
+                </small>
+            </div>
+        {% empty %}
+            <p>No comments yet.</p>
+        {% endfor %}
+    </section>
+
+    <section>
+        <h2>Post a Comment</h2>
+        <form id="comment-form">
+            {% csrf_token %}
+            <textarea id="comment-content" placeholder="Write your comment..." required></textarea>
+            <button type="submit">Submit</button>
+            <p id="comment-msg"></p>
+        </form>
+    </section>
+
+    <script>
+    document.getElementById('comment-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const response = await fetch('/api/exhibits/{{ exhibit.exhibitId }}/comments/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                content: document.getElementById('comment-content').value,
+            })
+        });
+
+    if (response.ok) {
+        document.getElementById('comment-msg').textContent = 'Comment submitted and awaiting review.';
+        document.getElementById('comment-content').value = '';
+    } else {
+        document.getElementById('comment-msg').textContent = 'Something went wrong, please try again.';
+    }
+    });
+    </script>
                 <section class="single-exhibit">${artefactsHtml}</section>
                 <section class="single-exhibit">${aiHtml}</section>
                 <section class="single-exhibit">${factorsHtml}</section>

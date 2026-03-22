@@ -33,6 +33,9 @@ urlpatterns = [
      path('exhibits/<int:exhibitId>/contributing-factors/edit/', views.AdminEditCotributingFactorsView.as_view()),
      path('login/', views.loginPage, name='login'),
      path('register/', views.registerPage, name='register'),
+     path('exhibits/<int:exhibitId>/comments/', views.ExhibitCommentsView.as_view()),
+     path('comments/pending/', views.CuratorIncomingCommentsView.as_view()),
+     path('comments/<int:commentId>/', views.CuratorReviewCommentView.as_view()),
 ]
 
 

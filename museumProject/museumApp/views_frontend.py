@@ -44,8 +44,32 @@ def unbookmarkExhibit(request, exhibitId):
         return JsonResponse({'success': False})
    
 @login_required
-def single_exhibit(request, exhibitId):
-    return render(request, "pages/single_exhibit.html", {"exhibitId": exhibitId})
+def single_exhibit(request,  exhibitId):
+    exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
+
+    artefacts = Artefact.objects.filter(exhibitId=exhibit)
+    ai_description = AiSystemDescription.objects.filter(exhibitId=exhibit).first()
+    contributing_factors = ContributingFactors.objects.filter(exhibitId=exhibit).first()
+    failures = FailureDescription.objects.filter(exhibitId=exhibit).first()
+    lessons = LessonsLearned.objects.filter(exhibitId=exhibit).first()
+    comments = Comments.objects.filter(exhibit=exhibit, isApproved=True)
+    #creates a bookmark entry if it doesnt exist already
+    #userId = request.user
+    #BookMarks.objects.get_or_create(exhibitId=exhibit.exhibitId,userId=userId)#functionality should be assigned to the bookmark button 
+    #if not BookMarks.objects.filter(exhibitId = exhibitId, userId = userId).exists():
+     #      BookMarks.objects.create(exhibitId =exhibitId,userId=userId)
+     #^ alterntive method of creating a bookmark entry if it doesnt exist already
+
+
+    return render(request, "pages/single_exhibit.html", {
+        "exhibit": exhibit,
+        "artefacts": artefacts,
+        "ai_description": ai_description,
+        "contributing_factors": contributing_factors,
+        "failures": failures,
+        "lessons": lessons,
+        "comments": comments,
+    })
 
 
 def home(request):
@@ -189,3 +213,10 @@ def quiz(request, quizId):
 
 
 """
+
+@login_required
+@curator_required
+def review_comments(request):
+    incoming = Comments.objects.filter(isApproved=False)
+    return render(request, 'pages/curator/review_comments.html', {'comments': incoming})
+
