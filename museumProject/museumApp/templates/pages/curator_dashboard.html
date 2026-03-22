@@ -9,6 +9,7 @@
 <section>
     <ul class="management-grid">
         <li class="management-card"><a href="{% url 'create_exhibit' %}">Create Exhibit</a></li>
+        <li class="management-card"><a href="{% url 'quiz_create' %}">Create Quiz</a></li>
         <li class="management-card"><a href="{% url 'review_comments' %}">Review Comments</a></li>
         <li class="management-card"><a href="{% url 'home'%}">View Analytics </a></li>
     </ul>
@@ -59,6 +60,11 @@
                         {% endfor %}
 
                         <a href="{% url 'create_artefact' exhibitId=exhibit.exhibitId %}">Add Artefact</a>
+
+                        {% for quiz in exhibit.quiz_set.all %}
+                            <a href="{% url 'quiz_edit' quizId=quiz.pk %}">Edit Quiz: {{ quiz.name }}</a>
+                        {% endfor %}
+                        <a href="{% url 'quiz_create' %}">Create Quiz</a>
                     </div>
         
                 </li>

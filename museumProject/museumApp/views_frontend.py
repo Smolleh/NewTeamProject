@@ -216,3 +216,16 @@ def review_comments(request):
     incoming = Comments.objects.filter(isApproved=False)
     return render(request, 'pages/curator/review_comments.html', {'comments': incoming})
 
+@login_required
+@curator_required
+def quiz_create(request):
+    exhibits = Exhibit.objects.all()
+    return render(request, 'pages/curator/quiz_create.html', {"exhibits": exhibits})
+
+@login_required
+@curator_required
+def quiz_edit(request, quizId):
+    quiz = get_object_or_404(Quiz, pk=quizId)
+    exhibits = Exhibit.objects.all()
+    return render(request, 'pages/curator/quiz_edit.html', {"quiz": quiz, "exhibits": exhibits})
+

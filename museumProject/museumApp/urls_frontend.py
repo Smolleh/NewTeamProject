@@ -40,4 +40,6 @@ urlpatterns = [
     path('single_quiz/<int:quizId>/', views_frontend.single_quiz, name='single_quiz'),
 
     path('curator/comments/', views_frontend.review_comments, name='review_comments'),
+    path('curator/quiz/create/', views_frontend.quiz_create, name='quiz_create'),
+    path('curator/quiz/<int:quizId>/edit/', views_frontend.quiz_edit, name='quiz_edit'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #needed for images 
