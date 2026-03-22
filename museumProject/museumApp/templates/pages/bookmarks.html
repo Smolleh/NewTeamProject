@@ -1,8 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1>My Profile</h1>
+</div>
+{% endblock %}
 {% block content %}
 
-<h1> My Profile</h1>
+
+<h2>My Achievements</h2>
+<p>Points: <span id="user-points">Loading...</span></p>
+<p>Badge: <span id="user-badge">Loading...</span></p>
+
+
+<h2>My Bookmarks</h2>
 
 {% if exhibits %}
     {% for exhibit in exhibits %}
@@ -22,7 +33,7 @@
      <button type="submit" class="logout-btn"><img src="{% static 'images/logout.png' %}"></button>
 </form>
 
-<h2>My details</h2>
+<h2>Edit my details</h2>
 
 <form id="edit-profile-form" class="input-form">
     {% csrf_token %}
@@ -39,6 +50,28 @@
 
 
 <script>
+const BADGE_IMAGES = {
+    0: "{% static 'images/badge_new.png' %}",
+    1: "{% static 'images/badge_bronze.png' %}",
+    2: "{% static 'images/badge_silver.png' %}",
+    3: "{% static 'images/badge_gold.png' %}",
+    4: "{% static 'images/badge_platinum.png' %}",
+};
+
+fetch('/quizzes-api/me/')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('user-points').innerText = data.points;
+        const badgeEl = document.getElementById('user-badge');
+        const img = BADGE_IMAGES[data.badge] || BADGE_IMAGES[0];
+        badgeEl.innerHTML = `<img src="${img}" alt="badge">`;
+    })
+    .catch(() => {
+        document.getElementById('user-points').innerText = '0';
+    });
+
+
+
 document.getElementById('edit-profile-form').addEventListener('submit', function(e) {
     e.preventDefault();
     const formData = new FormData(this);

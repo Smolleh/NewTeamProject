@@ -1,13 +1,16 @@
 {% extends "base.html" %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1>Curator Dashboard</h1>
+</div>
+{% endblock %}
 {% block content %}
-
-<h1> Curator Dashboard</h1>
 
 <section>
     <ul class="management-grid">
         <li class="management-card"><a href="{% url 'create_exhibit' %}">Create Exhibit</a></li>
         <li class="management-card"><a href="{% url 'home' %}">View User Feedback</a></li>
-        <li class="management-card"><a href="{% url 'home'%}">View Analytics </a></li>
+        <li class="management-card"><a href="{% url 'home'%}">View Quiz Analytics </a></li>
     </ul>
 
     {% if exhibits %}
@@ -49,7 +52,7 @@
                         {% comment %} Nested loop for artefacts {% endcomment %}
                         {% for artefact in exhibit.artefact_set.all %}
                             <a href="{% url 'edit_artefact' exhibitId=exhibit.exhibitId artefactId=artefact.artefactId %}">
-                                Edit Artefact: {{ artefact.title }}
+                                Edit Artefact: {{ artefact.artefactId }}
                             </a>
                         {% empty %}
                             <span>No artefacts yet</span>

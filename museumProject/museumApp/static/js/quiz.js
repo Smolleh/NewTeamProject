@@ -13,15 +13,17 @@ async function loadQuiz() {
     });
 
     if (!response.ok) {
-        document.getElementById('quiz-title').innerText = "Failed to load quiz. Are you logged in?";
+        document.getElementById('quiz-title').innerText = "Failed to load quiz";
         return;
     }
 
     const data = await response.json();
 
-    if (data["score: "] !== undefined) {
+    if (data.score !== undefined) {
         document.getElementById('quiz-title').innerText = "You have already completed this quiz!";
-        document.getElementById('result').innerText = `Your score: ${data["score: "]}%`;
+        document.getElementById('result').innerText = `Your score: ${data.score}%`;
+        document.getElementById('points').innerText = `Points earned: ${data.points}`;
+        document.getElementById('passed').innerText = data.passed ? 'Result: Passed' : 'Result: Failed';
         document.getElementById('submit').style.display = 'none';
         return;
     }
@@ -90,8 +92,9 @@ async function submitQuiz(e) {
     }
 
     const result = await response.json();
-    document.getElementById('result').innerText =
-        `You answered ${result.correct} out of ${result.total} correctly. Score: ${result.score.toFixed(1)}%`;
+    document.getElementById('result').innerText =`You answered ${result.correct} out of ${result.total} correctly. Score: ${result.score.toFixed(1)}%`;
+    document.getElementById('points').innerText = `Points earned: ${result.points}`;
+    document.getElementById('passed').innerText = result.passed ? 'Result: Passed' : 'Result: Failed';
 
     
     document.getElementById('submit').disabled = true;

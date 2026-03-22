@@ -54,7 +54,9 @@ class SimpleViewExhibitSerializer(serializers.ModelSerializer):
             .only('artefactObjectPath')
             .first()
         )
-        return artefact.artefactObjectPath if artefact else None
+        if artefact and artefact.artefactObjectPath:
+            return artefact.artefactObjectPath.name
+        return None
     
 class ExhibitSerializer(serializers.ModelSerializer):
     artefacts = serializers.SerializerMethodField()

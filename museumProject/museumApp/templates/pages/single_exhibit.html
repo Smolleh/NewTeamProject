@@ -1,10 +1,13 @@
 
 {% extends "base.html" %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1 id="exhibit-hero-title">Loading...</h1>
+</div>
+{% endblock %}
 {%block content %}
 
-    <div id="exhibit-content">
-        <p>Loading exhibit...</p>
-    </div>
+    <div id="exhibit-content"></div>
 
     <script>
     const exhibitId = "{{ exhibitId }}";
@@ -44,7 +47,7 @@
                             <h2>Artefact: ${a.artefactId}</h2>
                             <p>Information: ${a.info}</p>
                             <p>Date: ${a.artefactDate}</p>
-                            ${a.artefactObjectPath ? `<img src="/media/${a.artefactObjectPath}">` : ''}
+                            ${a.artefactObjectPath ? `<img src="${a.artefactObjectPath}">` : ''}
                         </li>`).join('')}
                    </ul>`
                 : '<p>No supporting artifacts found.</p>';
@@ -95,9 +98,8 @@
                    </div>`
                 : '<p>No information on lessons learnt found.</p>';
 
+            document.getElementById('exhibit-hero-title').innerText = exhibit.title;
             document.getElementById('exhibit-content').innerHTML = `
-                <h1>${exhibit.title}</h1>
-
                 <section class="single-exhibit">
                     <h3>BookMark Button - use this to save an exhibit to your bookmarks page for easy access later</h3>
                     <button onclick="bookmarkExhibit(${exhibit.exhibitId})">Bookmark</button>

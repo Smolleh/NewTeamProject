@@ -2,16 +2,18 @@
 
 {% extends "base.html" %}
 {% load static %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1>Create Artefact</h1>
+</div>
+{% endblock %}
 {%block content %}
 
+<form id="create-artefact-form" class="input-form" enctype="multipart/form-data">
 
-<h1> Create Artefact</h1>
-
-<form id="create-artefact-form" class="input-form">
-
-    <textarea id="info" placeholder="info"></textarea>
-    <textarea id="artefactDate" placeholder="artefactDate"></textarea>
-    <textarea id="artefactObjectPath" placeholder="artefactObjectPath"></textarea>
+    <textarea id="info" name="info" placeholder="info"></textarea>
+    <input type="date" id="artefactDate" name="artefactDate">
+    <input type="file" id="artefactObjectPath" name="artefactObjectPath" accept="image/*">
 
     <div class="input-form">
         <button class="submit" type="submit">Save</button>
