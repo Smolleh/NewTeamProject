@@ -17,3 +17,6 @@ API endpoints are used to retrieve and manipulate the data in the sytem through 
 The authentication system enforces role-based access control to the system and establishes what a visitor can do compared to a curator. 
 ### Quiz system
 The quiz system handles everything to do with quiz questions and answers as well as the user's results. 
+
+## Deployment View
+Our system is deployed through the use of PythonAnywhere and at the domain name: bigleh.eu.pythonanywhere.com. This allows the users to access the system through a web browser. The server on PythonAnywhere clones the repository on GitHub which allows for easy updates to the system by pulling the latest version from the active development branch. 
