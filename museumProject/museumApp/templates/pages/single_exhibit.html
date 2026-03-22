@@ -10,7 +10,7 @@
     <div id="exhibit-content"></div>
 
     <script>
-    const exhibitId = "{{ exhibitId }}";
+    const exhibitId = "{{ exhibit.exhibitId }}";
 
     function getCookie(name) {
         return document.cookie.split('; ')
@@ -114,13 +114,25 @@
                     <p>${exhibit.intededUse}</p>
                 </section>
 
+                <section class="single-exhibit">${artefactsHtml}</section>
+                <section class="single-exhibit">${aiHtml}</section>
+                <section class="single-exhibit">${factorsHtml}</section>
+                <section class="single-exhibit">${failuresHtml}</section>
+                <section class="single-exhibit">${lessonsHtml}</section>
+            `;
+        })
+        .catch(() => {
+            document.getElementById('exhibit-content').innerHTML = '<p>Failed to load exhibit.</p>';
+        });
+    </script>
+
     <section>
         <h2>Comments</h2>
         {% for comment in comments %}
             <div class="comment">
                 <p>{{ comment.content }}</p>
                 <small>
-                    {{ comment.user.username|default:"Deleted User" }} — 
+                    {{ comment.user.username|default:"Deleted User" }} —
                     {{ comment.date|date:"d M Y" }}
                 </small>
             </div>
@@ -142,7 +154,7 @@
     <script>
     document.getElementById('comment-form').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const response = await fetch('/api/exhibits/{{ exhibit.exhibitId }}/comments/', {
+        const response = await fetch(`/api/exhibits/${exhibitId}/comments/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -153,24 +165,13 @@
             })
         });
 
-    if (response.ok) {
-        document.getElementById('comment-msg').textContent = 'Comment submitted and awaiting review.';
-        document.getElementById('comment-content').value = '';
-    } else {
-        document.getElementById('comment-msg').textContent = 'Something went wrong, please try again.';
-    }
+        if (response.ok) {
+            document.getElementById('comment-msg').textContent = 'Comment submitted and awaiting review.';
+            document.getElementById('comment-content').value = '';
+        } else {
+            document.getElementById('comment-msg').textContent = 'Something went wrong, please try again.';
+        }
     });
-    </script>
-                <section class="single-exhibit">${artefactsHtml}</section>
-                <section class="single-exhibit">${aiHtml}</section>
-                <section class="single-exhibit">${factorsHtml}</section>
-                <section class="single-exhibit">${failuresHtml}</section>
-                <section class="single-exhibit">${lessonsHtml}</section>
-            `;
-        })
-        .catch(() => {
-            document.getElementById('exhibit-content').innerHTML = '<p>Failed to load exhibit.</p>';
-        });
     </script>
 
 {% endblock %}
