@@ -1,9 +1,23 @@
-
 {% extends "base.html" %}
-{%block content %}
+{% block content %}
     
     <h1>Exhibits</h1>
 
+    <form method="GET" action="">
+        <input type="text" name="search" placeholder="Search by title..." value="{{ search }}">
+    
+        <select name="domain">
+            <option value="">All Domains</option>
+            {% for d in domains %}
+            <option value="{{ d }}" {% if d == selected_domain %}selected{% endif %}>
+                {{ d }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filter</button>
+        <a href="{% url 'exhibits' %}">Clear</a>
+    </form>
 
     <section>
         {% if exhibits %}
@@ -11,16 +25,11 @@
                 {% for exhibit in exhibits %}
                     <li class="exhibit-card">
                         <a href="{% url 'single_exhibit' exhibitId=exhibit.exhibitId %}">
-                        <h2>{{exhibit.title}}</h2>
-                        <p>{{exhibit.domain}}</p>
-                        <p>Views : {{exhibit.viewNumber}} </p>
-                        
-                        
-                        
-                         
+                            <h2>{{ exhibit.title }}</h2>
+                            <p>{{ exhibit.domain }}</p>
+                            <p>Views: {{ exhibit.viewNumber }}</p>
                         </a>
                     </li>
-
                 {% endfor %}
             </ul>
         {% else %}
@@ -28,5 +37,23 @@
         {% endif %}
     </section>
     
+    {% if paginator.num_pages > 1 %}
+    <div class="pagination">
+        {% if page.has_previous %}
+            <a href="?page={{ page.previous_page_number }}&domain={{ selected_domain }}&search={{ search }}">← Prev</a>
+        {% endif %}
 
-    {% endblock %}
+        {% for num in paginator.page_range %}
+            {% if page.number == num %}
+                <span>{{ num }}</span>
+            {% else %}
+                <a href="?page={{ num }}&domain={{ selected_domain }}&search={{ search }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page.has_next %}
+            <a href="?page={{ page.next_page_number }}&domain={{ selected_domain }}&search={{ search }}">Next →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+{% endblock %}

@@ -6,13 +6,33 @@ from .models import *
 from .decorators import curator_required
 from django.contrib.auth.decorators import login_required
 from quizApp.models import Quiz
-
+from django.db.models import Q
+from django.template.response import TemplateResponse
+from .decorators import paginator
 
 # URLs to render actual HTML pages for the front end
 @login_required
+@paginator('exhibits', per_page=5)
 def exhibits(request):
-    exhibits = Exhibit.objects.all()
-    return render(request, "pages/exhibits.html", {"exhibits": exhibits})
+    queryset = Exhibit.objects.all()
+
+    search = request.GET.get('search', '')
+    if search:
+        queryset = queryset.filter(title__icontains=search)
+
+    domain = request.GET.get('domain', '')
+    if domain:
+        queryset = queryset.filter(domain=domain)
+
+    domains = Exhibit.objects.values_list('domain', flat=True).distinct()
+
+    return TemplateResponse(request, "pages/exhibits.html", {
+        "exhibits": queryset,
+        "domains": domains,
+        "selected_domain": domain,
+        "search": search,    
+    })
+
 @login_required
 def bookmarkExhibit(request, exhibitId):
     exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)

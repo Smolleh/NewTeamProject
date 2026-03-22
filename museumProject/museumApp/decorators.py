@@ -3,6 +3,8 @@ from django.core.cache import cache
 from django.http import HttpResponse
 from functools import wraps
 from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.template.response import TemplateResponse
 
 
 def curator_required(view_func):
@@ -39,3 +41,31 @@ def rate_limiter(view_func):
         return view_func(request, *args, **kwargs)
     return wrapper
         
+def paginator(q_set_key, per_page=9):
+    def decorator(view_func):
+        @wraps(view_func)
+        def wrapper(request, *args, **kwargs):
+            response = view_func(request, *args, **kwargs)
+
+            if not isinstance(response, TemplateResponse):
+                return response
+            
+            q_set = response.context_data.get(q_set_key)
+            if q_set is None:
+                return response
+            
+            page_num = request.GET.get('page', 1)
+            paginator = Paginator(q_set, per_page)
+
+            try:
+                page = paginator.page(page_num)
+            except (PageNotAnInteger, EmptyPage):
+                page = paginator.page(1)
+
+            response.context_data[q_set_key] = page.object_list
+            response.context_data['page'] = page
+            response.context_data['paginator'] = paginator
+
+            return response
+        return wrapper
+    return decorator
