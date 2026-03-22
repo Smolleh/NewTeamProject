@@ -17,7 +17,7 @@ urlpatterns = [
      path('exhibits/<int:exhibitId>/artefacts/edit/<int:pk>', views.AdminEditArtefactView.as_view()),
      #crearte System description
      path("exhibits/<int:exhibitId>/ai-system-description/new", views.AdminCreateSystemDescView.as_view()),
-     # view, edit and delete system description
+     # view, edit and delete system descrip.0tion
      path('exhibits/<int:exhibitId>/ai-system-description/edit/', views.AdminEditSystemDescView.as_view()),
      #crearte failure description
      path("exhibits/<int:exhibitId>/failure-description/new", views.AdminCreateFailureDescView.as_view()),
@@ -33,6 +33,7 @@ urlpatterns = [
      path('exhibits/<int:exhibitId>/contributing-factors/edit/', views.AdminEditCotributingFactorsView.as_view()),
      path('login/', views.loginPage, name='login'),
      path('register/', views.registerPage, name='register'),
+     path('delete_account/', views.deleteUser, name='delete_account'),
      path('exhibits/<int:exhibitId>/comments/', views.ExhibitCommentsView.as_view()),
      path('comments/pending/', views.CuratorIncomingCommentsView.as_view()),
      path('comments/<int:commentId>/', views.CuratorReviewCommentView.as_view()),

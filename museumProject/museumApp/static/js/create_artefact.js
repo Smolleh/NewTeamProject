@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-const form = document.getElementById('create-artefact-form')
+    const form = document.getElementById('create-artefact-form')
 
-form.addEventListener("submit", async function(event) {
-    event.preventDefault();
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
 
     try {
         const response = await fetch(`/api/exhibits/${exhibitId}/artefacts/new`, {

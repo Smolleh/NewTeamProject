@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -9,6 +10,7 @@ from django.contrib.auth import login, logout, authenticate
 from .permissions import isCurator
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .decorators import rate_limiter
 
 class CuratorProtectedView(APIView):
@@ -22,6 +24,15 @@ class UserSingleExhibitView(generics.RetrieveAPIView):
     queryset = Exhibit.objects.all()
     serializer_class = ExhibitSerializer
     
+@login_required
+def deleteUser(request):
+    if request.method == 'POST':
+        user = request.user
+        logout(request)
+        user.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
 class AdminExhibitsView(CuratorProtectedView, generics.ListCreateAPIView):
     queryset = Exhibit.objects.all()
     serializer_class = SimpleViewCreateExhibitSerializer
@@ -34,7 +45,8 @@ class AdminCreateArtefactView(CuratorProtectedView, generics.CreateAPIView):
     serializer_class = ArtefactSerializer 
     def perform_create(self, serializer): 
         exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"]) 
-        serializer.save(exhibitId=exhibit) 
+        image = self.request.FILES.get('artefactObjectPath')
+        serializer.save(exhibitId=exhibit, artefactObjectPath=image) 
         
 class AdminEditArtefactView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView): 
     serializer_class = ArtefactSerializer 

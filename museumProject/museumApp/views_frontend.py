@@ -53,13 +53,9 @@ def single_exhibit(request,  exhibitId):
     failures = FailureDescription.objects.filter(exhibitId=exhibit).first()
     lessons = LessonsLearned.objects.filter(exhibitId=exhibit).first()
     comments = Comments.objects.filter(exhibit=exhibit, isApproved=True)
-    #creates a bookmark entry if it doesnt exist already
-    #userId = request.user
-    #BookMarks.objects.get_or_create(exhibitId=exhibit.exhibitId,userId=userId)#functionality should be assigned to the bookmark button 
-    #if not BookMarks.objects.filter(exhibitId = exhibitId, userId = userId).exists():
-     #      BookMarks.objects.create(exhibitId =exhibitId,userId=userId)
-     #^ alterntive method of creating a bookmark entry if it doesnt exist already
-
+    exhibit.viewNumber += 1
+    exhibit.save()
+    
 
     return render(request, "pages/single_exhibit.html", {
         "exhibit": exhibit,
