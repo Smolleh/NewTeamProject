@@ -1,4 +1,5 @@
 # Repository Structure
+```
 NewTeamProject/
 ├── docs/
 │   ├── architecture/
@@ -15,6 +16,7 @@ NewTeamProject/
 │       ├── operations_and_maintenance.md
 │       └── repo_and_tests.md
 └── museumProject/
+```
 
 # How to Run Tests
 ## First, in order to run the app:
