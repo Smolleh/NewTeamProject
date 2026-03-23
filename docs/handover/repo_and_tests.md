@@ -19,7 +19,7 @@ NewTeamProject/
 ```
 
 # How to Run Tests
-## First, in order to run the app:
+## First, in order to run the tests:
 1. in the terminal, naviagate to the NEWTEAMPROJECT repository (the one that pipfile is in)
 2. run:
 pipenv install (to install all dependencies)
@@ -27,8 +27,6 @@ pipenv install (to install all dependencies)
 pipenv shell (to enter the virtual environment)
 4. run:
 cd museumProject
-5. run:
-python manage.py runserver
 
 ## Museum Testing:
 1. Do the above (steps 1-4) 
