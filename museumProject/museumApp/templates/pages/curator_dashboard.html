@@ -72,11 +72,12 @@
                     <th>Lessons</th>
                     <th>AI System</th>
                     <th>Artefacts</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
                 {% for exhibit in exhibits %}
-                <tr>
+                <tr id="exhibit-row-{{ exhibit.exhibitId }}">
                     <td><strong>{{ exhibit.title }}</strong></td>
                     <td>{{ exhibit.viewNumber }}</td>
                     <td><a href="{% url 'edit_exhibit_detail' exhibitId=exhibit.exhibitId %}">Edit</a></td>
@@ -110,9 +111,15 @@
                     </td>
                     <td>
                         {% for artefact in exhibit.artefact_set.all %}
-                            <a href="{% url 'edit_artefact' exhibitId=exhibit.exhibitId artefactId=artefact.artefactId %}">Artefact {{ artefact.artefactId }}</a>
+                            <span id="artefact-cell-{{ artefact.artefactId }}">
+                                <a href="{% url 'edit_artefact' exhibitId=exhibit.exhibitId artefactId=artefact.artefactId %}">Artefact {{ artefact.artefactId }}</a>
+                                <button class="delete-btn" onclick="deleteArtefact({{ exhibit.exhibitId }}, {{ artefact.artefactId }})">Delete</button>
+                            </span>
                         {% endfor %}
                         <a href="{% url 'create_artefact' exhibitId=exhibit.exhibitId %}">+ Add</a>
+                    </td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteExhibit({{ exhibit.exhibitId }})">Delete</button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -151,7 +158,10 @@
                         <td>{{ quiz.topic }}</td>
                         <td>{{ quiz.num_questions }}</td>
                         <td>{{ quiz.max_points }}</td>
-                        <td><a href="{% url 'quiz_edit' quizId=quiz.pk %}">Edit</a></td>
+                        <td>
+                            <a href="{% url 'quiz_edit' quizId=quiz.pk %}">Edit</a>
+                            <button class="delete-btn" onclick="deleteQuiz({{ quiz.pk }}, this)">Delete</button>
+                        </td>
                     </tr>
                     {% endfor %}
                 {% endfor %}
@@ -252,6 +262,52 @@ async function loadAnalytics() {
 }
 
 loadAnalytics();
+
+function getCsrfToken() {
+    return document.cookie.split('; ').find(r => r.startsWith('csrftoken='))?.split('=')[1];
+}
+
+function deleteExhibit(exhibitId) {
+    if (!confirm('Delete this exhibit and all its content? This cannot be undone.')) return;
+    fetch(`/api/exhibits/${exhibitId}/edit`, {
+        method: 'DELETE',
+        headers: { 'X-CSRFToken': getCsrfToken() },
+    }).then(res => {
+        if (res.ok) {
+            document.getElementById(`exhibit-row-${exhibitId}`)?.remove();
+        } else {
+            alert('Failed to delete exhibit.');
+        }
+    });
+}
+
+function deleteQuiz(quizId, btn) {
+    if (!confirm('Delete this quiz? This cannot be undone.')) return;
+    fetch(`/quizzes-api/manage/${quizId}/`, {
+        method: 'DELETE',
+        headers: { 'X-CSRFToken': getCsrfToken() },
+    }).then(res => {
+        if (res.ok) {
+            btn.closest('tr')?.remove();
+        } else {
+            alert('Failed to delete quiz.');
+        }
+    });
+}
+
+function deleteArtefact(exhibitId, artefactId) {
+    if (!confirm('Delete this artefact?')) return;
+    fetch(`/api/exhibits/${exhibitId}/artefacts/edit/${artefactId}`, {
+        method: 'DELETE',
+        headers: { 'X-CSRFToken': getCsrfToken() },
+    }).then(res => {
+        if (res.ok) {
+            document.getElementById(`artefact-cell-${artefactId}`)?.remove();
+        } else {
+            alert('Failed to delete artefact.');
+        }
+    });
+}
 </script>
 
 {% endblock %}
