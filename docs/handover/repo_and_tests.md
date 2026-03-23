@@ -1,20 +1,15 @@
 # Repository Structure
 ```
 NewTeamProject/
-├── docs/
-│   ├── architecture/
-│   │   └── ReadMe.md
-│   ├── data/
-│   │   └── ReadMe.md
-│   ├── decisions/
-│   │   └── license-decisions.md
-│   └── handover/
-│       ├── ReadMe.md
-│       ├── data_management.md
-│       ├── deployment.md
-│       ├── development.md
-│       ├── operations_and_maintenance.md
-│       └── repo_and_tests.md
+├── docs/ #Stores all the documentation files
+│   ├── architecture/ #Stores a ReadMe file which describes the main system components and provides a component diagram
+│   │   
+│   ├── data/ #Stores a ReadMe file which describes the data model and passport schema as well as the UML of the database
+│   │   
+│   ├── decisions/ #Stores a license decisions file which has the license we used
+│   │  
+│   └── handover/ #Contains several files to fully describe to a client how to install, operate, maintain and extend our system
+│       
 └── museumProject/
 ```
 
