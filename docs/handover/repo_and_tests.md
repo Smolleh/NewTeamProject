@@ -39,12 +39,3 @@ python manage.py test museumApp
 1. Do the above (steps 1-4) 
 2. run:
 python manage.py test quizApp
-
-if you have made any changes to the models.py file:
-1. run: 
-python manage.py makemigrations
-2. run:
-python manage.py migrate
-3. run:
-python manage.py runserver
-
