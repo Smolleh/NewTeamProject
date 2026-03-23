@@ -308,7 +308,7 @@ h3 {
 /* -------------------------exhibit grid ----------------------- */
 .exhibits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 250px));
     padding: 50px;
     gap: 2rem;
     list-style: none;
