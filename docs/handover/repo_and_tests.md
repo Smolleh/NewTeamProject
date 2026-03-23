@@ -10,8 +10,18 @@ NewTeamProject/
 │   │  
 │   └── handover/ #Contains several files to fully describe to a client how to install, operate, maintain and extend our system
 │       
-└── museumProject/
-```
+└── museumProject/ #contains the database, pipenv files, manage.py
+    │
+    ├── media/ArtefactImages/ #stores all artefact images
+    │
+    ├── museumApp/ #contains backend implementations for museum related APIs, all frontend views and templates
+    │
+    ├── quizApp/ #contains backend implementations for the quiz API
+    │
+    ├── museumProject/ #contains project level settings and urls
+
+    
+
 
 # How to Run Tests
 ## First, in order to run the tests:
