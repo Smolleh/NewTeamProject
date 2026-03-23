@@ -7,12 +7,33 @@ from .forms import EditUserForm
 from .decorators import curator_required
 from django.contrib.auth.decorators import login_required
 from quizApp.models import Quiz
-
+from django.db.models import Q
+from django.template.response import TemplateResponse
+from .decorators import paginator
 
 # URLs to render actual HTML pages for the front end
 @login_required
+@paginator('exhibits', per_page=5)
 def exhibits(request):
-    return render(request, "pages/exhibits.html", {})
+    queryset = Exhibit.objects.all()
+
+    search = request.GET.get('search', '')
+    if search:
+        queryset = queryset.filter(title__icontains=search)
+
+    domain = request.GET.get('domain', '')
+    if domain:
+        queryset = queryset.filter(domain=domain)
+
+    domains = Exhibit.objects.values_list('domain', flat=True).distinct()
+
+    return TemplateResponse(request, "pages/exhibits.html", {
+        "exhibits": queryset,
+        "domains": domains,
+        "selected_domain": domain,
+        "search": search,    
+    })
+
 @login_required
 def bookmarkExhibit(request, exhibitId):
     exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
@@ -20,11 +41,11 @@ def bookmarkExhibit(request, exhibitId):
     BookMarks.objects.get_or_create(exhibitId=exhibit,userId=userId)
     return JsonResponse({'success': True})
 @login_required
-def bookmarkedExhibits(request):
+def profile(request):
         bookmarks = BookMarks.objects.filter(userId=request.user).select_related('exhibitId')
         exhibits = [i.exhibitId for i in bookmarks]
         form = EditUserForm(instance=request.user)
-        return render(request, 'pages/bookmarks.html', {"exhibits": exhibits, "form": form})
+        return render(request, 'pages/profile.html', {"exhibits": exhibits, "form": form})
 
 @login_required
 def edit_profile(request):
@@ -55,7 +76,7 @@ def single_exhibit(request,  exhibitId):
     comments = Comments.objects.filter(exhibit=exhibit, isApproved=True)
     exhibit.viewNumber += 1
     exhibit.save()
-    
+    is_bookmarked = request.user.is_authenticated and BookMarks.objects.filter(exhibitId=exhibit, userId=request.user).exists()
 
     return render(request, "pages/single_exhibit.html", {
         "exhibit": exhibit,
@@ -65,6 +86,7 @@ def single_exhibit(request,  exhibitId):
         "failures": failures,
         "lessons": lessons,
         "comments": comments,
+        "is_bookmarked": is_bookmarked,
     })
 
 
@@ -83,8 +105,14 @@ def about(request):
 @login_required
 @curator_required
 def curator_dashboard(request):
-        exhibits = Exhibit.objects.all()
+        exhibits = Exhibit.objects.prefetch_related('artefact_set', 'quiz_set').all()
         return render(request, 'pages/curator_dashboard.html', {"exhibits": exhibits})
+
+@login_required
+@curator_required
+def curator_exhibits(request):
+        exhibits = Exhibit.objects.all()
+        return render(request, 'pages/curator/curator_exhibits.html', {"exhibits": exhibits})
 
 @login_required
 @curator_required
@@ -228,4 +256,5 @@ def quiz_edit(request, quizId):
     quiz = get_object_or_404(Quiz, pk=quizId)
     exhibits = Exhibit.objects.all()
     return render(request, 'pages/curator/quiz_edit.html', {"quiz": quiz, "exhibits": exhibits})
+
 

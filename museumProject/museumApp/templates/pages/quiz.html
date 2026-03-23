@@ -11,12 +11,15 @@
         {% if quiz %}
             <ul class="exhibits-grid">
                 {% for quiz in quiz %}
-                    <li class="exhibit-card">
+                    <li class="quiz-card">
                         <a href="{% url 'single_quiz' quiz.id %}">
-                        <h2>Name: {{quiz.name}}</h2>
-                        <p>Topic: {{quiz.topic}}</p>
-                        <p>Number of Questions: {{quiz.num_questions}} </p> 
-                        <p>Maximum Points: {{quiz.max_points}}</p>
+                            <h2>{{quiz.name}}</h2>
+                            <ul>
+                                <li>Exhibit: {{quiz.exhibit}}</li>
+                                <li>Topic: {{quiz.topic}}</li>
+                                <li>{{quiz.num_questions}} questions</li>
+                                <li>Worth: {{quiz.max_points}} point</li>
+                            </ul>
                         </a>
                     </li>
 

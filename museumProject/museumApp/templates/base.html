@@ -41,7 +41,7 @@
         <a href="{% url 'home' %}"><img src="{% static 'images/home.png' %}"></a>
 
         {% if user.is_authenticated %}
-            <a href="{% url 'bookmarks' %}"><img src="{% static 'images/account.png' %}"></a>
+            <a href="{% url 'profile' %}"><img src="{% static 'images/account.png' %}"></a>
             <form method="POST" action="{% url 'logout' %}" style="display:inline;">
               {% csrf_token %}
               <button type="submit" class="logout-btn"><img src="{% static 'images/logout.png' %}"></button>

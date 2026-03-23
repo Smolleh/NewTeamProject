@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *

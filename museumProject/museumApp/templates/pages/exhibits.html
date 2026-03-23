@@ -1,43 +1,140 @@
-
 {% extends "base.html" %}
 {% block page_hero %}
 <div class="page-hero">
     <h1>Exhibits</h1>
 </div>
 {% endblock %}
-{%block content %}
+{% block content %}
 
-    <section>
-        <ul class="exhibits-grid" id="exhibits-grid">
-            <li id="exhibits-loading"><p>Loading exhibits...</p></li>
-        </ul>
-    </section>
+    <div class="search-bar">
+        <input type="text" id="search-input" class="search-input" placeholder="Search by title:">
+        <select id="domain-filter" class="search-select">
+            <option value="">All Domains</option>
+        </select>
+        <button id="clear-btn" class="search-clear-btn">Clear</button>
+    </div>
+
+    <ul class="exhibits-grid" id="exhibits-grid"></ul>
+
+    <div class="pagination" id="pagination"></div>
 
     <script>
+    const PAGE_SIZE = 5;
+    let allExhibits = [];
+    let currentPage = 1;
+
     fetch('/api/exhibits/')
-        .then(res => res.json())
-        .then(exhibits => {
-            const grid = document.getElementById('exhibits-grid');
-            grid.innerHTML = '';
-            if (exhibits.length === 0) {
-                grid.innerHTML = '<p>No exhibits found.</p>';
-                return;
-            }
-            exhibits.forEach(exhibit => {
+        .then(res => {
+            if (!res.ok) throw new Error();
+            return res.json();
+        })
+        .then(data => {
+            allExhibits = data;
+            populateDomains(data);
+            render();
+        })
+        .catch(() => {
+            document.getElementById('exhibits-grid').innerHTML = '<li>Failed to load exhibits.</li>';
+        });
+
+    function populateDomains(exhibits) {
+        const select = document.getElementById('domain-filter');
+        const domains = [...new Set(exhibits.map(e => e.domain).filter(Boolean))].sort();
+        domains.forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d;
+            opt.textContent = d;
+            select.appendChild(opt);
+        });
+    }
+
+    function filtered() {
+        const search = document.getElementById('search-input').value.toLowerCase();
+        const domain = document.getElementById('domain-filter').value;
+        return allExhibits.filter(e => {
+            const matchSearch = !search || e.title.toLowerCase().includes(search);
+            const matchDomain = !domain || e.domain === domain;
+            return matchSearch && matchDomain;
+        });
+    }
+
+    function render() {
+        const results = filtered();
+        const totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const page = results.slice(start, start + PAGE_SIZE);
+
+        const grid = document.getElementById('exhibits-grid');
+        grid.innerHTML = '';
+        if (page.length === 0) {
+            grid.innerHTML = '<li>No exhibits found.</li>';
+        } else {
+            page.forEach(exhibit => {
                 const li = document.createElement('li');
                 li.className = 'exhibit-card';
+                const imgHtml = exhibit.ArtefactObjectPath
+                    ? `<img src="/media/${exhibit.ArtefactObjectPath}" alt="${exhibit.title}" class="exhibit-cover">`
+                    : `<div class="exhibit-cover-placeholder"></div>`;
                 li.innerHTML = `
                     <a href="/exhibit/${exhibit.exhibitId}/">
+                        ${imgHtml}
                         <h2>${exhibit.title}</h2>
-                        <p>${exhibit.domain}</p>
+                        <p>${exhibit.domain || ''}</p>
                     </a>
                 `;
                 grid.appendChild(li);
             });
-        })
-        .catch(() => {
-            document.getElementById('exhibits-grid').innerHTML = '<p>Failed to load exhibits.</p>';
-        });
+        }
+
+        renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+        const pag = document.getElementById('pagination');
+        pag.innerHTML = '';
+        if (totalPages <= 1) return;
+
+        if (currentPage > 1) {
+            const prev = document.createElement('a');
+            prev.textContent = '← Prev';
+            prev.href = '#';
+            prev.addEventListener('click', e => { e.preventDefault(); currentPage--; render(); });
+            pag.appendChild(prev);
+        }
+
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === currentPage) {
+                const span = document.createElement('span');
+                span.textContent = i;
+                pag.appendChild(span);
+            } else {
+                const a = document.createElement('a');
+                a.textContent = i;
+                a.href = '#';
+                a.addEventListener('click', e => { e.preventDefault(); currentPage = i; render(); });
+                pag.appendChild(a);
+            }
+        }
+
+        if (currentPage < totalPages) {
+            const next = document.createElement('a');
+            next.textContent = 'Next →';
+            next.href = '#';
+            next.addEventListener('click', e => { e.preventDefault(); currentPage++; render(); });
+            pag.appendChild(next);
+        }
+    }
+
+    document.getElementById('search-input').addEventListener('input', () => { currentPage = 1; render(); });
+    document.getElementById('domain-filter').addEventListener('change', () => { currentPage = 1; render(); });
+    document.getElementById('clear-btn').addEventListener('click', () => {
+        document.getElementById('search-input').value = '';
+        document.getElementById('domain-filter').value = '';
+        currentPage = 1;
+        render();
+    });
     </script>
 
 {% endblock %}

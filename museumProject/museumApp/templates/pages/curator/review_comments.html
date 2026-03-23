@@ -1,21 +1,34 @@
 {% extends "base.html" %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1>Pending Comments</h1>
+</div>
+{% endblock %}
 {% block content %}
 
-<h1>Pending Comments</h1>
+<div class="comments-toolbar">
+    <a href="{% url 'curator_dashboard' %}" class="back-btn">← Back to Dashboard</a>
+</div>
 
-{% for comment in comments %}
-    <div class="incoming-comment">
-        <p>{{ comment.content }}</p>
-        <small>
-            {{ comment.date|date:"D M Y" }} — 
-            Exhibit: {{ comment.exhibit.title }}
-        </small>
-        <button onclick="approveComment({{ comment.commentId }})">Approve</button>
-        <button onclick="deleteComment({{ comment.commentId }})">Delete</button>
+{% if comments %}
+    <div class="review-comments-list">
+        {% for comment in comments %}
+        <div class="review-comment-card">
+            <div class="review-comment-meta">
+                <span class="review-exhibit-tag">{{ comment.exhibit.title }}</span>
+                <span class="review-comment-date">{{ comment.date|date:"d M Y" }}</span>
+            </div>
+            <p>{{ comment.content }}</p>
+            <div class="review-comment-actions">
+                <button class="approve-btn" onclick="approveComment({{ comment.commentId }})">Approve</button>
+                <button class="delete-btn" onclick="deleteComment({{ comment.commentId }})">Delete</button>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-{% empty %}
-    <p>No incoming comments.</p>
-{% endfor %}
+{% else %}
+    <p class="review-empty">No pending comments to review.</p>
+{% endif %}
 
 <script>
 async function approveComment(id) {
