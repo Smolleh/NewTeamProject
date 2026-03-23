@@ -17,7 +17,7 @@
         <a href="{% url 'exhibits' %}">Exhibits</a>
         <a href="{% url 'quiz' %}">Quizzes</a>
 
-        <a href="{% url 'curator_dashboard' %}">Curator Dashboard</a>
+        {% for group in user.groups.all %}{% if group.name == 'Curator' %}<a href="{% url 'curator_dashboard' %}">Curator Dashboard</a>{% endif %}{% endfor %}
 
     </div>
     <div class="overlay" onclick="s_close()" id="overlay"></div>
@@ -66,11 +66,13 @@
     {% endblock %}
 
     <div class="footer">
- 
+
         <a href="{% url 'about' %}">About Us</a>
-        <p>© Copyright 2026. All rights reserved</p>
+        <div style="text-align: center;">
+            <p>© Copyright Git Happens 2026<br>All rights reserved</p>
+        </div>
         <a href="{% url 'privacy_policy' %}">View our Privacy Policy</a>
-        
+
 
     </div>
 
