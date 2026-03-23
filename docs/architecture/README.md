@@ -1,8 +1,6 @@
 # Architecture Overview
 The AI Failures Museum is a web-based application which was constructed using the Django framework. It's client-server style architecture allows users to interact with the frontend interface and requests are processed by the Django backend, connected to a SQLite database. The system is designed for the following functionality: exhibit browsing, quiz testing and curator management of the system. 
 
-## Component Diagram
-NEED TO CHECK WITH ALEX!!!
 
 ## System Components
 ### Frontend (HTML & CSS)
