@@ -7,14 +7,24 @@
         <p class="hero-register">Not registered? <a href="{% url 'register' %}">Register here</a></p>
     {% endif %}
     <h1 class="hero-title">AI Museum of Failures</h1>
-    <p class="hero-text"> Welcome to the to Museum of AI failures.  Explore exhibits, complete reflective quizzes to learn more about how LLM's have failed. </p>
+    <p class="hero-text"> Welcome to the to Museum of AI failures. This website will educate you on the recent examples of where artifical intelligence has gone wrong and lead to catastrophic concequences that ended up harming people. <br> Here you can browse exhibits and take reflective quizzes to level up your knowledge and earn badges. </p>
     <div class="hero-buttons">
         <a href="{% url 'exhibits' %}"><button class="home-button">Explore Exhibits</button></a>
         <a href="{% url 'quiz' %}"><button class="home-button">Explore Quizzes</button></a>
     </div>
 </div>
 
-<div>
-
+<div class="feature-cards">
+    <div class="feature-card">
+        <h2 class="feature-card-title">Exhibits</h2>
+        <p class="feature-card-text">Browse our gallery of AI failures. Each exhibit goes into detail about what went wrong, who was affected, and what we can learn. Artefacts are included as evidence of each failure.</p>
+        <a href="{% url 'exhibits' %}" style="text-decoration: none;"><button class="home-button feature-card-btn">Explore Exhibits</button></a>
+    </div>
+    <div class="feature-card">
+        <h2 class="feature-card-title">Quizzes</h2>
+        <p class="feature-card-text">Test what you've learned from the exhibits. Earn points and unlock badges to show off your knowledge. Each quiz can only be taken once, so read carefully first!</p>
+        <a href="{% url 'quiz' %}" style="text-decoration: none;"><button class="home-button feature-card-btn">Explore Quizzes</button></a>
+    </div>
+</div>
 
 {% endblock %}

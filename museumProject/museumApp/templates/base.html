@@ -16,7 +16,7 @@
         <a href="{% url 'home' %}">Home</a>
         <a href="{% url 'exhibits' %}">Exhibits</a>
         <a href="{% url 'quiz' %}">Quizzes</a>
-
+        <!-- Only Curators can see link to curator page -->
         {% for group in user.groups.all %}{% if group.name == 'Curator' %}<a href="{% url 'curator_dashboard' %}">Curator Dashboard</a>{% endif %}{% endfor %}
 
     </div>
@@ -26,6 +26,7 @@
       <div class="top-bar">
         <button class="menu" onclick="s_open()">&#9776;</button>
         {% if user.is_authenticated %}
+        <!-- shows badge level for each user -->
         <div class="badge-display" id="badge-display"
             data-badge-0="{% static 'images/badge_new.png' %}"
             data-badge-1="{% static 'images/badge_bronze.png' %}"
@@ -36,10 +37,11 @@
             <span id="badge-label"></span>
         </div>
         {% endif %}
-        <a href="{% url 'exhibits' %}">Exhibits</a>
-        <a href="{% url 'quiz' %}"> Quizzes</a>
+        <!-- Nav bar is too wide with exhibt and quiz button -->
+        <a class="hide-mobile" href="{% url 'exhibits' %}">Exhibits</a>
+        <a class="hide-mobile" href="{% url 'quiz' %}"> Quizzes</a>
         <a href="{% url 'home' %}"><img src="{% static 'images/home.png' %}"></a>
-
+        <!-- if logged in, profile icon will go to profile, if not it will go to log in -->
         {% if user.is_authenticated %}
             <a href="{% url 'profile' %}"><img src="{% static 'images/account.png' %}"></a>
             <form method="POST" action="{% url 'logout' %}" style="display:inline;">
@@ -59,9 +61,9 @@
       </div>
       
       
-
+      <!-- Page headers go here  -->
     {% block page_hero %}{% endblock %}
-
+    <!-- rest of page goes here -->
     {% block content %}
     {% endblock %}
 
@@ -75,7 +77,7 @@
 
 
     </div>
-
+    <!-- JS to open and close sidebar -->
     <script>
         function s_open() {
           document.getElementById("sidebar").style.display = "block";
@@ -86,7 +88,7 @@
           document.getElementById("sidebar").style.display = "none";
           document.getElementById("overlay").style.display = "none";
         }
-
+       // shows correct badge and descrition label in nav bar from api 
         const badgeDisplay = document.getElementById('badge-display');
         if (badgeDisplay) {
             const badgeLabels = ["NEWBIE", "BRONZE LEVEL", "SILVER LEVEL", "GOLD LEVEL", "PLATINUM LEVEL"];

@@ -3,12 +3,14 @@
 {% block page_hero %}
 <div class="profile-hero">
     <h1 class="profile-title">My Profile</h1>
+    <!-- personalised greeting using visitor username -->
     <p class="profile-greeting">Hello, {{ request.user.username }}</p>
 </div>
 {% endblock %}
 {% block content %}
 
 <section>
+    <!-- displays all quiz statics for user -->
     <h2>My Achievements</h2>
     <div class="achievements-card">
         <div class="achievements-info">
@@ -17,6 +19,7 @@
             <p class="achievement-description" id="user-level-desc"></p>
             <p class="achievement-next" id="user-next-level"></p>
         </div>
+        <!-- displays a large badge icon for level  -->
         <div class="achievement-badge-wrap">
             <span id="user-badge"></span>
         </div>
@@ -27,12 +30,14 @@
 <section>
     <h2>My Bookmarks</h2>
     {% if exhibits %}
+    <!-- displays grid of bookmarked exhibits -->
     <div class="bookmarks-grid">
         {% for exhibit in exhibits %}
         <div id="exhibit-{{ exhibit.exhibitId }}" class="bookmark-card">
             <h3>{{ exhibit.title }}</h3>
             <div class="bookmark-actions">
                 <a href="{% url 'single_exhibit' exhibit.exhibitId %}" class="view-btn">View</a>
+                <!-- removed the exhibit from their bookmarks -->
                 <button class="remove-btn" data-id="{{ exhibit.exhibitId }}" onclick="unbookmarkItem(this.dataset.id)">Remove</button>
             </div>
         </div>
@@ -45,7 +50,7 @@
 
 <section>
     <h2>Edit my details</h2>
-
+    <!-- users can edit username and email -->
     <form id="edit-profile-form" class="input-form">
         {% csrf_token %}
         {{ form.as_p }}
@@ -54,18 +59,19 @@
         </div>
     </form>
     <p id="profile-message"></p>
-
+    <!-- on change, logs user out so page can be refreshed  -->
     <form method="POST" action="{% url 'logout' %}" style="display:inline;">
         {% csrf_token %}
         <button type="submit" class="logout-btn"><img src="{% static 'images/logout.png' %}"></button>
     </form>
-
+    <!-- button deletes user account, and all associated data in databases -->
     <button id="delete-account-btn" class="delete-data"> Delete My Account </button>
     <p id="delete-message"></p>
 </section>
 
 
 <script>
+// loads badge icons
 const BADGE_IMAGES = {
     0: "{% static 'images/badge_new.png' %}",
     1: "{% static 'images/badge_bronze.png' %}",
@@ -73,35 +79,37 @@ const BADGE_IMAGES = {
     3: "{% static 'images/badge_gold.png' %}",
     4: "{% static 'images/badge_platinum.png' %}",
 };
-
+// personalised message for users
+// shows user gow many points until next badge is achieved
 const LEVEL_DATA = {
     0: {
         name: "Newbie",
-        desc: "You're just getting started on your museum journey. Explore exhibits and take quizzes to earn points and unlock your first badge!",
+        desc: "You haven’t gained any points yet. Complete quizzes to level up to your first badge! You’ve got this.", 
+
         nextThreshold: 10,
         nextName: "Bronze"
     },
     1: {
         name: "Bronze",
-        desc: "You've taken your first steps into the world of art and history. Keep exploring and quizzing to deepen your knowledge!",
+        desc: "Congratulations, you’ve got your first badge! Keep going to reach the next level.",
         nextThreshold: 30,
         nextName: "Silver"
     },
     2: {
         name: "Silver",
-        desc: "A dedicated museum-goer! Your curiosity is growing with every exhibit you discover. You're making great progress.",
+        desc: "Well done, you’re half way there! Two more badges to go until you are an expert in AI failure knowledge",
         nextThreshold: 70,
         nextName: "Gold"
     },
     3: {
         name: "Gold",
-        desc: "An expert explorer! You've shown impressive dedication to learning and discovery across many exhibits.",
+        desc: "Almost there! Only one level to go. You have excellent dedication to learning about AI. Well done!",
         nextThreshold: 100,
         nextName: "Platinum"
     },
     4: {
         name: "Platinum",
-        desc: "You've reached the pinnacle of museum mastery! Your passion for art and history is truly exceptional. You've seen it all.",
+        desc: "You've reached the pinnacle of museum mastery! Congratualations on reaching the highest level. Feel free to keep exploring!",
         nextThreshold: null,
         nextName: null
     },
@@ -112,12 +120,12 @@ fetch('/quizzes-api/me/')
     .then(data => {
         const points = data.points ?? 0;
         const badge = data.badge ?? 0;
-        const level = LEVEL_DATA[badge] || LEVEL_DATA[0];
+        const level = LEVEL_DATA[badge] || LEVEL_DATA[0]; // loads badge and score
 
         document.getElementById('user-points').innerText = points;
         document.getElementById('user-level-name').innerText = level.name;
         document.getElementById('user-level-desc').innerText = level.desc;
-
+        // calculates points to next level 
         if (level.nextThreshold !== null) {
             const needed = level.nextThreshold - points;
             document.getElementById('user-next-level').innerText =
@@ -125,7 +133,7 @@ fetch('/quizzes-api/me/')
         } else {
             document.getElementById('user-next-level').innerText = "You've reached the highest level. Well done!";
         }
-
+        // fetches badge
         const imgSrc = BADGE_IMAGES[badge] || BADGE_IMAGES[0];
         document.getElementById('user-badge').innerHTML = `<img src="${imgSrc}" alt="${level.name} badge">`;
     })
@@ -133,7 +141,7 @@ fetch('/quizzes-api/me/')
         document.getElementById('user-points').innerText = '0';
     });
 
-
+// posting user detail edits to database
 document.getElementById('edit-profile-form').addEventListener('submit', function(e) {
     e.preventDefault();
     const formData = new FormData(this);
@@ -143,13 +151,13 @@ document.getElementById('edit-profile-form').addEventListener('submit', function
         body: formData,
     })
     .then(res => res.json())
-    .then(data => {
+    .then(data => { // error handing for updates
         document.getElementById('profile-message').innerText = data.success
             ? 'Details updated.'
             : 'Error: ' + JSON.stringify(data.errors);
     });
 });
-
+// posting updates in user bookmarks to databases
 function unbookmarkItem(exhibitId) {
     fetch(`/bookmarks/${exhibitId}/unbookmark/`, {
         method: 'POST',
@@ -161,7 +169,7 @@ function unbookmarkItem(exhibitId) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            document.getElementById(`exhibit-${exhibitId}`).remove();
+            document.getElementById(`exhibit-${exhibitId}`).remove(); // removing bookmark 
         }
     });
 }
@@ -171,8 +179,9 @@ function getCookie(name) {
         .find(row => row.startsWith(name + '='))
         ?.split('=')[1];
 }
-
+// deleting all user data from db 
 document.getElementById('delete-account-btn').addEventListener('click', function() {
+    // confirmation, so users cannot do this by accident
     if (!confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
     fetch('/account/delete/', {
         method: 'POST',
@@ -180,6 +189,7 @@ document.getElementById('delete-account-btn').addEventListener('click', function
     })
     .then(res => res.json())
     .then(data => {
+        // user redirected back to home page if account deleted
         if (data.success) {
             window.location.href = '/';
         } else {

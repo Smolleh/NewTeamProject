@@ -6,16 +6,16 @@
 </div>
 {% endblock %}
 {%block content %}
-
+    <!-- Shows a grid of all the quizzes -->
     <section>
         {% if quiz %}
             <ul class="exhibits-grid">
                 {% for quiz in quiz %}
                     <li class="quiz-card">
+                        <!-- on click, user redirected to actual quiz -->
                         <a href="{% url 'single_quiz' quiz.id %}">
                             <h2>{{quiz.name}}</h2>
                             <ul>
-                                <li>Exhibit: {{quiz.exhibit}}</li>
                                 <li>Topic: {{quiz.topic}}</li>
                                 <li>{{quiz.num_questions}} questions</li>
                                 <li>Worth: {{quiz.max_points}} points</li>

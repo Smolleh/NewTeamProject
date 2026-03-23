@@ -219,25 +219,6 @@ def single_quiz(request, quizId):
         return render(request, "pages/single_quiz.html", {"quizId": quizId, "quizzes": quizzes})    
 
 
-"""
-def results(request,quizId ): 
-    question = get_object_or_404(QuizzQuestion, questionId=quizId)
-    return (response, "pags/options.html" )
-
-
-def results(request,quizId ): 
-    response = " "
-    return Http404
-
-
-def quiz(request, quizId):
-    return render(request, 'pages/quiz.html', {})
-
-
-
-
-"""
-
 @login_required
 @curator_required
 def review_comments(request):

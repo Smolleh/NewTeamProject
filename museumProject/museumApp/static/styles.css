@@ -305,10 +305,53 @@ h3 {
     color: #0f172a;
 }
 
+.feature-cards {
+    display: flex;
+    gap: 32px;
+    padding: 60px;
+}
+
+.feature-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 40px;
+    gap: 20px;
+}
+
+.feature-card-title {
+    font-size: 22px;
+    color: #0f172a;
+    margin: 0;
+}
+
+.feature-card-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #64748b;
+    margin: 0;
+    flex: 1;
+}
+
+.feature-card-btn {
+    align-self: flex-start;
+    color: #0f172a;
+    border-color: #0f172a;
+}
+
+.feature-card-btn:hover {
+    background-color: #0f172a;
+    color: #ffffff;
+}
+
+
 /* -------------------------exhibit grid ----------------------- */
 .exhibits-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 250px));
+    justify-content: center;
     padding: 50px;
     gap: 2rem;
     list-style: none;
@@ -489,6 +532,20 @@ h3 {
     font-size: 16px;
 }
 
+.exhibit-container section h2 {
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
+.exhibit-container section h3 {
+    margin-top: 28px;
+    margin-bottom: 4px;
+}
+
+.exhibit-container section p {
+    margin-bottom: 0;
+}
+
 .exhibit-container section:last-child {
     border-bottom: none;
 }
@@ -655,7 +712,9 @@ h3 {
 }
 
 .quiz-btn {
-    display: inline-block;
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
     padding: 12px 28px;
     background-color: #3463cf;
     color: #ffffff;
@@ -1159,18 +1218,131 @@ form.input-form {
 /*--------------------------------- mobile ------------------------ */
 @media (max-width: 600px) {
     body {
-        padding-top: 120px;
-        margin-left: 20px;
-        margin-right: 20px;
+        padding: 100px 12px 100px 20px;
+        margin: 0;
+    }
+
+    .footer {
+        padding: 12px 16px;
+        font-size: 12px;
+    }
+
+    .footer p {
+        font-size: 8px;
+    }
+
+    .footer a {
+        font-size: 8px;
+    }
+
+    .hide-mobile,
+    .top-bar a.hide-mobile {
+        display: none;
     }
 
     section {
-        margin: 10px;
-        padding: 20px;
+        margin: 8px 0;
+        padding: 8px 0;
     }
 
+    /* --- top bar --- */
+    .top-bar {
+        padding: 0 10px;
+        gap: 8px;
+        height: 60px;
+    }
+
+    .top-bar a {
+        font-size: 11px;
+        height: 60px;
+        letter-spacing: 0;
+    }
+
+    .logout-btn {
+        font-size: 11px;
+        height: 60px;
+        letter-spacing: 0;
+    }
+
+    .menu {
+        font-size: 22px;
+        padding: 8px 10px;
+    }
+
+    .badge-display img {
+        height: 40px;
+    }
+
+    .badge-display span {
+        font-size: 11px;
+    }
+
+    /* --- hero sections (negative margins must match body padding) --- */
+    .hero {
+        margin: -100px -12px 24px -12px;
+        padding: 120px 16px 32px;
+    }
+
+    .page-hero {
+        margin: -100px -12px 24px -12px;
+        padding: 80px 16px 24px;
+    }
+
+    .profile-hero {
+        margin: -100px -12px 24px -12px;
+        padding: 80px 16px 32px;
+    }
+
+    /* --- exhibits / quiz grid --- */
     .exhibits-grid {
         grid-template-columns: 1fr;
-        padding: 20px;
+        padding: 8px 0;
+    }
+
+    .search-bar {
+        padding: 0 0 8px;
+    }
+
+    /* --- quiz submit button --- */
+    .submit {
+        margin: 16px auto;
+        display: block;
+        width: 100%;
+    }
+
+    /* --- profile / achievements --- */
+    .achievements-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px 16px;
+        gap: 16px;
+    }
+
+    .achievement-badge-wrap img {
+        height: 100px;
+    }
+
+    .achievement-points {
+        font-size: 28px;
+    }
+
+    /* --- exhibit container --- */
+    .exhibit-container {
+        padding: 0 12px;
+    }
+
+    /* --- forms --- */
+    form.input-form {
+        margin: 20px 0;
+        padding: 20px 16px;
+    }
+
+    /* --- bookmarks --- */
+    .bookmarks-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .bookmark-card {
+        width: 100%;
     }
 }

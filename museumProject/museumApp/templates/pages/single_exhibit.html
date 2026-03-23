@@ -3,12 +3,13 @@
 {% load static %}
 {% block page_hero %}
 <div class="page-hero">
-    <h1 id="exhibit-hero-title">Loading...</h1>
+    <h1 id="exhibit-hero-title"></h1>
 </div>
 {% endblock %}
 {%block content %}
-
     <div class="exhibit-container">
+        <!-- icon displayed top right, if not bookmared icon has a plus sign -->
+        <!-- on click, book mark is added -->
         <div class="bookmark-icon-wrap">
             <img
                 id="bookmark-icon"
@@ -22,6 +23,7 @@
         </div>
 
         <div id="exhibit-content"></div>
+        <a href="{% url 'quiz' %}" style="text-decoration: none;"><button class="quiz-btn">Explore Quizzes</button></a>
 
     <script>
     const exhibitId = "{{ exhibit.exhibitId }}";
@@ -29,10 +31,12 @@
     let bookmarked = bookmarkIcon.dataset.bookmarked === 'true';
 
     bookmarkIcon.addEventListener('click', () => {
+        // on second click, user re-directed to profile
         if (bookmarked) {
             window.location.href = '{% url "profile" %}';
             return;
         }
+        // adds bookmark to users profile 
         fetch(`/exhibit/${exhibitId}/bookmark/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
@@ -42,7 +46,7 @@
             if (data.success) {
                 bookmarked = true;
                 bookmarkIcon.src = bookmarkIcon.dataset.addedSrc;
-                bookmarkIcon.title = 'Click to go to your profile';
+                bookmarkIcon.title = 'Click to go to your profile'; // failsafe
                 alert('Bookmarked!');
             }
         });
@@ -53,12 +57,13 @@
             .find(row => row.startsWith(name + '='))
             ?.split('=')[1];
     }
-
+    // error handling 
     fetch(`/api/exhibits/${exhibitId}`)
         .then(res => {
             if (!res.ok) throw new Error('Not found');
             return res.json();
         })
+        // displaying all exhibit information from database viewable to user
         .then(exhibit => {
             const artefactsHtml = exhibit.artefacts && exhibit.artefacts.length > 0
                 ? `<ul class="exhibits-grid">
@@ -121,9 +126,8 @@
             document.getElementById('exhibit-hero-title').innerText = exhibit.title;
             document.getElementById('exhibit-content').innerHTML = `
                 <section>
-                    <h3>Description:</h3>
-                    <p>${exhibit.domain}</p>
-                    <h3>Background Deployment Context</h3>
+                    <h2>Domain: ${exhibit.domain}</h2>
+                    <h3>Background Deployment Context:</h3>
                     <p>${exhibit.backgroundDeploymentContext}</p>
                     <h3>Intended Use:</h3>
                     <p>${exhibit.intededUse}</p>
@@ -140,18 +144,19 @@
             document.getElementById('exhibit-content').innerHTML = '<p>Failed to load exhibit.</p>';
         });
     </script>
-
+        <!-- displays all comments for an exhibit -->
         <section class="comments-section">
             <h2>Comments</h2>
             {% for comment in comments %}
                 <div class="comment">
                     <p>{{ comment.content }}</p>
+                    <!-- if user has deleted their account, name shows as deleted user  -->
                     <small>{{ comment.user.username|default:"Deleted User" }} &mdash; {{ comment.date|date:"d M Y" }}</small>
                 </div>
             {% empty %}
                 <p>No comments yet.</p>
             {% endfor %}
-
+            <!-- form for users to enter comments -->
             <div class="comment-form-wrap">
                 <h3>Post a Comment</h3>
                 <form id="comment-form" class="input-form">
@@ -161,10 +166,13 @@
                     <p id="comment-msg"></p>
                 </form>
             </div>
+            <a href="{% url 'exhibits' %}" style="text-decoration: none;"><button class="quiz-btn">← Back to Exhibits</button></a>
         </section>
+    
     </div>
 
     <script>
+    // posting comment to database
     document.getElementById('comment-form').addEventListener('submit', async function(e) {
         e.preventDefault();
         const response = await fetch(`/api/exhibits/${exhibitId}/comments/`, {
@@ -177,7 +185,7 @@
                 content: document.getElementById('comment-content').value,
             })
         });
-
+        // comments must be reviewed by curator before being visable
         if (response.ok) {
             document.getElementById('comment-msg').textContent = 'Comment submitted and awaiting review.';
             document.getElementById('comment-content').value = '';
@@ -186,7 +194,7 @@
         }
     });
     </script>
-
+<!-- shows artefact larger when clicked -->
 <div id="lightbox" onclick="closeLightbox()">
     <img id="lightbox-img" src="" alt="Enlarged artefact">
 </div>
@@ -199,6 +207,7 @@ function openLightbox(src) {
 function closeLightbox() {
     document.getElementById('lightbox').style.display = 'none';
 }
+// pressing escape or any but the image minimizes it 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 

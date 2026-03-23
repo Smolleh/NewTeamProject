@@ -7,18 +7,20 @@
 </div>
 {% endblock %}
 {%block content %}
+<!-- formats the quiz, data fetched by quiz.js -->
 <form id="quiz-form" class="input-form">
 
     <div id="quiz"></div>
     
         <button id="submit" class="submit" type="submit">Submit Quiz</button>
-    
+    <!-- passes results of the submission -->
     <div id="result"></div>
     <div id="points"></div>
     <div id="passed"></div>
     
     
 </form>
+<a href="{% url 'quiz' %}" style="text-decoration: none;"><button class="quiz-btn">← Back to Quizzes</button></a>
 
 
 
