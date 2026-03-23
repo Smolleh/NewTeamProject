@@ -1,27 +1,29 @@
 
 {% extends "base.html" %}
 {% load static %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1>Edit AI System Description</h1>
+</div>
+{% endblock %}
 {%block content %}
-
-
-<h1> Edit AI System Description </h1>
 
 <form id="edit-ai-form" class="input-form">
 
     <div class="input-form">
-        <label for="systemDescription"> System Description:</label>
-        <textarea id="systemDescription" placeholder="systemDescription"> {{ ai_description.systemDescription }}</textarea>
+        <label for="systemDescription"> System Type:</label>
+        <textarea id="systemDescription" placeholder="System Type"> {{ ai_description.systemDescription }}</textarea>
     </div>
 
     <div class="input-form">
-        <label for="systemPurpose"> System Purpose:</label>
-        <textarea id="systemPurpose" placeholder="systemPurpose">{{ ai_description.systemPurpose }}</textarea>
+        <label for="systemPurpose"> Inputs and Assumptions:</label>
+        <textarea id="systemPurpose" placeholder="Inputs and Assumptions">{{ ai_description.systemPurpose }}</textarea>
 
     </div>
 
     <div class="input-form">
         <label for="systemOutputs"> System Outputs:</label>
-        <textarea id="systemOutputs" placeholder="systemOutputs">{{ ai_description.systemOutputs }}</textarea>
+        <textarea id="systemOutputs" placeholder="System Outputs">{{ ai_description.systemOutputs }}</textarea>
     </div>
 
     <div class="input-form">

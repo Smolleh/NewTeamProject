@@ -25,12 +25,23 @@
       <div>
       <div class="top-bar">
         <button class="menu" onclick="s_open()">&#9776;</button>
+        {% if user.is_authenticated %}
+        <div class="badge-display" id="badge-display"
+            data-badge-0="{% static 'images/badge_new.png' %}"
+            data-badge-1="{% static 'images/badge_bronze.png' %}"
+            data-badge-2="{% static 'images/badge_silver.png' %}"
+            data-badge-3="{% static 'images/badge_gold.png' %}"
+            data-badge-4="{% static 'images/badge_platinum.png' %}">
+            <img id="badge-icon" src="" alt="badge">
+            <span id="badge-label"></span>
+        </div>
+        {% endif %}
         <a href="{% url 'exhibits' %}">Exhibits</a>
         <a href="{% url 'quiz' %}"> Quizzes</a>
         <a href="{% url 'home' %}"><img src="{% static 'images/home.png' %}"></a>
 
         {% if user.is_authenticated %}
-            <a href="{% url 'bookmarks' %}"><img src="{% static 'images/account.png' %}"></a>
+            <a href="{% url 'profile' %}"><img src="{% static 'images/account.png' %}"></a>
             <form method="POST" action="{% url 'logout' %}" style="display:inline;">
               {% csrf_token %}
               <button type="submit" class="logout-btn"><img src="{% static 'images/logout.png' %}"></button>
@@ -49,6 +60,8 @@
       
       
 
+    {% block page_hero %}{% endblock %}
+
     {% block content %}
     {% endblock %}
 
@@ -66,10 +79,22 @@
           document.getElementById("sidebar").style.display = "block";
           document.getElementById("overlay").style.display = "block";
         }
-        
+
         function s_close() {
           document.getElementById("sidebar").style.display = "none";
           document.getElementById("overlay").style.display = "none";
+        }
+
+        const badgeDisplay = document.getElementById('badge-display');
+        if (badgeDisplay) {
+            const badgeLabels = ["NEWBIE", "BRONZE LEVEL", "SILVER LEVEL", "GOLD LEVEL", "PLATINUM LEVEL"];
+            fetch('/quizzes-api/me/', { credentials: 'include' })
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('badge-icon').src = badgeDisplay.dataset['badge-' + data.badge];
+                    document.getElementById('badge-label').innerText = badgeLabels[data.badge];
+                })
+                .catch(() => {});
         }
     </script>
 

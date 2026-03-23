@@ -1,14 +1,18 @@
-
 {% extends "base.html" %}
-{%block content %}
+{% block content %}
     <h1>Login Page</h1>
 
-    <form method = "POST" action = "" class="input-form">
-        {% csrf_token %}
+    {% if locked %}
+        <p style="color: red;">Too many login attempts. Please try again later.</p>
+    {% else %}
+    
+        <form method="POST" action="" class="input-form">
+            {% csrf_token %}
 
-        {{form.as_p}}
+            {{ form.as_p }}
 
-        <input type = "submit" value = "Log In">
-    </form>
+            <input type="submit" value="Log In">
+        </form>
+    {% endif %}
 
 {% endblock %}

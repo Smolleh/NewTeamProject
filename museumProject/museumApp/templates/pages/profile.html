@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_hero %}
+<div class="profile-hero">
+    <h1 class="profile-title">My Profile</h1>
+    <p class="profile-greeting">Hello, {{ request.user.username }}</p>
+</div>
+{% endblock %}
+{% block content %}
+
+<section>
+    <h2>My Achievements</h2>
+    <div class="achievements-card">
+        <div class="achievements-info">
+            <p class="achievement-points"><span id="user-points">--</span> pts</p>
+            <p class="achievement-level" id="user-level-name">--</p>
+            <p class="achievement-description" id="user-level-desc"></p>
+            <p class="achievement-next" id="user-next-level"></p>
+        </div>
+        <div class="achievement-badge-wrap">
+            <span id="user-badge"></span>
+        </div>
+    </div>
+    <a href="{% url 'quiz' %}" class="quiz-btn">TAKE A QUIZ</a>
+</section>
+
+<section>
+    <h2>My Bookmarks</h2>
+    {% if exhibits %}
+    <div class="bookmarks-grid">
+        {% for exhibit in exhibits %}
+        <div id="exhibit-{{ exhibit.exhibitId }}" class="bookmark-card">
+            <h3>{{ exhibit.title }}</h3>
+            <div class="bookmark-actions">
+                <a href="{% url 'single_exhibit' exhibit.exhibitId %}" class="view-btn">View</a>
+                <button class="remove-btn" data-id="{{ exhibit.exhibitId }}" onclick="unbookmarkItem(this.dataset.id)">Remove</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>No bookmarks yet.</p>
+    {% endif %}
+</section>
+
+<section>
+    <h2>Edit my details</h2>
+
+    <form id="edit-profile-form" class="input-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="input-form">
+            <button class="submit" type="submit">Save Changes</button>
+        </div>
+    </form>
+    <p id="profile-message"></p>
+
+    <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="logout-btn"><img src="{% static 'images/logout.png' %}"></button>
+    </form>
+
+    <button id="delete-account-btn" class="delete-data"> Delete My Account </button>
+    <p id="delete-message"></p>
+</section>
+
+
+<script>
+const BADGE_IMAGES = {
+    0: "{% static 'images/badge_new.png' %}",
+    1: "{% static 'images/badge_bronze.png' %}",
+    2: "{% static 'images/badge_silver.png' %}",
+    3: "{% static 'images/badge_gold.png' %}",
+    4: "{% static 'images/badge_platinum.png' %}",
+};
+
+const LEVEL_DATA = {
+    0: {
+        name: "Newbie",
+        desc: "You're just getting started on your museum journey. Explore exhibits and take quizzes to earn points and unlock your first badge!",
+        nextThreshold: 10,
+        nextName: "Bronze"
+    },
+    1: {
+        name: "Bronze",
+        desc: "You've taken your first steps into the world of art and history. Keep exploring and quizzing to deepen your knowledge!",
+        nextThreshold: 30,
+        nextName: "Silver"
+    },
+    2: {
+        name: "Silver",
+        desc: "A dedicated museum-goer! Your curiosity is growing with every exhibit you discover. You're making great progress.",
+        nextThreshold: 70,
+        nextName: "Gold"
+    },
+    3: {
+        name: "Gold",
+        desc: "An expert explorer! You've shown impressive dedication to learning and discovery across many exhibits.",
+        nextThreshold: 100,
+        nextName: "Platinum"
+    },
+    4: {
+        name: "Platinum",
+        desc: "You've reached the pinnacle of museum mastery! Your passion for art and history is truly exceptional. You've seen it all.",
+        nextThreshold: null,
+        nextName: null
+    },
+};
+
+fetch('/quizzes-api/me/')
+    .then(res => res.json())
+    .then(data => {
+        const points = data.points ?? 0;
+        const badge = data.badge ?? 0;
+        const level = LEVEL_DATA[badge] || LEVEL_DATA[0];
+
+        document.getElementById('user-points').innerText = points;
+        document.getElementById('user-level-name').innerText = level.name;
+        document.getElementById('user-level-desc').innerText = level.desc;
+
+        if (level.nextThreshold !== null) {
+            const needed = level.nextThreshold - points;
+            document.getElementById('user-next-level').innerText =
+                `${needed > 0 ? needed : 0} more point${needed !== 1 ? 's' : ''} needed to reach ${level.nextName}`;
+        } else {
+            document.getElementById('user-next-level').innerText = "You've reached the highest level. Well done!";
+        }
+
+        const imgSrc = BADGE_IMAGES[badge] || BADGE_IMAGES[0];
+        document.getElementById('user-badge').innerHTML = `<img src="${imgSrc}" alt="${level.name} badge">`;
+    })
+    .catch(() => {
+        document.getElementById('user-points').innerText = '0';
+    });
+
+
+document.getElementById('edit-profile-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('/profile/edit/', {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        body: formData,
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('profile-message').innerText = data.success
+            ? 'Details updated.'
+            : 'Error: ' + JSON.stringify(data.errors);
+    });
+});
+
+function unbookmarkItem(exhibitId) {
+    fetch(`/bookmarks/${exhibitId}/unbookmark/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById(`exhibit-${exhibitId}`).remove();
+        }
+    });
+}
+
+function getCookie(name) {
+    return document.cookie.split('; ')
+        .find(row => row.startsWith(name + '='))
+        ?.split('=')[1];
+}
+
+document.getElementById('delete-account-btn').addEventListener('click', function() {
+    if (!confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
+    fetch('/account/delete/', {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = '/';
+        } else {
+            document.getElementById('delete-message').textContent = 'Failed to delete account.';
+        }
+    })
+    .catch(() => {
+        document.getElementById('delete-message').textContent = 'An error occurred.';
+    });
+});
+</script>
+{% endblock %}

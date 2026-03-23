@@ -1,16 +1,18 @@
 
 {% extends "base.html" %}
 {% load static %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1>Create AI System Description</h1>
+</div>
+{% endblock %}
 {%block content %}
-
-
-<h1> Create AI System Description </h1>
 
 <form id="create-ai-form" class="input-form">
 
-    <textarea id="systemDescription" placeholder="systemDescription"></textarea>
-    <textarea id="systemPurpose" placeholder="systemPurpose"></textarea>
-    <textarea id="systemOutputs" placeholder="systemOutputs"></textarea>
+    <textarea id="systemDescription" placeholder="System Type"></textarea>
+    <textarea id="systemPurpose" placeholder="Inputs and Assumptions"></textarea>
+    <textarea id="systemOutputs" placeholder="System Outputs"></textarea>
 
     <div class="input-form">
         <button class="submit" type="submit">Save</button>

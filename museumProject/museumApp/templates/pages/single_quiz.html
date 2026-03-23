@@ -1,16 +1,22 @@
 
 {% extends "base.html" %}
 {% load static %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1 id="quiz-title">Loading...</h1>
+</div>
+{% endblock %}
 {%block content %}
-
 <form id="quiz-form" class="input-form">
-    <h1 id="quiz-title"></h1>
 
     <div id="quiz"></div>
     
         <button id="submit" class="submit" type="submit">Submit Quiz</button>
     
     <div id="result"></div>
+    <div id="points"></div>
+    <div id="passed"></div>
+    
     
 </form>
 

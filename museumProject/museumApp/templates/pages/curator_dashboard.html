@@ -1,71 +1,257 @@
 {% extends "base.html" %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1>Curator Dashboard</h1>
+</div>
+{% endblock %}
 {% block content %}
 
-<h1> Curator Dashboard</h1>
+<section>
+    <a href="{% url 'review_comments' %}" class="review-comments-btn">Review Comments</a>
+</section>
 
 <section>
-    <ul class="management-grid">
-        <li class="management-card"><a href="{% url 'create_exhibit' %}">Create Exhibit</a></li>
-        <li class="management-card"><a href="{% url 'home' %}">View User Feedback</a></li>
-        <li class="management-card"><a href="{% url 'home'%}">View Analytics </a></li>
-    </ul>
+    <h2>Analytics</h2>
+    <div class="analytics-stats" id="analytics-stats">
+        <div class="stat-card">
+            <span class="stat-value" id="stat-total-views">—</span>
+            <span class="stat-label">Total Exhibit Views</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value" id="stat-total-exhibits">—</span>
+            <span class="stat-label">Exhibits</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value" id="stat-total-quizzes">—</span>
+            <span class="stat-label">Quizzes</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value" id="stat-total-attempts">—</span>
+            <span class="stat-label">Quiz Attempts</span>
+        </div>
+    </div>
 
+    <div class="analytics-chart-wrap">
+        <h3>Exhibit Views</h3>
+        <canvas id="views-chart"></canvas>
+    </div>
+
+    <h3 style="margin-top:32px;">Quiz Performance</h3>
+    <div class="dash-table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Quiz</th>
+                    <th>Topic</th>
+                    <th>Attempts</th>
+                    <th>Avg Score (%)</th>
+                    <th>Pass Rate (%)</th>
+                </tr>
+            </thead>
+            <tbody id="quiz-tbody"></tbody>
+        </table>
+    </div>
+    <p id="quiz-message"></p>
+</section>
+
+<section>
+    <div class="dash-section-header">
+        <h2>Exhibits</h2>
+        <a href="{% url 'create_exhibit' %}" class="curator-new-btn">+ Create Exhibit</a>
+    </div>
     {% if exhibits %}
-        <ul class="curator-grid">
-            {% for exhibit in exhibits %}
-
-                <li class="curator-card">
-                    <h2>{{ exhibit.title }}</h2>
-                    <p> Views: {{exhibit.viewNumber}} </p>
-                    <div class="curator-links">
-
-                        <a href="{% url 'edit_exhibit_detail' exhibitId=exhibit.exhibitId %}">Edit Exhibit Detail</a>
+    <div class="dash-table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Exhibit</th>
+                    <th>Views</th>
+                    <th>Details</th>
+                    <th>Factors</th>
+                    <th>Failure</th>
+                    <th>Lessons</th>
+                    <th>AI System</th>
+                    <th>Artefacts</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exhibit in exhibits %}
+                <tr>
+                    <td><strong>{{ exhibit.title }}</strong></td>
+                    <td>{{ exhibit.viewNumber }}</td>
+                    <td><a href="{% url 'edit_exhibit_detail' exhibitId=exhibit.exhibitId %}">Edit</a></td>
+                    <td>
                         {% if exhibit.contributingfactors %}
-                            <a href="{% url 'edit_factors' exhibitId=exhibit.exhibitId %}">Edit Contributing Factors</a>
+                            <a href="{% url 'edit_factors' exhibitId=exhibit.exhibitId %}">Edit</a>
                         {% else %}
-                            <a href="{% url 'create_factors' exhibitId=exhibit.exhibitId %}">Create Contributing Factors</a>
+                            <a href="{% url 'create_factors' exhibitId=exhibit.exhibitId %}">Create</a>
                         {% endif %}
-
+                    </td>
+                    <td>
                         {% if exhibit.failuredescription %}
-                            <a href="{% url 'edit_failure' exhibitId=exhibit.exhibitId %}">Edit AI Failure Description</a>
+                            <a href="{% url 'edit_failure' exhibitId=exhibit.exhibitId %}">Edit</a>
                         {% else %}
-                            <a href="{% url 'create_failure' exhibitId=exhibit.exhibitId %}">Create AI Failure Description</a>
+                            <a href="{% url 'create_failure' exhibitId=exhibit.exhibitId %}">Create</a>
                         {% endif %}
-
+                    </td>
+                    <td>
                         {% if exhibit.lessonslearned %}
-                             <a href="{% url 'edit_lessons' exhibitId=exhibit.exhibitId %}">Edit Lessons Learned</a>
+                            <a href="{% url 'edit_lessons' exhibitId=exhibit.exhibitId %}">Edit</a>
                         {% else %}
-                             <a href="{% url 'create_lessons' exhibitId=exhibit.exhibitId %}">Create Lessons Learned</a>
+                            <a href="{% url 'create_lessons' exhibitId=exhibit.exhibitId %}">Create</a>
                         {% endif %}
-                       
+                    </td>
+                    <td>
                         {% if exhibit.aisystemdescription %}
-                             <a href="{% url 'edit_system' exhibitId=exhibit.exhibitId %}">Edit System Description</a>
+                            <a href="{% url 'edit_system' exhibitId=exhibit.exhibitId %}">Edit</a>
                         {% else %}
-                             <a href="{% url 'create_system' exhibitId=exhibit.exhibitId %}">Create System Description</a>
+                            <a href="{% url 'create_system' exhibitId=exhibit.exhibitId %}">Create</a>
                         {% endif %}
-                       
-                        
-
-                        {% comment %} Nested loop for artefacts {% endcomment %}
+                    </td>
+                    <td>
                         {% for artefact in exhibit.artefact_set.all %}
-                            <a href="{% url 'edit_artefact' exhibitId=exhibit.exhibitId artefactId=artefact.artefactId %}">
-                                Edit Artefact: {{ artefact.title }}
-                            </a>
-                        {% empty %}
-                            <span>No artefacts yet</span>
+                            <a href="{% url 'edit_artefact' exhibitId=exhibit.exhibitId artefactId=artefact.artefactId %}">Artefact {{ artefact.artefactId }}</a>
                         {% endfor %}
-
-                        <a href="{% url 'create_artefact' exhibitId=exhibit.exhibitId %}">Add Artefact</a>
-                    </div>
-        
-                </li>
-            {% endfor %}
-        </ul>
+                        <a href="{% url 'create_artefact' exhibitId=exhibit.exhibitId %}">+ Add</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% else %}
         <p>No exhibits found.</p>
     {% endif %}
 </section>
 
+<section>
+    <div class="dash-section-header">
+        <h2>Quizzes</h2>
+        <a href="{% url 'quiz_create' %}" class="curator-new-btn">+ Create Quiz</a>
+    </div>
+    {% if exhibits %}
+    <div class="dash-table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th>Quiz</th>
+                    <th>Exhibit</th>
+                    <th>Topic</th>
+                    <th>Questions</th>
+                    <th>Max Points</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exhibit in exhibits %}
+                    {% for quiz in exhibit.quiz_set.all %}
+                    <tr>
+                        <td><strong>{{ quiz.name }}</strong></td>
+                        <td>{{ exhibit.title }}</td>
+                        <td>{{ quiz.topic }}</td>
+                        <td>{{ quiz.num_questions }}</td>
+                        <td>{{ quiz.max_points }}</td>
+                        <td><a href="{% url 'quiz_edit' quizId=quiz.pk %}">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>No quizzes found.</p>
+    {% endif %}
+</section>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+async function loadAnalytics() {
+    try {
+        const res = await fetch('/api/exhibits/viewCreate');
+        const exhibits = await res.json();
+
+        const sorted = exhibits.slice().sort((a, b) => (b.viewNumber || 0) - (a.viewNumber || 0));
+        const totalViews = exhibits.reduce((s, e) => s + (e.viewNumber || 0), 0);
+
+        document.getElementById('stat-total-views').textContent = totalViews;
+        document.getElementById('stat-total-exhibits').textContent = exhibits.length;
+
+        const ctx = document.getElementById('views-chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: sorted.map(e => e.title),
+                datasets: [{
+                    label: 'Views',
+                    data: sorted.map(e => e.viewNumber || 0),
+                    backgroundColor: '#0f172a',
+                    borderRadius: 6,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} views` } }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { font: { size: 12 } } },
+                    y: { beginAtZero: true, grid: { color: '#f0f0f0' }, ticks: { precision: 0 } }
+                }
+            }
+        });
+    } catch {
+        document.getElementById('stat-total-views').textContent = '—';
+    }
+
+    try {
+        const quizRes = await fetch('/quizzes-api/manage/');
+        const quizzes = await quizRes.json();
+
+        document.getElementById('stat-total-quizzes').textContent = quizzes.length;
+
+        const tbody = document.getElementById('quiz-tbody');
+
+        if (quizzes.length === 0) {
+            document.getElementById('quiz-message').textContent = 'No quizzes found.';
+            return;
+        }
+
+        const results = await Promise.all(
+            quizzes.map(q =>
+                fetch(`/quizzes-api/manage/${q.id}/analytics/`)
+                    .then(r => r.json())
+                    .then(data => ({ quiz: q, data }))
+                    .catch(() => ({ quiz: q, data: null }))
+            )
+        );
+
+        let totalAttempts = 0;
+        results.forEach(({ quiz, data }) => {
+            totalAttempts += data?.attempts || 0;
+            const tr = document.createElement('tr');
+            if (!data || data.attempts === 0) {
+                tr.innerHTML = `<td>${quiz.name}</td><td>${quiz.topic}</td><td>0</td><td>—</td><td>—</td>`;
+            } else {
+                tr.innerHTML = `
+                    <td>${quiz.name}</td>
+                    <td>${quiz.topic}</td>
+                    <td>${data.attempts}</td>
+                    <td>${data.average_score}%</td>
+                    <td>${data.pass_rate}%</td>
+                `;
+            }
+            tbody.appendChild(tr);
+        });
+
+        document.getElementById('stat-total-attempts').textContent = totalAttempts;
+    } catch {
+        document.getElementById('quiz-message').textContent = 'Failed to load quiz analytics.';
+    }
+}
+
+loadAnalytics();
+</script>
 
 {% endblock %}

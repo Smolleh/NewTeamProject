@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1>Edit Quiz</h1>
+</div>
+{% endblock %}
+{% block content %}
+
+<script>
+    const quizId = "{{ quiz.pk }}";
+</script>
+
+<form id="edit-quiz-form" class="input-form">
+    <h2>Quiz Details</h2>
+    <input id="quiz-name" type="text" value="{{ quiz.name }}" required>
+    <input id="quiz-topic" type="text" value="{{ quiz.topic }}" required>
+    <input id="quiz-num-questions" type="number" value="{{ quiz.num_questions }}" min="1" required>
+    <input id="quiz-passing-score" type="number" value="{{ quiz.passing_score }}" min="0" max="100" step="0.1" required>
+    <input id="quiz-max-points" type="number" value="{{ quiz.max_points }}" min="1" required>
+
+    <label for="quiz-exhibit">Exhibit:</label>
+    <select id="quiz-exhibit" required>
+        {% for exhibit in exhibits %}
+            <option value="{{ exhibit.exhibitId }}" {% if exhibit.exhibitId == quiz.exhibit.exhibitId %}selected{% endif %}>
+                {{ exhibit.title }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button class="submit" type="submit">Save Quiz Details</button>
+</form>
+<p id="quiz-message"></p>
+
+<hr>
+<h2>Questions</h2>
+<div id="questions-container"></div>
+<button type="button" id="add-question-btn">+ Add Question</button>
+<p id="question-message"></p>
+
+<ul class="curator-navs">
+    <li><a href="{% url 'curator_dashboard' %}">&#8592; Dashboard</a></li>
+</ul>
+
+<script src="{% static 'js/edit_quiz.js' %}"></script>
+
+{% endblock %}

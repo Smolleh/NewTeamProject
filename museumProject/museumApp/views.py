@@ -1,5 +1,7 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
@@ -9,6 +11,8 @@ from django.contrib.auth import login, logout, authenticate
 from .permissions import isCurator
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .decorators import rate_limiter
 
 class CuratorProtectedView(APIView):
     permission_classes = [isCurator]
@@ -21,6 +25,15 @@ class UserSingleExhibitView(generics.RetrieveAPIView):
     queryset = Exhibit.objects.all()
     serializer_class = ExhibitSerializer
     
+@login_required
+def deleteUser(request):
+    if request.method == 'POST':
+        user = request.user
+        logout(request)
+        user.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
 class AdminExhibitsView(CuratorProtectedView, generics.ListCreateAPIView):
     queryset = Exhibit.objects.all()
     serializer_class = SimpleViewCreateExhibitSerializer
@@ -33,7 +46,8 @@ class AdminCreateArtefactView(CuratorProtectedView, generics.CreateAPIView):
     serializer_class = ArtefactSerializer 
     def perform_create(self, serializer): 
         exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs["exhibitId"]) 
-        serializer.save(exhibitId=exhibit) 
+        image = self.request.FILES.get('artefactObjectPath')
+        serializer.save(exhibitId=exhibit, artefactObjectPath=image) 
         
 class AdminEditArtefactView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView): 
     serializer_class = ArtefactSerializer 
@@ -119,6 +133,7 @@ def registerPage(request):
     context = {'form': form}
     return render(request, 'pages/register.html', context)
 
+@rate_limiter
 def loginPage(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
@@ -133,5 +148,28 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('login')
-    #logout button to be added to html in order for this to work, and url path to be added to urls.py, otherwise pointless.
+
+class ExhibitCommentsView(generics.ListCreateAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs['exhibitId'])
+        return Comments.objects.filter(exhibit=exhibit, isApproved=True)
+
+    def perform_create(self, serializer):
+        exhibit = get_object_or_404(Exhibit, exhibitId=self.kwargs['exhibitId'])
+        serializer.save(exhibit=exhibit, user=self.request.user)
+
+class CuratorIncomingCommentsView(CuratorProtectedView, generics.ListAPIView):
+    serializer_class = CuratorCommentReviewSerializer
+
+    def get_queryset(self):
+        return Comments.objects.filter(isApproved=False)
+
+class CuratorReviewCommentView(CuratorProtectedView, generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CuratorCommentReviewSerializer
+
+    def get_object(self):
+        return get_object_or_404(Comments, commentId=self.kwargs['commentId'])
+
 

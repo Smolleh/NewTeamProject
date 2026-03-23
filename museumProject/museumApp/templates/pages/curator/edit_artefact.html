@@ -2,16 +2,21 @@
 
 {% extends "base.html" %}
 {% load static %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1>Edit Artefact</h1>
+</div>
+{% endblock %}
 {%block content %}
 
+<form id="edit-artefact-form" class="input-form" enctype="multipart/form-data">
 
-<h1> Edit Artefact </h1>
-
-<form id="edit-artefact-form"class="input-form">
-
-    <textarea id="info" placeholder="info"> {{ artefact.info }}</textarea>
-    <textarea id="artefactDate" placeholder="artefactDate">{{ artefact.artefactDate }}</textarea>
-    <textarea id="artefactObjectPath" placeholder="artefactObjectPath">{{ artefact.artefactObjectPath }}</textarea>
+    <textarea id="info" name="info" placeholder="info">{{ artefact.info }}</textarea>
+    <input type="date" id="artefactDate" name="artefactDate" value="{{ artefact.artefactDate }}">
+    {% if artefact.artefactObjectPath %}
+        <p>Current image: <img src="{{ artefact.artefactObjectPath.url }}" style="max-height:80px;"></p>
+    {% endif %}
+    <input type="file" id="artefactObjectPath" name="artefactObjectPath" accept="image/*">
 
     <div class="input-form">
         <button class="submit" type="submit">Save</button>

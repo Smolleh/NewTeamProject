@@ -41,10 +41,15 @@ cd museumProject
 5. run:
 python manage.py runserver
 
-Testing:
+Museum Testing:
 1. Do the above (steps 1-4) 
 2. run:
 python manage.py test museumApp
+
+Quiz Testing:
+1. Do the above (steps 1-4) 
+2. run:
+python manage.py test quizApp
 
 if you have made any changes to the models.py file:
 1. run: 

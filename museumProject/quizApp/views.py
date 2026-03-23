@@ -100,7 +100,7 @@ class StartQuizView(generics.RetrieveAPIView):
             #if theyve already finished the quiz, do not let them continue
             if existing.completed:
                 return Response(
-                    {"score: ": existing.score},
+                    {"score": existing.score, "points": existing.points, "passed": existing.passed},
                     status=status.HTTP_200_OK
                 )
 

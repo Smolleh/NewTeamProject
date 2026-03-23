@@ -1,41 +1,26 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-const form = document.getElementById('create-artefact-form')
+    const form = document.getElementById('create-artefact-form')
 
-form.addEventListener("submit", function(event) { 
-    event.preventDefault(); 
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
 
-    const data = { 
-        artefactDate:  document.getElementById('artefactDate').value,
-        info: document.getElementById('info').value,
-        artefactObjectPath: document.getElementById('artefactObjectPath').value
-    };
-
-    fetch(`/api/exhibits/${exhibitId}/artefacts/new`, { 
-        method: "POST", 
-        headers: { 
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCSRFToken()
-
-        },
-        body: JSON.stringify(data)
-    })
-
-    .then(response => {
+    try {
+        const response = await fetch(`/api/exhibits/${exhibitId}/artefacts/new`, {
+            method: "POST",
+            credentials: "include",
+            headers: { "X-CSRFToken": getCSRFToken() },
+            body: new FormData(form)
+        });
         if (!response.ok) {
-            throw new Error("Failed to create ");
+            const err = await response.json();
+            throw new Error(JSON.stringify(err));
         }
-        return response.json();
-    })
-    .then(data => { 
         document.getElementById('message').innerText = "Creation saved";
-    })
-    .catch(error => {
+    } catch (error) {
         console.error("Error:", error);
-        document.getElementById('message').innerText = "Error occured, Creation not saved.";
-    });
-
-
+        document.getElementById('message').innerText = "Error: " + error.message;
+    }
 });
 
 })

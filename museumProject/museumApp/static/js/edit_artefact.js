@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             document.getElementById('info').value = data.info || '';
             document.getElementById('artefactDate').value = data.artefactDate || '';
-            document.getElementById('artefactObjectPath').value = data.artefactObjectPath || '';
-
         })
         .catch(error => console.error(error));
 });
@@ -24,20 +22,11 @@ const form = document.getElementById('edit-artefact-form')
 form.addEventListener("submit", function(event) { 
     event.preventDefault(); 
 
-    const data = { 
-        artefactDate:  document.getElementById('artefactDate').value,
-        info: document.getElementById('info').value,
-        artefactObjectPath: document.getElementById('artefactObjectPath').value
-    };
-
-    fetch(`/api/exhibits/${exhibitId}/artefacts/edit/${pk}`, { 
-        method: "PUT", 
-        headers: { 
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCSRFToken()
-
-        },
-        body: JSON.stringify(data)
+    fetch(`/api/exhibits/${exhibitId}/artefacts/edit/${pk}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "X-CSRFToken": getCSRFToken() },
+        body: new FormData(form)
     })
 
     .then(response => {
@@ -46,7 +35,7 @@ form.addEventListener("submit", function(event) {
         }
         return response.json();
     })
-    .then(data => { 
+    .then(() => {
         document.getElementById('message').innerText = "Edit saved";
     })
     .catch(error => {
