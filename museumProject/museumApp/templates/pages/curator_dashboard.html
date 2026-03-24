@@ -5,11 +5,11 @@
 </div>
 {% endblock %}
 {% block content %}
-
+<!--  brings curator to comment review page-->
 <section>
     <a href="{% url 'review_comments' %}" class="review-comments-btn">Review Comments</a>
 </section>
-
+<!-- Shows curator statistics on views and quizzes  -->
 <section>
     <h2>Analytics</h2>
     <div class="analytics-stats" id="analytics-stats">
@@ -30,12 +30,12 @@
             <span class="stat-label">Quiz Attempts</span>
         </div>
     </div>
-
+    <!-- view bar chart -->
     <div class="analytics-chart-wrap">
         <h3>Exhibit Views</h3>
         <canvas id="views-chart"></canvas>
     </div>
-
+    <!-- quiz statistics -->
     <h3 style="margin-top:32px;">Quiz Performance</h3>
     <div class="dash-table-wrap">
         <table class="dash-table">
@@ -53,10 +53,11 @@
     </div>
     <p id="quiz-message"></p>
 </section>
-
+<!-- Edit create table for exhibits  -->
 <section>
     <div class="dash-section-header">
         <h2>Exhibits</h2>
+        <!-- creates a new exhibit -->
         <a href="{% url 'create_exhibit' %}" class="curator-new-btn">+ Create Exhibit</a>
     </div>
     {% if exhibits %}
@@ -76,15 +77,18 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- fetches all exhibits -->
                 {% for exhibit in exhibits %}
                 <tr id="exhibit-row-{{ exhibit.exhibitId }}">
                     <td><strong>{{ exhibit.title }}</strong></td>
-                    <td>{{ exhibit.viewNumber }}</td>
+                    <td>{{ exhibit.viewNumber }}</td> <!-- Displays number of views for each exhibit -->
                     <td><a href="{% url 'edit_exhibit_detail' exhibitId=exhibit.exhibitId %}">Edit</a></td>
                     <td>
+                        <!-- If a section has been created, it may be edited -->
                         {% if exhibit.contributingfactors %}
                             <a href="{% url 'edit_factors' exhibitId=exhibit.exhibitId %}">Edit</a>
                         {% else %}
+                            <!--  else, it can be created -->
                             <a href="{% url 'create_factors' exhibitId=exhibit.exhibitId %}">Create</a>
                         {% endif %}
                     </td>
@@ -110,15 +114,18 @@
                         {% endif %}
                     </td>
                     <td>
+                        <!-- edit function for every exhibit  -->
                         {% for artefact in exhibit.artefact_set.all %}
                             <span id="artefact-cell-{{ artefact.artefactId }}">
                                 <a href="{% url 'edit_artefact' exhibitId=exhibit.exhibitId artefactId=artefact.artefactId %}">Artefact {{ artefact.artefactId }}</a>
                                 <button class="delete-btn" onclick="deleteArtefact({{ exhibit.exhibitId }}, {{ artefact.artefactId }})">Delete</button>
                             </span>
                         {% endfor %}
+                        <!-- button to create an arefact -->
                         <a href="{% url 'create_artefact' exhibitId=exhibit.exhibitId %}">+ Add</a>
                     </td>
                     <td>
+                        <!-- button to delete exhibit -->
                         <button class="delete-btn" onclick="deleteExhibit({{ exhibit.exhibitId }})">Delete</button>
                     </td>
                 </tr>
@@ -131,6 +138,7 @@
     {% endif %}
 </section>
 
+<!-- Quiz edit and delete functions  -->
 <section>
     <div class="dash-section-header">
         <h2>Quizzes</h2>
@@ -173,19 +181,21 @@
     {% endif %}
 </section>
 
+<!--source for bar chart  -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 async function loadAnalytics() {
     try {
         const res = await fetch('/api/exhibits/viewCreate');
         const exhibits = await res.json();
-
+        // sorts exhibits to rank by view number
         const sorted = exhibits.slice().sort((a, b) => (b.viewNumber || 0) - (a.viewNumber || 0));
+        // calculating total views across all exhibits
         const totalViews = exhibits.reduce((s, e) => s + (e.viewNumber || 0), 0);
 
         document.getElementById('stat-total-views').textContent = totalViews;
         document.getElementById('stat-total-exhibits').textContent = exhibits.length;
-
+        // making chart of number of views 
         const ctx = document.getElementById('views-chart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
@@ -200,7 +210,7 @@ async function loadAnalytics() {
                 }]
             },
             options: {
-                responsive: true,
+                responsive: true, // chart resizes automatically
                 plugins: {
                     legend: { display: false },
                     tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} views` } }
@@ -214,7 +224,7 @@ async function loadAnalytics() {
     } catch {
         document.getElementById('stat-total-views').textContent = '—';
     }
-
+    // table of quiz attempts and 
     try {
         const quizRes = await fetch('/quizzes-api/manage/');
         const quizzes = await quizRes.json();

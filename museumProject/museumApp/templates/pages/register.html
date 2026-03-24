@@ -1,8 +1,11 @@
 
 {% extends "base.html" %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1 id="exhibit-hero-title">Register an Account</h1>
+</div>
+{% endblock %}
 {%block content %}
-
-<H1>Register Page</H1>
 <!-- uses django form for registering user, loads all fields required -->
 <form method = "POST" action = "" class="input-form">
     {% csrf_token %}
@@ -10,6 +13,9 @@
     {{form.as_p}}
 
     <input type = "submit" value = "Sign Up">
+    <p>Already registered? <a href="{% url 'login' %}">Login</a> here</p>
 </form>
+
+
 
 {% endblock %}
