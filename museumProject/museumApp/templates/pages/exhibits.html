@@ -5,7 +5,7 @@
 </div>
 {% endblock %}
 {% block content %}
-
+    <!-- visitors can search by title and domain -->
     <div class="search-bar">
         <input type="text" id="search-input" class="search-input" placeholder="Search by title:">
         <select id="domain-filter" class="search-select">
@@ -19,10 +19,11 @@
     <div class="pagination" id="pagination"></div>
 
     <script>
+    // 12 exhibits per page 
     const PAGE_SIZE = 12;
     let allExhibits = [];
     let currentPage = 1;
-
+    // fetches all exhiits from api endpoint
     fetch('/api/exhibits/')
         .then(res => {
             if (!res.ok) throw new Error();
@@ -33,10 +34,10 @@
             populateDomains(data);
             render();
         })
-        .catch(() => {
+        .catch(() => { // error handling 
             document.getElementById('exhibits-grid').innerHTML = '<li>Failed to load exhibits.</li>';
         });
-
+    // displays exhibits only with selected domain in seach
     function populateDomains(exhibits) {
         const select = document.getElementById('domain-filter');
         const domains = [...new Set(exhibits.map(e => e.domain).filter(Boolean))].sort();
@@ -47,7 +48,8 @@
             select.appendChild(opt);
         });
     }
-
+    // Searching by name 
+    // converst to lowercase and finds matches in db 
     function filtered() {
         const search = document.getElementById('search-input').value.toLowerCase();
         const domain = document.getElementById('domain-filter').value;
@@ -57,12 +59,12 @@
             return matchSearch && matchDomain;
         });
     }
-
+    // actually showing the results of the search / all exhibits 
     function render() {
         const results = filtered();
         const totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
         if (currentPage > totalPages) currentPage = totalPages;
-
+        // calculating number of pages
         const start = (currentPage - 1) * PAGE_SIZE;
         const page = results.slice(start, start + PAGE_SIZE);
 
@@ -71,11 +73,14 @@
         if (page.length === 0) {
             grid.innerHTML = '<li>No exhibits found.</li>';
         } else {
+            // fetching infomation about exhibits for the gallery 
             page.forEach(exhibit => {
                 const li = document.createElement('li');
                 li.className = 'exhibit-card';
+                // using associated atefact as cover image 
                 const imgHtml = exhibit.ArtefactObjectPath
                     ? `<img src="/media/${exhibit.ArtefactObjectPath}" alt="${exhibit.title}" class="exhibit-cover">`
+                    // default if no arefact
                     : `<div class="exhibit-cover-placeholder"></div>`;
                 li.innerHTML = `
                     <a href="/exhibit/${exhibit.exhibitId}/">
@@ -87,7 +92,7 @@
                 grid.appendChild(li);
             });
         }
-
+        // showing total number of pages
         renderPagination(totalPages);
     }
 
@@ -95,7 +100,7 @@
         const pag = document.getElementById('pagination');
         pag.innerHTML = '';
         if (totalPages <= 1) return;
-
+        // click on 'prev' button brings to page before 
         if (currentPage > 1) {
             const prev = document.createElement('a');
             prev.textContent = '← Prev';
@@ -103,7 +108,8 @@
             prev.addEventListener('click', e => { e.preventDefault(); currentPage--; render(); });
             pag.appendChild(prev);
         }
-
+        // centering page buttons 
+        // clicks on numbered buttons brings visitior to associated page of exhibits
         for (let i = 1; i <= totalPages; i++) {
             if (i === currentPage) {
                 const span = document.createElement('span');
@@ -117,7 +123,7 @@
                 pag.appendChild(a);
             }
         }
-
+        // click on next button brings to page after 
         if (currentPage < totalPages) {
             const next = document.createElement('a');
             next.textContent = 'Next →';

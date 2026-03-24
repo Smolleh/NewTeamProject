@@ -1,7 +1,12 @@
-{% extends "base.html" %}
-{% block content %}
-    <h1>Login Page</h1>
 
+{% extends "base.html" %}
+{% block page_hero %}
+<div class="page-hero">
+    <h1 id="exhibit-hero-title">Login</h1>
+</div>
+{% endblock %}
+{%block content %}
+    <!-- blocks for potential DOS attacks -->
     {% if locked %}
         <p style="color: red;">Too many login attempts. Please try again later.</p>
     {% else %}

@@ -113,7 +113,6 @@ class ArtefactAPITestCase(APITestCase):
         data = {
             'info': 'New artefact',
             'artefactDate': '2024-02-01',
-            'artefactObjectPath': '/new/path'
         }
         response = self.client.post(f'/api/exhibits/{self.exhibit.exhibitId}/artefacts/new', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -124,7 +123,6 @@ class ArtefactAPITestCase(APITestCase):
         data = {
             'info': 'New artefact',
             'artefactDate': '2024-02-01',
-            'artefactObjectPath': '/new/path'
         }
         response = self.client.post('/api/exhibits/9999/artefacts/new', data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

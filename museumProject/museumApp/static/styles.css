@@ -1195,8 +1195,17 @@ form.input-form {
 }
 
 .input-form p {
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     margin-bottom: 15px;
+}
+
+.input-form input,
+.input-form select,
+.input-form textarea {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .submit {
