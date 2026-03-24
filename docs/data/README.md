@@ -83,6 +83,7 @@ The previous 4 entities are used to store additional, more in-depth/specific inf
 - result: used to represent a quiz attempt by a user
 - userAchievements: used to represent a users total amount of points gained (from doing quizzes) and the users badge 
 
+
 # Passport Schema
 - Product: Each exhibit represents the main product being examined and the AI_system_description entity is where the information about the AI system is stored. 
 
