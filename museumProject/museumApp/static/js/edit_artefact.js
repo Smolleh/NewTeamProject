@@ -1,6 +1,6 @@
-
+// editing an artefact
 document.addEventListener("DOMContentLoaded", function() {
-    fetch(`/api/exhibits/${exhibitId}/artefacts/edit/${pk}`)
+    fetch(`/api/exhibits/${exhibitId}/artefacts/edit/${pk}`) // load existing data
         .then(response => {
             if (!response.ok) {
                 throw new Error("Data not loaded");
@@ -22,7 +22,7 @@ const form = document.getElementById('edit-artefact-form')
 form.addEventListener("submit", function(event) { 
     event.preventDefault(); 
 
-    fetch(`/api/exhibits/${exhibitId}/artefacts/edit/${pk}`, {
+    fetch(`/api/exhibits/${exhibitId}/artefacts/edit/${pk}`, { // posting edit to api endpoint
         method: "PUT",
         credentials: "include",
         headers: { "X-CSRFToken": getCSRFToken() },

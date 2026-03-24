@@ -1,6 +1,6 @@
-
+// editing an exhibit
 document.addEventListener("DOMContentLoaded", function() {
-    fetch(`/api/exhibits/${exhibitId}/edit`)
+    fetch(`/api/exhibits/${exhibitId}/edit`) // load existing data
         .then(response => {
             if (!response.ok) {
                 throw new Error("Data not loaded");
@@ -25,15 +25,15 @@ const form = document.getElementById('edit-exhibit-form')
 form.addEventListener("submit", function(event) { 
     event.preventDefault(); 
 
-    const data = { 
+    const data = { // posting details to db
         title: document.getElementById('title').value,
         domain:  document.getElementById('domain').value,
         backgroundDeploymentContext: document.getElementById('backgroundDeploymentContext').value,
         intededUse: document.getElementById('intededUse').value
     };
 
-    fetch(`/api/exhibits/${exhibitId}/edit`, { 
-        method: "PUT", 
+    fetch(`/api/exhibits/${exhibitId}/edit`, { // posting edit to api endpoint
+        method: "PUT",
         headers: { 
             "Content-Type": "application/json",
             "X-CSRFToken": getCSRFToken()

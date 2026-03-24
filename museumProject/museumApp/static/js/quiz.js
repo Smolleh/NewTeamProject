@@ -1,12 +1,17 @@
 
+// extract the quiz ID from the current URL
 const pathParts = window.location.pathname.split('/');
 const quizId = pathParts[pathParts.indexOf('single_quiz') + 1];
 
+// API endpoints for starting and submitting the quiz
 const startUrl = `/quizzes-api/${quizId}/start/`;
 const submitUrl = `/quizzes-api/${quizId}/submit/`;
 
+
 let selectedAnswers = {};
 
+
+// if the quiz has already been completed previous result shown
 async function loadQuiz() {
     const response = await fetch(startUrl, {
         credentials: 'include'
@@ -19,6 +24,7 @@ async function loadQuiz() {
 
     const data = await response.json();
 
+    // if user has a score, they have already completed quiz
     if (data.score !== undefined) {
         document.getElementById('quiz-title').innerText = "You have already completed this quiz!";
         document.getElementById('result').innerText = `Your score: ${data.score}%`;
@@ -28,13 +34,12 @@ async function loadQuiz() {
         return;
     }
 
-
-
-    
+    // render the quiz title and clear any existing question content
     document.getElementById('quiz-title').innerText = data.quiz_name;
     const container = document.getElementById("quiz");
     container.innerHTML = "";
 
+    // builds DOM block for each question
     data.questions.forEach((q, index) => {
         const qDiv = document.createElement("div");
         qDiv.classList.add("question");
@@ -46,12 +51,14 @@ async function loadQuiz() {
         const aDiv = document.createElement("div");
         aDiv.classList.add("answers");
 
+        // create a radio button for each answer
         q.answers.forEach(a => {
             const label = document.createElement("label");
             const radio = document.createElement("input");
             radio.type = "radio";
             radio.name = `question_${q.id}`;
             radio.value = a.id;
+            // records the answer when the user clicks button
             radio.addEventListener("change", () => {
                 selectedAnswers[q.id] = a.id;
             });
@@ -66,9 +73,11 @@ async function loadQuiz() {
     });
 }
 
+// submits the user's selected answers to the API and displays the result.
 async function submitQuiz(e) {
     e.preventDefault();
 
+    // build the submission payload
     const payload = {
         answers: Object.entries(selectedAnswers).map(([qId, aId]) => ({
             question_id: parseInt(qId),
@@ -91,15 +100,17 @@ async function submitQuiz(e) {
         return;
     }
 
+    // displays the score, points, and pass/fail result
     const result = await response.json();
     document.getElementById('result').innerText =`You answered ${result.correct} out of ${result.total} correctly. Score: ${result.score.toFixed(1)}%`;
     document.getElementById('points').innerText = `Points earned: ${result.points}`;
     document.getElementById('passed').innerText = result.passed ? 'Result: Passed' : 'Result: Failed';
 
-    
+    // prevents resubmission
     document.getElementById('submit').disabled = true;
     document.querySelectorAll('#quiz input[type="radio"]').forEach(r => r.disabled = true);
 }
+
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -107,6 +118,7 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
+// attach submit handler
 document.getElementById('quiz-form').addEventListener('submit', submitQuiz);
 
 loadQuiz();

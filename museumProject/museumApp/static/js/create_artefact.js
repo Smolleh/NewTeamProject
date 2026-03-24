@@ -1,3 +1,4 @@
+// creating a new arefact
 document.addEventListener("DOMContentLoaded", function() {
 
     const form = document.getElementById('create-artefact-form')
@@ -5,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
     form.addEventListener("submit", async function(event) {
         event.preventDefault();
 
-    try {
+    try {// posting to api endpoint
         const response = await fetch(`/api/exhibits/${exhibitId}/artefacts/new`, {
             method: "POST",
             credentials: "include",

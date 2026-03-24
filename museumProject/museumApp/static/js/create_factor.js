@@ -1,18 +1,19 @@
+// creating a new contributing factor
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById('create-factors-form')
 
-form.addEventListener("submit", function(event) { 
-    event.preventDefault(); 
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
 
-    const data = { 
+    const data = { // posting details to db
         dataIssues: document.getElementById('dataIssues').value,
         designChoices:  document.getElementById('designChoices').value,
         organisationalOrGovernanceIssues: document.getElementById('organisationalOrGovernanceIssues').value
     };
 
-    fetch(`/api/exhibits/${exhibitId}/contributing-factors/new`, { 
-        method: "POST", 
-        headers: { 
+    fetch(`/api/exhibits/${exhibitId}/contributing-factors/new`, { // posting to api endpoint
+        method: "POST",
+        headers: {
             "Content-Type": "application/json",
             "X-CSRFToken": getCSRFToken()
 
@@ -25,7 +26,7 @@ form.addEventListener("submit", function(event) {
         }
         return response.json();
     })
-    .then(data => { 
+    .then(data => {
         document.getElementById('message').innerText = "Creation saved";
     })
     .catch(error => {

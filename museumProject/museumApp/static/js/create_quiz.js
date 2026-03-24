@@ -1,18 +1,20 @@
+// creating a quiz and questions
 document.addEventListener("DOMContentLoaded", function () {
     let questionCount = 0;
-
+    // listening for user actions
     document.getElementById("add-question-btn").addEventListener("click", addQuestion);
     document.getElementById("create-quiz-form").addEventListener("submit", submitQuiz);
 
     function addQuestion() {
-        questionCount++;
+        questionCount++; // incrementing number of questtions
         const container = document.getElementById("questions-container");
 
         const block = document.createElement("div");
         block.className = "question-block";
         block.dataset.index = questionCount;
+       // html for frontend to create a quiz
         block.innerHTML = `
-            <h3>Question ${questionCount}</h3>
+            <h3>Question ${questionCount}</h3> 
             <input type="text" class="question-text" placeholder="Question text" required>
             <div class="answers-container">
                 <div class="answer-row">
@@ -38,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         container.appendChild(block);
     }
-
+    // adding answer text for questions
     function addAnswer(answersContainer) {
         const row = document.createElement("div");
         row.className = "answer-row";
@@ -57,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         const msg = document.getElementById("message");
         msg.textContent = "";
-
+        // getting data from user inputs
         const quizData = {
             name: document.getElementById("quiz-name").value.trim(),
             topic: document.getElementById("quiz-topic").value.trim(),
@@ -66,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
             max_points: parseInt(document.getElementById("quiz-max-points").value),
             exhibit: parseInt(document.getElementById("quiz-exhibit").value),
         };
-
+        // failsafe so user has to select an exhibit 
         if (!quizData.exhibit) {
             msg.textContent = "Please select an exhibit.";
             return;
@@ -77,13 +79,13 @@ document.addEventListener("DOMContentLoaded", function () {
             msg.textContent = "Please add at least one question.";
             return;
         }
-
+        // ensures question numbers are correct
         if (quizData.num_questions > questionBlocks.length) {
             msg.textContent = `You have ${questionBlocks.length} question(s) but set the quiz to show ${quizData.num_questions}. Add more questions or lower the number.`;
             return;
         }
 
-        // Step 1: create the quiz
+        // creating the quiz
         let quizId;
         try {
             const res = await fetch("/quizzes-api/manage/", {
@@ -106,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Step 2: add each question with its answers
+        // adds each question with its answers
         for (const block of questionBlocks) {
             const questionText = block.querySelector(".question-text").value.trim();
             const answerRows = block.querySelectorAll(".answer-row");
@@ -119,13 +121,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     answers.push({ answer_text: text, is_correct: isCorrect });
                 }
             }
-
+            // checking length of answer text 
             if (answers.length < 2) {
                 msg.textContent = `Question "${questionText}" needs at least 2 answers.`;
                 return;
             }
 
-            try {
+            try { // conneting to api endpoint
                 const res = await fetch(`/quizzes-api/manage/${quizId}/questions/`, {
                     method: "POST",
                     headers: {

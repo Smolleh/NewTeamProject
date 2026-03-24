@@ -1,6 +1,6 @@
-
+// editing contributing factors
 document.addEventListener("DOMContentLoaded", function() {
-    fetch(`/api/exhibits/${exhibitId}/contributing-factors/edit/`)
+    fetch(`/api/exhibits/${exhibitId}/contributing-factors/edit/`) // load existing data
         .then(response => {
             if (!response.ok) {
                 throw new Error("Data not loaded");
@@ -24,14 +24,14 @@ const form = document.getElementById('edit-factors-form')
 form.addEventListener("submit", function(event) { 
     event.preventDefault(); 
 
-    const data = { 
+    const data = { // posting details to db
         dataIssues: document.getElementById('dataIssues').value,
         designChoices:  document.getElementById('designChoices').value,
         organisationalOrGovernanceIssues: document.getElementById('organisationalOrGovernanceIssues').value
     };
 
-    fetch(`/api/exhibits/${exhibitId}/contributing-factors/edit/`, { 
-        method: "PUT", 
+    fetch(`/api/exhibits/${exhibitId}/contributing-factors/edit/`, { // posting edit to api endpoint
+        method: "PUT",
         headers: { 
             "Content-Type": "application/json",
             "X-CSRFToken": getCSRFToken()

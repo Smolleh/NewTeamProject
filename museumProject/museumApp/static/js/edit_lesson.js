@@ -1,6 +1,6 @@
-
+// editing lessons learned
 document.addEventListener("DOMContentLoaded", function() {
-    fetch(`/api/exhibits/${exhibitId}/lessons-learned/edit/`)
+    fetch(`/api/exhibits/${exhibitId}/lessons-learned/edit/`) // load existing data
         .then(response => {
             if (!response.ok) {
                 throw new Error("Data not loaded");
@@ -23,13 +23,13 @@ const form = document.getElementById('edit-lessons-form')
 form.addEventListener("submit", function(event) { 
     event.preventDefault(); 
 
-    const data = { 
+    const data = { // posting details to db
         practicalRecommendations: document.getElementById('practicalRecommendations').value,
         futureWarnings:  document.getElementById('futureWarnings').value,
     };
 
-    fetch(`/api/exhibits/${exhibitId}/lessons-learned/edit/`, { 
-        method: "PUT", 
+    fetch(`/api/exhibits/${exhibitId}/lessons-learned/edit/`, { // posting edit to api endpoint
+        method: "PUT",
         headers: { 
             "Content-Type": "application/json",
             "X-CSRFToken": getCSRFToken()

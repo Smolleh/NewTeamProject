@@ -1,6 +1,6 @@
-
+// editing failure description
 document.addEventListener("DOMContentLoaded", function() {
-    fetch(`/api/exhibits/${exhibitId}/failure-description/edit/`)
+    fetch(`/api/exhibits/${exhibitId}/failure-description/edit/`) // load existing data
         .then(response => {
             if (!response.ok) {
                 throw new Error("Data not loaded");
@@ -24,13 +24,13 @@ const form = document.getElementById('edit-failure-form')
 form.addEventListener("submit", function(event) { 
     event.preventDefault(); 
 
-    const data = { 
+    const data = { // posting details to db
         whatWentWrong: document.getElementById('whatWentWrong').value,
         howItWasDetected:  document.getElementById('howItWasDetected').value,
         whatWasAffected: document.getElementById('whatWasAffected').value
     };
 
-    fetch(`/api/exhibits/${exhibitId}/failure-description/edit/`, {
+    fetch(`/api/exhibits/${exhibitId}/failure-description/edit/`, { // posting edit to api endpoint
         method: "PUT",
         headers: { 
             "Content-Type": "application/json",

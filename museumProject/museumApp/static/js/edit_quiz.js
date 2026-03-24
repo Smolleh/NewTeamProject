@@ -14,7 +14,7 @@ function getCSRFToken() {
         ?.split("=")[1];
 }
 
-// ── Load existing questions ──────────────────────────────────────────────────
+//loads existing questions
 
 function loadQuestions() {
     fetch(`/quizzes-api/manage/${quizId}/questions/`)
@@ -32,14 +32,13 @@ function loadQuestions() {
         });
 }
 
-// ── Render an existing question (with known id) ──────────────────────────────
-
+// renders an exisiting question
 function renderExistingQuestion(q) {
     const container = document.getElementById("questions-container");
     const block = document.createElement("div");
     block.className = "question-block";
     block.dataset.questionId = q.id;
-
+    // mapping answers to quiz 
     const answersHtml = q.answers
         .map(
             (a) => `
@@ -49,7 +48,7 @@ function renderExistingQuestion(q) {
         </div>`
         )
         .join("");
-
+    // html to show questions
     block.innerHTML = `
         <h3>Question</h3>
         <input type="text" class="question-text" value="${escapeHtml(q.question_text)}" required>
@@ -59,7 +58,7 @@ function renderExistingQuestion(q) {
         <button type="button" class="delete-question-btn">Delete Question</button>
         <p class="question-msg"></p>
     `;
-
+    // curator functions to add, save and delete questions
     block.querySelector(".add-answer-btn").addEventListener("click", () =>
         addAnswerRow(block.querySelector(".answers-container"))
     );
@@ -73,19 +72,19 @@ function renderExistingQuestion(q) {
     container.appendChild(block);
 }
 
-// ── Save an existing question ────────────────────────────────────────────────
+// saves an existing question
 
 async function saveExistingQuestion(block, questionId) {
     const msg = block.querySelector(".question-msg");
     const questionText = block.querySelector(".question-text").value.trim();
     const answers = collectAnswers(block);
-
+    // confirming length 
     if (answers.length < 2) {
         msg.textContent = "At least 2 answers required.";
         return;
     }
 
-    try {
+    try { // connecting to endpoint to save to db
         const res = await fetch(`/quizzes-api/manage/question/${questionId}/`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", "X-CSRFToken": getCSRFToken() },
@@ -97,10 +96,9 @@ async function saveExistingQuestion(block, questionId) {
     }
 }
 
-// ── Delete a question ────────────────────────────────────────────────────────
-
+// delete a question 
 async function deleteQuestion(block, questionId) {
-    if (!confirm("Delete this question?")) return;
+    if (!confirm("Delete this question?")) return; // confirming action
     try {
         const res = await fetch(`/quizzes-api/manage/question/${questionId}/`, {
             method: "DELETE",
@@ -116,13 +114,12 @@ async function deleteQuestion(block, questionId) {
     }
 }
 
-// ── Add a new question block (unsaved) ──────────────────────────────────────
-
+// add a new question block
 function addNewQuestionBlock() {
     const container = document.getElementById("questions-container");
     const block = document.createElement("div");
     block.className = "question-block";
-
+    // curator html form for inputting questions 
     block.innerHTML = `
         <h3>New Question</h3>
         <input type="text" class="question-text" placeholder="Question text" required>
@@ -155,7 +152,7 @@ function addNewQuestionBlock() {
     container.appendChild(block);
 }
 
-// ── Save a new question via POST ─────────────────────────────────────────────
+// save a new question
 
 async function saveNewQuestion(block) {
     const msg = block.querySelector(".question-msg");
@@ -185,7 +182,7 @@ async function saveNewQuestion(block) {
     }
 }
 
-// ── Save quiz metadata ───────────────────────────────────────────────────────
+// save quiz metadata
 
 async function saveQuizDetails(event) {
     event.preventDefault();
@@ -212,7 +209,7 @@ async function saveQuizDetails(event) {
     }
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// helper functions
 
 function addAnswerRow(answersContainer) {
     const row = document.createElement("div");
@@ -225,7 +222,7 @@ function addAnswerRow(answersContainer) {
     row.querySelector(".remove-answer-btn").addEventListener("click", () => row.remove());
     answersContainer.appendChild(row);
 }
-
+// gets all answers
 function collectAnswers(block) {
     const answers = [];
     block.querySelectorAll(".answer-row").forEach((row) => {
@@ -239,7 +236,7 @@ function collectAnswers(block) {
     });
     return answers;
 }
-
+// failsafe for html errors 
 function escapeHtml(str) {
     return String(str)
         .replace(/&/g, "&amp;")

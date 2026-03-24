@@ -1,6 +1,6 @@
-
+// editing AI system description
 document.addEventListener("DOMContentLoaded", function() {
-    fetch(`/api/exhibits/${exhibitId}/ai-system-description/edit/`)
+    fetch(`/api/exhibits/${exhibitId}/ai-system-description/edit/`) // load existing data
         .then(response => {
             if (!response.ok) {
                 throw new Error("Data not loaded");
@@ -24,14 +24,14 @@ const form = document.getElementById('edit-ai-form')
 form.addEventListener("submit", function(event) { 
     event.preventDefault(); 
 
-    const data = { 
+    const data = { // posting details to db
         systemDescription: document.getElementById('systemDescription').value,
         systemPurpose:  document.getElementById('systemPurpose').value,
         systemOutputs: document.getElementById('systemOutputs').value
     };
 
-    fetch(`/api/exhibits/${exhibitId}/ai-system-description/edit/`, { 
-        method: "PUT", 
+    fetch(`/api/exhibits/${exhibitId}/ai-system-description/edit/`, { // posting edit to api endpoint
+        method: "PUT",
         headers: { 
             "Content-Type": "application/json",
             "X-CSRFToken": getCSRFToken()

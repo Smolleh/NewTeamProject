@@ -1,17 +1,18 @@
+// creating a new AI system description
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById('create-ai-form')
 
-form.addEventListener("submit", function(event) { 
-    event.preventDefault(); 
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
 
-    const data = { 
+    const data = { // posting details to db
         systemDescription: document.getElementById('systemDescription').value,
         systemPurpose:  document.getElementById('systemPurpose').value,
         systemOutputs: document.getElementById('systemOutputs').value
     };
 
-    fetch(`/api/exhibits/${pk}/ai-system-description/new`, { 
-        method: "POST", 
+    fetch(`/api/exhibits/${pk}/ai-system-description/new`, { // posting to api endpoint
+        method: "POST",
         headers: { 
             "Content-Type": "application/json",
             "X-CSRFToken": getCSRFToken()

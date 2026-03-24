@@ -1,3 +1,4 @@
+// creating new exhibit
 document.addEventListener("DOMContentLoaded", function() {
 
 
@@ -6,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
     form.addEventListener("submit", function(event) { 
         event.preventDefault(); 
     
-        const data = { 
+        const data = { // posting details to db 
             title: document.getElementById('title').value,
             domain:  document.getElementById('domain').value,
             backgroundDeploymentContext: document.getElementById('backgroundDeploymentContext').value,

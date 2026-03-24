@@ -11,12 +11,15 @@ from django.db.models import Q
 from django.template.response import TemplateResponse
 from .decorators import paginator
 
-# URLs to render actual HTML pages for the front end
+# views  to render actual HTML pages for the front end
+# most pages require users to be logged in 
+
+# pagination sets number of exhibits per page 
 @login_required
 @paginator('exhibits', per_page=5)
 def exhibits(request):
     queryset = Exhibit.objects.all()
-
+    # filtering for seach funcitions
     search = request.GET.get('search', '')
     if search:
         queryset = queryset.filter(title__icontains=search)
@@ -26,7 +29,7 @@ def exhibits(request):
         queryset = queryset.filter(domain=domain)
 
     domains = Exhibit.objects.values_list('domain', flat=True).distinct()
-
+    # passing requested exhibits 
     return TemplateResponse(request, "pages/exhibits.html", {
         "exhibits": queryset,
         "domains": domains,
@@ -40,6 +43,7 @@ def bookmarkExhibit(request, exhibitId):
     userId = request.user
     BookMarks.objects.get_or_create(exhibitId=exhibit,userId=userId)
     return JsonResponse({'success': True})
+
 @login_required
 def profile(request):
         bookmarks = BookMarks.objects.filter(userId=request.user).select_related('exhibitId')
@@ -47,6 +51,7 @@ def profile(request):
         form = EditUserForm(instance=request.user)
         return render(request, 'pages/profile.html', {"exhibits": exhibits, "form": form})
 
+# post of editing a users name and username 
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
@@ -56,6 +61,7 @@ def edit_profile(request):
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'errors': form.errors})
     return JsonResponse({'success': False})
+# changing the status of a bookmarked exhibit 
 @login_required
 def unbookmarkExhibit(request, exhibitId):
     if request.method == 'POST':
@@ -67,7 +73,7 @@ def unbookmarkExhibit(request, exhibitId):
 @login_required
 def single_exhibit(request,  exhibitId):
     exhibit = get_object_or_404(Exhibit, exhibitId=exhibitId)
-
+    #passing all associated data to page 
     artefacts = Artefact.objects.filter(exhibitId=exhibit)
     ai_description = AiSystemDescription.objects.filter(exhibitId=exhibit).first()
     contributing_factors = ContributingFactors.objects.filter(exhibitId=exhibit).first()
@@ -89,7 +95,7 @@ def single_exhibit(request,  exhibitId):
         "is_bookmarked": is_bookmarked,
     })
 
-
+# static pages 
 def home(request):
     return render(request, 'pages/home.html', {})
 
@@ -101,7 +107,7 @@ def privacy_policy(request):
 def about(request):
     return render(request, 'pages/about.html', {})
 
-
+# curator dashboard pages requires user to be a curator
 @login_required
 @curator_required
 def curator_dashboard(request):
@@ -113,7 +119,7 @@ def curator_dashboard(request):
 def curator_exhibits(request):
         exhibits = Exhibit.objects.all()
         return render(request, 'pages/curator/curator_exhibits.html', {"exhibits": exhibits})
-
+# edit and create functionality for exhibits and quizzes 
 @login_required
 @curator_required
 def edit_system(request, exhibitId):
@@ -208,6 +214,7 @@ def create_artefact(request, exhibitId):
         return render(request, 'pages/curator/create_artefact.html',
                        {"exhibit": exhibit})
 
+# renders quiz 
 @login_required
 def quiz(request): 
         quiz = Quiz.objects.all()
@@ -218,13 +225,13 @@ def single_quiz(request, quizId):
         quizzes = Quiz.objects.all()
         return render(request, "pages/single_quiz.html", {"quizId": quizId, "quizzes": quizzes})    
 
-
+# curator accepting or denying comments
 @login_required
 @curator_required
 def review_comments(request):
     incoming = Comments.objects.filter(isApproved=False)
     return render(request, 'pages/curator/review_comments.html', {'comments': incoming})
-
+# quiz edits 
 @login_required
 @curator_required
 def quiz_create(request):

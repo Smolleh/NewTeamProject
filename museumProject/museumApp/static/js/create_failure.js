@@ -1,18 +1,18 @@
-
+// creating a new failure description
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById('create-failure-form')
 
-form.addEventListener("submit", function(event) { 
-    event.preventDefault(); 
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
 
-    const data = { 
+    const data = { // posting details to db
         whatWentWrong: document.getElementById('whatWentWrong').value,
         howItWasDetected:  document.getElementById('howItWasDetected').value,
         whatWasAffected: document.getElementById('whatWasAffected').value
     };
 
-    fetch(`/api/exhibits/${exhibitId}/failure-description/new`, { 
-        method: "POST", 
+    fetch(`/api/exhibits/${exhibitId}/failure-description/new`, { // posting to api endpoint
+        method: "POST",
         headers: { 
             "Content-Type": "application/json",
             "X-CSRFToken": getCSRFToken()

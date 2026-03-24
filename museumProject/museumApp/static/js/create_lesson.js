@@ -1,16 +1,17 @@
+// creating a new lesson learned
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById('create-lessons-form')
 
-form.addEventListener("submit", function(event) { 
-    event.preventDefault(); 
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
 
-    const data = { 
+    const data = { // posting details to db
         practicalRecommendations: document.getElementById('practicalRecommendations').value,
         futureWarnings:  document.getElementById('futureWarnings').value,
     };
 
-    fetch(`/api/exhibits/${exhibitId}/lessons-learned/new`, { 
-        method: "POST", 
+    fetch(`/api/exhibits/${exhibitId}/lessons-learned/new`, { // posting to api endpoint
+        method: "POST",
         headers: { 
             "Content-Type": "application/json",
             "X-CSRFToken": getCSRFToken()
