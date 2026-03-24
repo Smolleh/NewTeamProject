@@ -10,7 +10,7 @@
 <script>
     const quizId = "{{ quiz.pk }}";
 </script>
-
+<!-- form for editing quiz metadata-->
 <form id="edit-quiz-form" class="input-form">
     <h2>Quiz Details</h2>
     <input id="quiz-name" type="text" value="{{ quiz.name }}" required>
@@ -21,6 +21,7 @@
 
     <label for="quiz-exhibit">Exhibit:</label>
     <select id="quiz-exhibit" required>
+        <!-- options for what exhibit quiz is linked to -->
         {% for exhibit in exhibits %}
             <option value="{{ exhibit.exhibitId }}" {% if exhibit.exhibitId == quiz.exhibit.exhibitId %}selected{% endif %}>
                 {{ exhibit.title }}
@@ -33,12 +34,12 @@
 <p id="quiz-message"></p>
 
 <hr>
-<h2>Questions</h2>
+<h2>Questions</h2> <!-- editing questions-->
 <div id="questions-container"></div>
 <button type="button" id="add-question-btn">+ Add Question</button>
 <p id="question-message"></p>
 
-<ul class="curator-navs">
+<ul class="curator-navs"> <!-- links back to dashboard-->
     <li><a href="{% url 'curator_dashboard' %}">&#8592; Dashboard</a></li>
 </ul>
 
