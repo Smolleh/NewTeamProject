@@ -9,17 +9,19 @@
 <div class="comments-toolbar">
     <a href="{% url 'curator_dashboard' %}" class="back-btn">← Back to Dashboard</a>
 </div>
-
+<!-- pulling all comments-->
 {% if comments %}
     <div class="review-comments-list">
         {% for comment in comments %}
         <div class="review-comment-card">
             <div class="review-comment-meta">
                 <span class="review-exhibit-tag">{{ comment.exhibit.title }}</span>
+                <!-- formatting data into standard format-->
                 <span class="review-comment-date">{{ comment.date|date:"d M Y" }}</span>
             </div>
             <p>{{ comment.content }}</p>
             <div class="review-comment-actions">
+                <!-- curator actions to delete or approve-->
                 <button class="approve-btn" onclick="approveComment({{ comment.commentId }})">Approve</button>
                 <button class="delete-btn" onclick="deleteComment({{ comment.commentId }})">Delete</button>
             </div>
@@ -31,19 +33,19 @@
 {% endif %}
 
 <script>
-async function approveComment(id) {
+async function approveComment(id) { // js to approve comments
     await fetch(`/api/comments/${id}/`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': '{{ csrf_token }}'
         },
-        body: JSON.stringify({ isApproved: true })
+        body: JSON.stringify({ isApproved: true }) // sending boolean 
     });
     location.reload();
 }
 
-async function deleteComment(id) {
+async function deleteComment(id) { // to not approve the comment
     await fetch(`/api/comments/${id}/`, {
         method: 'DELETE',
         headers: {

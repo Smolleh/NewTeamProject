@@ -232,18 +232,18 @@ async function loadAnalytics() {
         document.getElementById('stat-total-quizzes').textContent = quizzes.length;
 
         const tbody = document.getElementById('quiz-tbody');
-
+        // failsafe if quizzes have been deleted 
         if (quizzes.length === 0) {
             document.getElementById('quiz-message').textContent = 'No quizzes found.';
             return;
         }
-
+        // pairs analytics with quiz 
         const results = await Promise.all(
             quizzes.map(q =>
                 fetch(`/quizzes-api/manage/${q.id}/analytics/`)
                     .then(r => r.json())
                     .then(data => ({ quiz: q, data }))
-                    .catch(() => ({ quiz: q, data: null }))
+                    .catch(() => ({ quiz: q, data: null })) // returns null if fetch fails 
             )
         );
 
@@ -251,7 +251,7 @@ async function loadAnalytics() {
         results.forEach(({ quiz, data }) => {
             totalAttempts += data?.attempts || 0;
             const tr = document.createElement('tr');
-            if (!data || data.attempts === 0) {
+            if (!data || data.attempts === 0) { // html to write analytics table
                 tr.innerHTML = `<td>${quiz.name}</td><td>${quiz.topic}</td><td>0</td><td>—</td><td>—</td>`;
             } else {
                 tr.innerHTML = `
@@ -276,9 +276,9 @@ loadAnalytics();
 function getCsrfToken() {
     return document.cookie.split('; ').find(r => r.startsWith('csrftoken='))?.split('=')[1];
 }
-
+// deleting exhibit function
 function deleteExhibit(exhibitId) {
-    if (!confirm('Delete this exhibit and all its content? This cannot be undone.')) return;
+    if (!confirm('Delete this exhibit and all its content? This cannot be undone.')) return; // confirming action
     fetch(`/api/exhibits/${exhibitId}/edit`, {
         method: 'DELETE',
         headers: { 'X-CSRFToken': getCsrfToken() },
@@ -290,7 +290,7 @@ function deleteExhibit(exhibitId) {
         }
     });
 }
-
+// deleting quiz
 function deleteQuiz(quizId, btn) {
     if (!confirm('Delete this quiz? This cannot be undone.')) return;
     fetch(`/quizzes-api/manage/${quizId}/`, {
@@ -304,7 +304,7 @@ function deleteQuiz(quizId, btn) {
         }
     });
 }
-
+// deleting arefact 
 function deleteArtefact(exhibitId, artefactId) {
     if (!confirm('Delete this artefact?')) return;
     fetch(`/api/exhibits/${exhibitId}/artefacts/edit/${artefactId}`, {

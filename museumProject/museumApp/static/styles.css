@@ -1173,7 +1173,19 @@ form.input-form {
     color: #293241;
 }
 
-.input-form input,
+.question p {
+    font-weight: bold;
+}
+
+.input-form .answers label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+}
+
+.input-form input:not([type="radio"]),
 .input-form textarea {
     padding: 14px 16px;
     font-size: 16px;
@@ -1201,7 +1213,7 @@ form.input-form {
     margin-bottom: 15px;
 }
 
-.input-form input,
+.input-form input:not([type="radio"]),
 .input-form select,
 .input-form textarea {
     width: 100%;
