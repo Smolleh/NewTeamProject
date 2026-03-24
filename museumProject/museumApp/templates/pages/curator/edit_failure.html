@@ -9,23 +9,23 @@
 {%block content %}
 <!-- form for editing existing failure description-->
 <form id="edit-failure-form" class="input-form">
-    <div class="input-form">
+    <div>
         <label for="whatWentWrong"> What Went Wrong:</label>
         <textarea id="whatWentWrong" placeholder="whatWentWrong"> {{ failures.whatWentWrong }}</textarea>
-    
+
     </div>
 
-   <div class="input-form">
+    <div>
         <label for="howItWasDetected"> How It Was Detected:</label>
         <textarea id="howItWasDetected" placeholder="howItWasDetected">{{ failures.howItWasDetected }}</textarea>
     </div>
 
-    <div class="input-form">
+    <div>
         <label for="whatWasAffected"> What Was Affected:</label>
         <textarea id="whatWasAffected" placeholder="whatWasAffected">{{ failures.whatWasAffected }}</textarea>
     </div>
 
-    <div class="input-form">
+    <div>
         <button class="submit" type="submit">Save</button>
 
     </div>
