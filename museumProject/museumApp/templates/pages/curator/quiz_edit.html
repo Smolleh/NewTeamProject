@@ -33,11 +33,12 @@
 </form>
 <p id="quiz-message"></p>
 
-<hr>
-<h2>Questions</h2> <!-- editing questions-->
-<div id="questions-container"></div>
-<button type="button" id="add-question-btn">+ Add Question</button>
-<p id="question-message"></p>
+<div class="input-form" style="margin-top: 30px;">
+    <h2>Questions</h2>
+    <div id="questions-container"></div>
+    <button type="button" id="add-question-btn">+ Add Question</button>
+    <p id="question-message"></p>
+</div>
 
 <ul class="curator-navs"> <!-- links back to dashboard-->
     <li><a href="{% url 'curator_dashboard' %}">&#8592; Dashboard</a></li>

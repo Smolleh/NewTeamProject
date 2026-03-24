@@ -1148,7 +1148,8 @@ h3 {
 }
 
 /* ------------------------------------------ forms ---------------------------- */
-form.input-form {
+form.input-form,
+div.input-form {
     max-width: 700px;
     margin: 60px auto;
     padding: 30px;
@@ -1165,6 +1166,51 @@ form.input-form {
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.question-block {
+    background: #f8fafc;
+    border: 2px solid #98c1d9;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.question-block h3 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    color: #293241;
+    font-weight: bold;
+}
+
+.answer-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px;
+}
+
+.answer-row input.answer-text {
+    flex: 1;
+}
+
+.answer-row label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    font-weight: normal !important;
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+.answer-row input[type="checkbox"] {
+    width: auto;
+    padding: 0;
+    border: none;
+    box-shadow: none;
 }
 
 .input-form label {
@@ -1353,7 +1399,8 @@ form.input-form {
     }
 
     /* --- forms --- */
-    form.input-form {
+    form.input-form,
+    div.input-form {
         margin: 20px 0;
         padding: 20px 16px;
     }
