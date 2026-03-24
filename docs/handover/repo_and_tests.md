@@ -20,7 +20,7 @@ NewTeamProject/
     │
     ├── museumProject/ #contains project level settings and urls
 
-    
+```    
 
 
 # How to Run Tests
