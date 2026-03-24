@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django_enum.fields import EnumField
 import random
 
-# Create your models here.
+
 class Quiz(models.Model):
     name = models.CharField(max_length=120)
     topic = models.CharField(max_length=120)
@@ -51,13 +51,6 @@ class Result(models.Model):
     class Meta:
         constraints = [models.UniqueConstraint(fields=["quiz", "user"], name="one_attempt")]
         
-        
-# class QuestionAttempt(models.Model):
-#     result = models.ForeignKey(Result, on_delete = models.CASCADE, null=False)
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE, null= False)
-#     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, null=False)
-#     class Meta:
-#         constraints = [models.UniqueConstraint(fields=["result", "question"], name="unique_question")]
     
     
     

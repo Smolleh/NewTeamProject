@@ -9,13 +9,13 @@ class UserAchievementsSerializer(serializers.ModelSerializer):
         model = UserAchievements
         fields = ["username", "points", "badge"]
         
-#serializer for answer objects obfuscating whether the answer is correct 
+#serializer for answer objects obfuscating whether the answer is correct (used when presenting the possible answers in a quiz)
 class AnswerDisplaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = ["id", "answer_text"]
 
-#
+#serilaiser to return a question object with a list of it's associated answer objects, serialised by AnswerDesplaySerializer
 class QuestionWithAnswersSerializer(serializers.ModelSerializer):
     answers = AnswerDisplaySerializer(source="answer_set", many=True, read_only=True)
 
@@ -33,15 +33,16 @@ class QuizStartResponseSerializer(serializers.Serializer):
     passing_score = serializers.IntegerField()
     questions = QuestionWithAnswersSerializer(many=True)
     
-#serializer to store a selected answer 
+#serializer to store a selected answer and it's associated question
 class SelectedAnswerSerializer(serializers.Serializer):
     question_id = serializers.IntegerField()
     answer_id = serializers.IntegerField()
 
+#seriliser to store all selected answers with their associated questions
 class SubmitQuizSerializer(serializers.Serializer):
     answers = SelectedAnswerSerializer(many =True, required = False, default = list)
 
-
+#seriliser for quiz details
 class QuizDesplaySerializer(serializers.ModelSerializer):
     exhibit = serializers.PrimaryKeyRelatedField(
         queryset=Exhibit.objects.all()
@@ -51,6 +52,7 @@ class QuizDesplaySerializer(serializers.ModelSerializer):
         model = Quiz
         fields = ['id','name', 'topic', 'num_questions', 'passing_score','exhibit', 'exhibit_name', 'max_points']
 
+#serialiser for creating and editing a quiz (it's details)
 class QuizCreateDesplaySerializer(serializers.ModelSerializer):
     exhibit = serializers.PrimaryKeyRelatedField(queryset=Exhibit.objects.all())
     exhibit_name = serializers.StringRelatedField(source="exhibit", read_only=True)
@@ -64,12 +66,13 @@ class QuizCreateDesplaySerializer(serializers.ModelSerializer):
             "exhibit", "exhibit_name", "average_score", "max_points"
         ]
 
+#serialiser for creating and editing answers
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = ["answer_text", "is_correct"]
 
-
+#serialiser for creating and editing quiz questions with their associated answers
 class QuestionCreateSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(source="answer_set", many=True)
 
