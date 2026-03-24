@@ -67,5 +67,3 @@ Run these commands within the PythonAnywhere bash console:
     pip install -r requirements.txt
     python manage.py migrate
     python manage.py collectstatic --noinput
-
-![Deployment diagram](../deployment_diagram.svg)
