@@ -4,15 +4,16 @@ from django.contrib.auth.models import User, Group
 from .models import Exhibit, Artefact, AiSystemDescription, FailureDescription, LessonsLearned, ContributingFactors
 from datetime import date
 from unittest import mock
-
-
+ 
+ 
 class ExhibitAPITestCase(APITestCase):
     
     def setUp(self):
-        """Create test data before each test"""
+        #Create test data before each test
+        # Bypass the real isCurator permission check so tests don't depend on group setup
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
-        self.addCleanup(patcher.stop)
+        self.addCleanup(patcher.stop)  # Ensures the patch is always removed after each test
         
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
@@ -33,24 +34,24 @@ class ExhibitAPITestCase(APITestCase):
         )
         
     def test_get_all_exhibits_success(self):
-        """Test retrieving all exhibits"""
+        #Test retrieving all exhibits
         response = self.client.get('/api/exhibits/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
         
     def test_get_single_exhibit_success(self):
-        """Test retrieving a single exhibit"""
+        #Test retrieving a single exhibit
         response = self.client.get(f'/api/exhibits/{self.exhibit1.exhibitId}')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], "Test Exhibit 1")
         
     def test_get_single_exhibit_not_found(self):
-        """Test retrieving non-existent exhibit"""
+        #Test retrieving non-existent exhibit
         response = self.client.get('/api/exhibits/9999')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         
     def test_create_exhibit_success(self):
-        """Test creating a new exhibit"""
+        #Test creating a new exhibit
         data = {
             'title': 'New Exhibit',
             'domain': 'Transportation',
@@ -63,7 +64,7 @@ class ExhibitAPITestCase(APITestCase):
         self.assertEqual(Exhibit.objects.count(), 3)
         
     def test_update_exhibit_success(self):
-        """Test updating an exhibit"""
+        #Test updating an exhibit
         data = {
             'title': 'Updated Title',
             'domain': 'Healthcare',
@@ -73,20 +74,20 @@ class ExhibitAPITestCase(APITestCase):
         }
         response = self.client.put(f'/api/exhibits/{self.exhibit1.exhibitId}/edit', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.exhibit1.refresh_from_db()
+        self.exhibit1.refresh_from_db()  # Re-fetch from DB to confirm the PUT actually persisted
         self.assertEqual(self.exhibit1.title, 'Updated Title')
         
     def test_delete_exhibit_success(self):
-        """Test deleting an exhibit"""
+        #Test deleting an exhibit
         response = self.client.delete(f'/api/exhibits/{self.exhibit1.exhibitId}/edit')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Exhibit.objects.count(), 1)
-
-
+ 
+ 
 class ArtefactAPITestCase(APITestCase):
     
     def setUp(self):
-        """Create test data before each test"""
+        #Create test data before each test
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
@@ -109,7 +110,7 @@ class ArtefactAPITestCase(APITestCase):
         )
         
     def test_create_artefact_success(self):
-        """Test creating a new artefact"""
+        #Test creating a new artefact
         data = {
             'info': 'New artefact',
             'artefactDate': '2024-02-01',
@@ -119,19 +120,19 @@ class ArtefactAPITestCase(APITestCase):
         self.assertEqual(Artefact.objects.count(), 2)
         
     def test_create_artefact_invalid_exhibit(self):
-        """Test creating artefact with non-existent exhibit"""
+        #Test creating artefact with non-existent exhibit
         data = {
             'info': 'New artefact',
             'artefactDate': '2024-02-01',
         }
         response = self.client.post('/api/exhibits/9999/artefacts/new', data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-
+ 
+ 
 class SystemDescriptionAPITestCase(APITestCase):
     
     def setUp(self):
-        """Create test data before each test"""
+        #Create test data before each test
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
@@ -148,7 +149,7 @@ class SystemDescriptionAPITestCase(APITestCase):
         )
         
     def test_create_system_description_success(self):
-        """Test creating a system description"""
+        #Test creating a system description
         data = {
             'systemDescription': 'Test system',
             'systemPurpose': 'Test purpose',
@@ -159,7 +160,7 @@ class SystemDescriptionAPITestCase(APITestCase):
         self.assertEqual(AiSystemDescription.objects.count(), 1)
         
     def test_get_system_description_success(self):
-        """Test retrieving a system description"""
+        #Test retrieving a system description
         system_desc = AiSystemDescription.objects.create(
             exhibitId=self.exhibit,
             systemDescription='Test',
@@ -170,7 +171,7 @@ class SystemDescriptionAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
     def test_update_system_description_success(self):
-        """Test updating a system description"""
+        #Test updating a system description
         system_desc = AiSystemDescription.objects.create(
             exhibitId=self.exhibit,
             systemDescription='Test',
@@ -184,12 +185,12 @@ class SystemDescriptionAPITestCase(APITestCase):
         }
         response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/ai-system-description/edit/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
+ 
+ 
 class FailureDescriptionAPITestCase(APITestCase):
     
     def setUp(self):
-        """Create test data before each test"""
+        #Create test data before each test
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
@@ -206,7 +207,7 @@ class FailureDescriptionAPITestCase(APITestCase):
         )
         
     def test_create_failure_description_success(self):
-        """Test creating a failure description"""
+        #Test creating a failure description
         data = {
             'whatWentWrong': 'Something failed',
             'howItWasDetected': 'We noticed',
@@ -216,7 +217,7 @@ class FailureDescriptionAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_delete_failure_description_success(self):
-        """Test deleting a failure description"""
+        #Test deleting a failure description
         failure_desc = FailureDescription.objects.create(
             exhibitId=self.exhibit,
             whatWentWrong='Test',
@@ -225,12 +226,12 @@ class FailureDescriptionAPITestCase(APITestCase):
         )
         response = self.client.delete(f'/api/exhibits/{self.exhibit.exhibitId}/failure-description/edit/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-
+ 
+ 
 class LessonsLearnedAPITestCase(APITestCase):
     
     def setUp(self):
-        """Create test data before each test"""
+        #Create test data before each test
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
@@ -247,7 +248,7 @@ class LessonsLearnedAPITestCase(APITestCase):
         )
         
     def test_create_lesson_learned_success(self):
-        """Test creating a lesson learned"""
+        #Test creating a lesson learned
         data = {
             'practicalRecommendations': 'Do this better',
             'futureWarnings': 'Watch out for this'
@@ -256,7 +257,7 @@ class LessonsLearnedAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_get_lesson_learned_success(self):
-        """Test retrieving a lesson learned"""
+        #Test retrieving a lesson learned
         lesson = LessonsLearned.objects.create(
             exhibitId=self.exhibit,
             practicalRecommendations='Test',
@@ -264,12 +265,12 @@ class LessonsLearnedAPITestCase(APITestCase):
         )
         response = self.client.get(f'/api/exhibits/{self.exhibit.exhibitId}/lessons-learned/edit/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
+ 
+ 
 class ContributingFactorsAPITestCase(APITestCase):
     
     def setUp(self):
-        """Create test data before each test"""
+        #Create test data before each test
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
@@ -286,7 +287,7 @@ class ContributingFactorsAPITestCase(APITestCase):
         )
         
     def test_create_contributing_factor_success(self):
-        """Test creating a contributing factor"""
+        #Test creating a contributing factor
         data = {
             'dataIssues': 'Bad data',
             'designChoices': 'Poor design',
@@ -296,7 +297,7 @@ class ContributingFactorsAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_update_contributing_factor_success(self):
-        """Test updating a contributing factor"""
+        #Test updating a contributing factor
         factor = ContributingFactors.objects.create(
             exhibitId=self.exhibit,
             dataIssues='Test',
@@ -310,12 +311,12 @@ class ContributingFactorsAPITestCase(APITestCase):
         }
         response = self.client.put(f'/api/exhibits/{self.exhibit.exhibitId}/contributing-factors/edit/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
+ 
+ 
 class AuthenticationTestCase(APITestCase):
     
     def setUp(self):
-        """Create test user and exhibit"""
+        #Create test user and exhibit
         curator_group, created = Group.objects.get_or_create(name='Curator')
         
         self.curator_user = User.objects.create_user(username='curator', password='testpass123')
@@ -332,12 +333,12 @@ class AuthenticationTestCase(APITestCase):
         )
     
     def test_unauthenticated_get_fails(self):
-        """Test that unauthenticated GET requests are rejected"""
+        #Test that unauthenticated GET requests are rejected
         response = self.client.get('/api/exhibits/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
     
     def test_unauthenticated_post_fails(self):
-        """Test that unauthenticated POST requests are rejected"""
+        #Test that unauthenticated POST requests are rejected
         data = {
             'title': 'New Exhibit',
             'domain': 'Finance',
@@ -349,13 +350,13 @@ class AuthenticationTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
     
     def test_authenticated_curator_get_succeeds(self):
-        """Test that authenticated curator GET requests succeed"""
+        #Test that authenticated curator GET requests succeed
         self.client.force_authenticate(user=self.curator_user)
         response = self.client.get('/api/exhibits/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
     
     def test_authenticated_curator_post_succeeds(self):
-        """Test that authenticated curator POST requests succeed"""
+        #Test that authenticated curator POST requests succeed
         self.client.force_authenticate(user=self.curator_user)
         data = {
             'title': 'New Exhibit',
@@ -368,7 +369,7 @@ class AuthenticationTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     
     def test_non_curator_user_denied(self):
-        """Test that authenticated non-curator users are denied"""
+        #Test that authenticated non-curator users are denied
         self.client.force_authenticate(user=self.regular_user)
         data = {
             'title': 'New Exhibit',
@@ -381,11 +382,11 @@ class AuthenticationTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
     
     def test_logout_prevents_access(self):
-        """Test that logging out prevents access"""
+        #Test that logging out prevents access
         self.client.force_authenticate(user=self.curator_user)
         response = self.client.get('/api/exhibits/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
-        self.client.force_authenticate(user=None)
+        self.client.force_authenticate(user=None)  # Simulate logout
         response = self.client.get('/api/exhibits/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

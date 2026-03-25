@@ -4,19 +4,20 @@ from django.contrib.auth.models import User, Group
 from museumApp.models import Exhibit
 from .models import Quiz, Question, Answer, Result
 from unittest import mock
- 
- 
+
+
 class QuizAPITestCase(APITestCase):
- 
+
     def setUp(self):
-        """Create test data before each test"""
+        #Create test data before each test
+        # Bypass the real isCurator permission check so tests don't depend on group setup
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
-        self.addCleanup(patcher.stop)
- 
+        self.addCleanup(patcher.stop)  # Ensures the patch is always removed after each test
+
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
- 
+
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -38,21 +39,21 @@ class QuizAPITestCase(APITestCase):
             passing_score=70,
             exhibit=self.exhibit
         )
- 
+
     def test_get_all_quizzes_success(self):
-        """Test retrieving all quizzes from the public list endpoint"""
+        #Test retrieving all quizzes from the public list endpoint
         response = self.client.get('/quizzes-api/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
- 
+
     def test_get_all_quizzes_manage_success(self):
-        """Test retrieving all quizzes from the curator manage endpoint"""
+        #Test retrieving all quizzes from the curator manage endpoint
         response = self.client.get('/quizzes-api/manage/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
- 
+
     def test_create_quiz_success(self):
-        """Test creating a new quiz"""
+        #Test creating a new quiz
         data = {
             'name': 'New Quiz',
             'topic': 'Bias in AI',
@@ -63,20 +64,20 @@ class QuizAPITestCase(APITestCase):
         response = self.client.post('/quizzes-api/manage/', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Quiz.objects.count(), 3)
- 
+
     def test_get_single_quiz_manage_success(self):
-        """Test retrieving a single quiz via the manage endpoint"""
+        #Test retrieving a single quiz via the manage endpoint
         response = self.client.get(f'/quizzes-api/manage/{self.quiz1.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], "Quiz One")
- 
+
     def test_get_single_quiz_manage_not_found(self):
-        """Test retrieving a non-existent quiz returns 404"""
+        #Test retrieving a non-existent quiz returns 404
         response = self.client.get('/quizzes-api/manage/9999/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
- 
+
     def test_update_quiz_success(self):
-        """Test updating an existing quiz"""
+        #Test updating an existing quiz
         data = {
             'name': 'Updated Quiz',
             'topic': 'Updated Topic',
@@ -86,27 +87,27 @@ class QuizAPITestCase(APITestCase):
         }
         response = self.client.put(f'/quizzes-api/manage/{self.quiz1.id}/', data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.quiz1.refresh_from_db()
+        self.quiz1.refresh_from_db()  # Re-fetch from DB to confirm the PUT actually persisted
         self.assertEqual(self.quiz1.name, 'Updated Quiz')
- 
+
     def test_delete_quiz_success(self):
-        """Test deleting a quiz"""
+        #Test deleting a quiz
         response = self.client.delete(f'/quizzes-api/manage/{self.quiz1.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Quiz.objects.count(), 1)
- 
- 
+
+
 class QuestionAPITestCase(APITestCase):
- 
+
     def setUp(self):
-        """Create test data before each test"""
+        #Create test data before each test
         patcher = mock.patch('museumApp.permissions.isCurator.has_permission', return_value=True)
         self.mock_permission = patcher.start()
         self.addCleanup(patcher.stop)
- 
+
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
- 
+
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -135,15 +136,15 @@ class QuestionAPITestCase(APITestCase):
             is_correct=False,
             question=self.question
         )
- 
+
     def test_get_questions_for_quiz_success(self):
-        """Test retrieving all questions for a specific quiz"""
+        #Test retrieving all questions for a specific quiz
         response = self.client.get(f'/quizzes-api/manage/{self.quiz.id}/questions/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
- 
+
     def test_create_question_success(self):
-        """Test creating a question with answers for a quiz"""
+        #Test creating a question with answers for a quiz
         data = {
             'question_text': 'What is machine learning?',
             'answers': [
@@ -154,25 +155,25 @@ class QuestionAPITestCase(APITestCase):
         response = self.client.post(
             f'/quizzes-api/manage/{self.quiz.id}/questions/',
             data,
-            format='json'
+            format='json'  # Needed for nested objects (answers list)
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Question.objects.count(), 2)
-        self.assertEqual(Answer.objects.count(), 4)
- 
+        self.assertEqual(Answer.objects.count(), 4)  # 2 existing + 2 new
+
     def test_get_single_question_success(self):
-        """Test retrieving a single question"""
+        #Test retrieving a single question
         response = self.client.get(f'/quizzes-api/manage/question/{self.question.id}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['question_text'], "What is AI?")
- 
+
     def test_get_single_question_not_found(self):
-        """Test retrieving a non-existent question returns 404"""
+        #Test retrieving a non-existent question returns 404
         response = self.client.get('/quizzes-api/manage/question/9999/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
- 
+
     def test_update_question_success(self):
-        """Test updating a question and replacing its answers"""
+        #Test updating a question and replacing its answers
         data = {
             'question_text': 'Updated question text?',
             'answers': [
@@ -188,21 +189,21 @@ class QuestionAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.question.refresh_from_db()
         self.assertEqual(self.question.question_text, 'Updated question text?')
- 
+
     def test_delete_question_success(self):
-        """Test deleting a question also removes its answers"""
+        #Test deleting a question also removes its answers
         response = self.client.delete(f'/quizzes-api/manage/question/{self.question.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Question.objects.count(), 0)
         self.assertEqual(Answer.objects.count(), 0)
- 
- 
+
+
 class StartQuizAPITestCase(APITestCase):
- 
+
     def setUp(self):
-        """Create test data before each test"""
+        #Create test data before each test
         self.user = User.objects.create_user(username='testuser', password='testpass123')
- 
+
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -219,19 +220,19 @@ class StartQuizAPITestCase(APITestCase):
         )
         self.question1 = Question.objects.create(question_text="Q1?", quiz=self.quiz)
         self.question2 = Question.objects.create(question_text="Q2?", quiz=self.quiz)
- 
+
         Answer.objects.create(answer_text="A1 correct", is_correct=True, question=self.question1)
         Answer.objects.create(answer_text="A1 wrong", is_correct=False, question=self.question1)
         Answer.objects.create(answer_text="A2 correct", is_correct=True, question=self.question2)
         Answer.objects.create(answer_text="A2 wrong", is_correct=False, question=self.question2)
- 
+
     def test_start_quiz_unauthenticated_fails(self):
-        """Test that unauthenticated users cannot start a quiz"""
+        #Test that unauthenticated users cannot start a quiz
         response = self.client.get(f'/quizzes-api/{self.quiz.id}/start/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
- 
+
     def test_start_quiz_success(self):
-        """Test that an authenticated user can start a quiz"""
+        #Test that an authenticated user can start a quiz
         self.client.force_authenticate(user=self.user)
         response = self.client.get(f'/quizzes-api/{self.quiz.id}/start/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -239,27 +240,29 @@ class StartQuizAPITestCase(APITestCase):
         self.assertIn('questions', response.data)
         self.assertEqual(response.data['quiz_name'], "Test Quiz")
         self.assertEqual(Result.objects.count(), 1)
- 
+
     def test_start_quiz_not_found(self):
-        """Test starting a non-existent quiz returns 404"""
+        #Test starting a non-existent quiz returns 404
         self.client.force_authenticate(user=self.user)
         response = self.client.get('/quizzes-api/9999/start/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
- 
+
     def test_start_quiz_resumes_in_progress(self):
-        """Test that starting a quiz already in progress returns the same result"""
+        #Test that starting a quiz already in progress returns the same result
         self.client.force_authenticate(user=self.user)
         first_response = self.client.get(f'/quizzes-api/{self.quiz.id}/start/')
         first_result_id = first_response.data['result_id']
- 
+
+        # A second start should resume (not create a new Result)
         second_response = self.client.get(f'/quizzes-api/{self.quiz.id}/start/')
         self.assertEqual(second_response.status_code, status.HTTP_200_OK)
         self.assertEqual(second_response.data['result_id'], first_result_id)
         self.assertEqual(Result.objects.count(), 1)
- 
+
     def test_start_quiz_already_completed_returns_score(self):
-        """Test that starting an already completed quiz returns only the score"""
+        #Test that starting an already completed quiz returns only the score
         self.client.force_authenticate(user=self.user)
+        # Pre-create a completed result to simulate a returning user
         Result.objects.create(
             quiz=self.quiz,
             user=self.user,
@@ -271,15 +274,15 @@ class StartQuizAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('score', response.data)
         self.assertEqual(response.data['score'], 80.0)
- 
- 
+
+
 class SubmitQuizAPITestCase(APITestCase):
- 
+
     def setUp(self):
-        """Create test data before each test"""
+        #Create test data before each test
         self.user = User.objects.create_user(username='testuser', password='testpass123')
         self.client.force_authenticate(user=self.user)
- 
+
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -296,7 +299,7 @@ class SubmitQuizAPITestCase(APITestCase):
         )
         self.question1 = Question.objects.create(question_text="Q1?", quiz=self.quiz)
         self.question2 = Question.objects.create(question_text="Q2?", quiz=self.quiz)
- 
+
         self.answer1_correct = Answer.objects.create(
             answer_text="A1 correct", is_correct=True, question=self.question1
         )
@@ -309,7 +312,8 @@ class SubmitQuizAPITestCase(APITestCase):
         self.answer2_wrong = Answer.objects.create(
             answer_text="A2 wrong", is_correct=False, question=self.question2
         )
- 
+
+        #In progress attempt selected_question_ids locks in which questions belong to this attempt
         self.result = Result.objects.create(
             quiz=self.quiz,
             user=self.user,
@@ -317,9 +321,9 @@ class SubmitQuizAPITestCase(APITestCase):
             completed=False,
             selected_question_ids=[self.question1.id, self.question2.id]
         )
- 
+
     def test_submit_quiz_all_correct_success(self):
-        """Test submitting a quiz with all correct answers"""
+        #Test submitting a quiz with all correct answers
         data = {
             'answers': [
                 {'question_id': self.question1.id, 'answer_id': self.answer1_correct.id},
@@ -336,9 +340,9 @@ class SubmitQuizAPITestCase(APITestCase):
         self.assertEqual(response.data['score'], 100.0)
         self.result.refresh_from_db()
         self.assertTrue(self.result.completed)
- 
+
     def test_submit_quiz_partial_correct_success(self):
-        """Test submitting a quiz with only some correct answers"""
+        #Test submitting a quiz with only some correct answers
         data = {
             'answers': [
                 {'question_id': self.question1.id, 'answer_id': self.answer1_correct.id},
@@ -353,9 +357,9 @@ class SubmitQuizAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['correct'], 1)
         self.assertEqual(response.data['score'], 50.0)
- 
+
     def test_submit_quiz_empty_answers_success(self):
-        """Test submitting a quiz with no answers scores zero"""
+        #Test submitting a quiz with no answers scores zero
         data = {'answers': []}
         response = self.client.patch(
             f'/quizzes-api/{self.quiz.id}/submit/',
@@ -367,13 +371,13 @@ class SubmitQuizAPITestCase(APITestCase):
         self.assertEqual(response.data['score'], 0)
         self.result.refresh_from_db()
         self.assertTrue(self.result.completed)
- 
+
     def test_submit_quiz_already_submitted_fails(self):
-        """Test that resubmitting a completed quiz is rejected"""
+        #Test that resubmitting a completed quiz is rejected
         self.result.completed = True
         self.result.score = 100.0
         self.result.save()
- 
+
         data = {
             'answers': [
                 {'question_id': self.question1.id, 'answer_id': self.answer1_correct.id}
@@ -385,9 +389,9 @@ class SubmitQuizAPITestCase(APITestCase):
             format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
- 
+
     def test_submit_quiz_invalid_answer_id_fails(self):
-        """Test that submitting a non-existent answer ID is rejected"""
+        #Test that submitting a non-existent answer ID is rejected
         data = {
             'answers': [
                 {'question_id': self.question1.id, 'answer_id': 9999}
@@ -399,11 +403,12 @@ class SubmitQuizAPITestCase(APITestCase):
             format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
- 
+
     def test_submit_quiz_answer_wrong_question_fails(self):
-        """Test that submitting an answer belonging to a different question is rejected"""
+        #Test that submitting an answer belonging to a different question is rejected
         data = {
             'answers': [
+                # answer2_correct belongs to question2, not question1
                 {'question_id': self.question1.id, 'answer_id': self.answer2_correct.id}
             ]
         }
@@ -413,9 +418,10 @@ class SubmitQuizAPITestCase(APITestCase):
             format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
- 
+
     def test_submit_quiz_question_not_in_attempt_fails(self):
-        """Test that submitting an answer for a question not in this attempt is rejected"""
+        #Test that submitting an answer for a question not in this attempt is rejected
+        #Question exists in the DB but was not part of the randomly selected attempt
         outside_question = Question.objects.create(question_text="Outside Q?", quiz=self.quiz)
         outside_answer = Answer.objects.create(
             answer_text="Outside answer", is_correct=True, question=outside_question
@@ -431,9 +437,9 @@ class SubmitQuizAPITestCase(APITestCase):
             format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
- 
+
     def test_submit_quiz_multiple_answers_same_question_fails(self):
-        """Test that submitting two answers for the same question is rejected"""
+        #Test that submitting two answers for the same question is rejected
         data = {
             'answers': [
                 {'question_id': self.question1.id, 'answer_id': self.answer1_correct.id},
@@ -446,19 +452,19 @@ class SubmitQuizAPITestCase(APITestCase):
             format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
- 
- 
+
+
 class QuizAuthenticationTestCase(APITestCase):
- 
+
     def setUp(self):
-        """Create test users and quiz data"""
+        #Create test users and quiz data
         curator_group, _ = Group.objects.get_or_create(name='Curator')
- 
+
         self.curator_user = User.objects.create_user(username='curator', password='testpass123')
         self.curator_user.groups.add(curator_group)
- 
+
         self.regular_user = User.objects.create_user(username='regularuser', password='testpass123')
- 
+
         self.exhibit = Exhibit.objects.create(
             title="Test Exhibit",
             domain="Healthcare",
@@ -473,14 +479,14 @@ class QuizAuthenticationTestCase(APITestCase):
             passing_score=50,
             exhibit=self.exhibit
         )
- 
+
     def test_unauthenticated_manage_get_fails(self):
-        """Test that unauthenticated GET requests to manage endpoint are rejected"""
+        #Test that unauthenticated GET requests to manage endpoint are rejected#
         response = self.client.get('/quizzes-api/manage/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
- 
+
     def test_unauthenticated_manage_post_fails(self):
-        """Test that unauthenticated POST requests to manage endpoint are rejected"""
+        #Test that unauthenticated POST requests to manage endpoint are rejected
         data = {
             'name': 'New Quiz',
             'topic': 'Topic',
@@ -490,15 +496,15 @@ class QuizAuthenticationTestCase(APITestCase):
         }
         response = self.client.post('/quizzes-api/manage/', data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
- 
+
     def test_authenticated_curator_manage_get_succeeds(self):
-        """Test that an authenticated curator can access the manage endpoint"""
+        #Test that an authenticated curator can access the manage endpoint
         self.client.force_authenticate(user=self.curator_user)
         response = self.client.get('/quizzes-api/manage/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
- 
+
     def test_authenticated_curator_manage_post_succeeds(self):
-        """Test that an authenticated curator can create a quiz"""
+        #Test that an authenticated curator can create a quiz
         self.client.force_authenticate(user=self.curator_user)
         data = {
             'name': 'Curator Quiz',
@@ -509,9 +515,9 @@ class QuizAuthenticationTestCase(APITestCase):
         }
         response = self.client.post('/quizzes-api/manage/', data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
- 
+
     def test_non_curator_manage_post_denied(self):
-        """Test that a non-curator authenticated user cannot create a quiz"""
+        #Test that a non-curator authenticated user cannot create a quiz
         self.client.force_authenticate(user=self.regular_user)
         data = {
             'name': 'Sneaky Quiz',
@@ -522,13 +528,13 @@ class QuizAuthenticationTestCase(APITestCase):
         }
         response = self.client.post('/quizzes-api/manage/', data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
- 
+
     def test_logout_prevents_manage_access(self):
-        """Test that logging out revokes access to the manage endpoint"""
+        #Test that logging out revokes access to the manage endpoint
         self.client.force_authenticate(user=self.curator_user)
         response = self.client.get('/quizzes-api/manage/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
- 
-        self.client.force_authenticate(user=None)
+
+        self.client.force_authenticate(user=None)  # Simulate logout
         response = self.client.get('/quizzes-api/manage/')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
