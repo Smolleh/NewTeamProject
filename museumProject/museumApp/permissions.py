@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
 
+#custom permission class for curators, extra security for curator-only functions.
 class isCurator(BasePermission):
     def has_permission(self, request, view):
         return (

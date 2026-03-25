@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template.response import TemplateResponse
 
-
+#function for access control, checks if the user requesting is a curator and returns it if they are and a forbidden response if they arent
 def curator_required(view_func):
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
@@ -15,6 +15,7 @@ def curator_required(view_func):
         return HttpResponseForbidden("You are not authorized to access this page.")
     return wrapper
 
+#rate limiter to prevent DoS attacks, limits the amount of requests someone can send on the login page
 def rate_limiter(view_func):
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
@@ -41,6 +42,7 @@ def rate_limiter(view_func):
         return view_func(request, *args, **kwargs)
     return wrapper
         
+#paginator function to display quizzes across pages if there are too many to fit on one page
 def paginator(q_set_key, per_page=9):
     def decorator(view_func):
         @wraps(view_func)
